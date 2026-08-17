@@ -567,12 +567,16 @@ function renderEvent(ev, idx) {
     if (i >= 0) mains[i] = f; else prelims.push(f);
   });
   const mainsClean = mains.filter(Boolean);
-  const useMains = mainsClean.length ? mainsClean : ev.fights.slice(0, 1);
-  const usePrelims = mainsClean.length ? prelims : ev.fights.slice(1);
+  // ESPN lists fights chronologically: earliest prelim FIRST, main event LAST.
+  // With baked meta we know the true main card; without it, treat the last fight as the main event.
+  const reversed = [...ev.fights].reverse();
+  const useMains = mainsClean.length ? mainsClean : reversed.slice(0, 1);
+  const usePrelims = (mainsClean.length ? [...prelims] : reversed.slice(1));
+  if (mainsClean.length) usePrelims.reverse(); // featured prelim first
   const kind = /fight night/i.test(ev.name) ? "Fight Night" : "Numbered event";
   const analyzed = meta ? '<span class="badge analyzed">Breakdowns inside</span>' : "";
   const titleBadge = meta && meta.titles ? '<span class="badge title">&#127942; ' + meta.titles + '</span>' : "";
-  const me = ev.fights[0];
+  const me = useMains[0];
   const hero = me ? `<div class="vs-hero">
       <div class="side">${avatar(me.f1.name, 64, "red", me.f1.id)}<div class="nm">${esc(me.f1.name)}</div><div class="rc">${esc(me.f1.record)}</div></div>
       <div class="mid"><div class="v">VS</div><div class="wt">${esc(me.weight)}<br>Main event</div></div>
