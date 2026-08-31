@@ -14,7 +14,12 @@ Built with Claude (Cowork) Aug 15–16, 2026; refreshed twice weekly since. The 
 
 ## Architecture — one file, design is FROZEN
 
-Everything lives in `index.html` (~200KB): CSS, JS, base64-embedded Barlow Condensed font, PWA manifest + icons as data URLs, add-to-home-screen banner, three bottom tabs (Fight Cards / Belts & Ranks / Catch Up).
+Everything lives in `index.html` (~230KB): CSS, JS, base64-embedded Barlow Condensed font, PWA manifest + icons as data URLs, add-to-home-screen banner, three bottom tabs (Fight Cards / Belts & Ranks / Catch Up).
+
+Also in the renderer (added Aug 31, don't strip during refreshes — they live outside the data blocks and survive automatically):
+
+- **Fight-night live mode**: when a card is in its ~8h window or any fight is IN_PROGRESS, the page polls ESPN every 60s (5 min when a card starts within 2h), shows a LIVE header chip and per-event "Live now" badges, and preserves open cards/picks UI across re-renders.
+- **"Beat the Books" pick'em**: tap-to-pick buttons on upcoming fights, stored in localStorage per device (`fc-picks`, `fc-pick-hist`). Results settle automatically from ESPN winner flags; underdog calls are detected by parsing the favorite out of `MATCHUPS[...].odds` text (best-effort — keep odds text in the "Name -NNN, Name +NNN" style so the parser works). All-time record shows as a header chip.
 
 **Do NOT redesign, restructure, or "improve" the design.** Noah approved it. A refresh touches ONLY the data blocks listed below plus `ANALYSIS_STAMP`. If a design change seems needed, leave it for Noah to request.
 

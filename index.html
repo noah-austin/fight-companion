@@ -292,6 +292,24 @@
   }
   footer { margin-top: 28px; color: var(--ink-3); font-size: 11px; text-align: center; padding: 0 20px; line-height: 1.6;}
 
+  /* ---------- pick'em ---------- */
+  .pick-row { display: flex; gap: 8px; margin-top: 9px; }
+  .pick-btn {
+    flex: 1; background: var(--surface-2); border: 1px solid var(--hairline); color: var(--ink-2);
+    border-radius: 9px; padding: 7px 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;
+    text-transform: uppercase; letter-spacing: .4px; font-family: var(--disp); transition: all .12s;
+  }
+  .pick-btn.sel { background: rgba(232,72,77,0.16); border-color: var(--accent); color: var(--ink); }
+  .pick-btn:active { transform: scale(0.97); }
+  .pick-result { display: inline-flex; align-items: center; gap: 5px; margin-top: 9px; font-size: 11.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+  .pick-result.win { background: rgba(47,191,79,0.13); color: var(--green); border: 1px solid rgba(47,191,79,0.35); }
+  .pick-result.loss { background: rgba(232,72,77,0.10); color: var(--accent); border: 1px solid rgba(232,72,77,0.3); }
+  .pick-tally { font-size: 11.5px; color: var(--ink-3); padding: 10px 14px 0; }
+  .pick-tally b { color: var(--ink-2); }
+  .chip.live { border-color: rgba(232,72,77,0.55); background: rgba(232,72,77,0.10); color: var(--ink); }
+  .chip.picks { border-color: rgba(227,165,58,0.4); }
+  .upd-note { color: var(--ink-3); font-size: 10.5px; }
+
   /* ---------- add-to-home-screen banner ---------- */
   #a2hs {
     display: none; position: relative;
@@ -496,9 +514,17 @@ async function loadEvents() {
       .filter(ev => !SPINOFF_RX.test(ev.name || ""))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
     if (!events.length) throw new Error("empty");
+    const t = new Date().toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
     document.getElementById("dataNote").innerHTML =
-      "<b>Live schedule</b> from ESPN &middot; breakdowns &amp; rankings written " + ANALYSIS_STAMP;
-    renderEvents(events.map(normalizeEspnEvent), box, false);
+      "<b>Live schedule</b> from ESPN &middot; breakdowns &amp; rankings written " + ANALYSIS_STAMP +
+      ' <span class="upd-note">&middot; updated ' + t + "</span>";
+    const norm2 = events.map(normalizeEspnEvent);
+    const box2 = document.getElementById("eventsList");
+    const openEvs = new Set([...box2.querySelectorAll(".event.open")].map(e => e.dataset.ev));
+    const openFights = new Set([...box2.querySelectorAll(".fight.open")].map(e => e.dataset.pk));
+    renderEvents(norm2, box, false);
+    box.querySelectorAll(".event").forEach(e => { if (openEvs.has(e.dataset.ev)) e.classList.add("open"); });
+    box.querySelectorAll(".fight").forEach(e => { if (openFights.has(e.dataset.pk)) e.classList.add("open"); });
   } catch (e) {
     document.getElementById("dataNote").innerHTML =
       "<b>Offline snapshot</b> (live feed unreachable) &middot; data as of " + ANALYSIS_STAMP;
@@ -537,7 +563,97 @@ function eventMetaFor(name) {
   return EVENT_META.find(m => m.match.some(x => n.includes(x))) || null;
 }
 
+/* ---------- Beat the Books pick'em ---------- */
+const lsGet = k => { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch (e) { return {}; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+let PICKS = lsGet("fc-picks");        // pairKey -> norm(picked fighter name)
+let PICK_HIST = lsGet("fc-pick-hist"); // pairKey -> {p: pickedName, w: correct, u: upsetCall, ev, d}
+
+// best-effort favorite detection from the odds text ("Makhachev around -350, Garry +255")
+function favoriteOf(f) {
+  const mu = findMatchup(f.f1.name, f.f2.name);
+  if (!mu || !mu.odds) return null;
+  const o = mu.odds.toLowerCase();
+  const near = name => {
+    const t = (name || "").trim().split(/\s+/).pop().toLowerCase();
+    const i = o.indexOf(t);
+    if (i < 0) return false;
+    const after = o.slice(i, i + t.length + 22);
+    return /[-−]\s?\d{3}/.test(after);
+  };
+  const f1fav = near(f.f1.name), f2fav = near(f.f2.name);
+  if (f1fav && !f2fav) return norm(f.f1.name);
+  if (f2fav && !f1fav) return norm(f.f2.name);
+  return null;
+}
+
+// record outcomes for settled picked fights (runs on every render; writes once per fight)
+function settlePicks(events) {
+  let changed = false;
+  events.forEach(ev => ev.fights.forEach(f => {
+    const pk = pairKey(f.f1.name, f.f2.name);
+    const pick = PICKS[pk];
+    if (!pick || PICK_HIST[pk] || !f.done || !(f.f1.winner || f.f2.winner)) return;
+    const winner = norm(f.f1.winner ? f.f1.name : f.f2.name);
+    const fav = favoriteOf(f);
+    PICK_HIST[pk] = { p: pick, w: winner === pick, u: !!(fav && fav !== pick && winner === pick), ev: ev.name, d: ev.date };
+    changed = true;
+  }));
+  if (changed) lsSet("fc-pick-hist", PICK_HIST);
+}
+
+function pickRecord() {
+  let w = 0, l = 0, u = 0;
+  Object.values(PICK_HIST).forEach(h => { h.w ? w++ : l++; if (h.u) u++; });
+  return { w, l, u };
+}
+
+function togglePick(pk, name) {
+  if (PICK_HIST[pk]) return; // already settled
+  if (PICKS[pk] === name) delete PICKS[pk]; else PICKS[pk] = name;
+  lsSet("fc-picks", PICKS);
+  rerenderPreservingState();
+}
+
+/* ---------- re-render without losing open cards ---------- */
+let LAST_EVENTS = null, LAST_OFFLINE = false;
+function rerenderPreservingState() {
+  if (!LAST_EVENTS) return;
+  const box = document.getElementById("eventsList");
+  const openEvs = new Set([...box.querySelectorAll(".event.open")].map(e => e.dataset.ev));
+  const openFights = new Set([...box.querySelectorAll(".fight.open")].map(e => e.dataset.pk));
+  const y = window.scrollY;
+  renderEvents(LAST_EVENTS, box, LAST_OFFLINE);
+  box.querySelectorAll(".event").forEach(e => { if (openEvs.has(e.dataset.ev)) e.classList.add("open"); });
+  box.querySelectorAll(".fight").forEach(e => { if (openFights.has(e.dataset.pk)) e.classList.add("open"); });
+  window.scrollTo({ top: y });
+}
+
+/* ---------- fight-night live mode ---------- */
+let pollTimer = null;
+function isCardWindow(events) {
+  const now = Date.now();
+  return events.some(ev =>
+    ev.fights.some(f => f.live) ||
+    (now >= new Date(ev.date).getTime() - 30 * 60000 && now <= new Date(ev.date).getTime() + 8 * 3600000));
+}
+function scheduleNextPoll(events) {
+  if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
+  const liveNow = events.some(ev => ev.fights.some(f => f.live));
+  const inWindow = isCardWindow(events);
+  const soon = events.some(ev => { const dt = new Date(ev.date).getTime() - Date.now(); return dt > 0 && dt < 2 * 3600000; });
+  let delay = null;
+  if (liveNow || inWindow) delay = 60000;       // fight night: every minute
+  else if (soon) delay = 5 * 60000;             // card starts soon: every 5 min
+  if (delay) pollTimer = setTimeout(() => { if (document.visibilityState === "visible") loadEvents(); else pollTimer = null; }, delay);
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && LAST_EVENTS && !LAST_OFFLINE && isCardWindow(LAST_EVENTS) && !pollTimer) loadEvents();
+});
+
 function renderEvents(events, box, offline) {
+  LAST_EVENTS = events; LAST_OFFLINE = offline;
+  settlePicks(events);
   let html = "";
   if (offline) html += '<div class="error-box"><b>Couldn\'t reach the live schedule</b><br>Showing the last saved snapshot instead.<br><button class="refresh-btn" onclick="loadEvents()">Try again</button></div>';
   html += events.map((ev, i) => renderEvent(ev, i)).join("");
@@ -545,16 +661,26 @@ function renderEvents(events, box, offline) {
   box.innerHTML = html;
   box.querySelectorAll(".event-head").forEach(h => h.addEventListener("click", () => h.parentElement.classList.toggle("open")));
   box.querySelectorAll(".fight-row").forEach(r => r.addEventListener("click", () => r.parentElement.classList.toggle("open")));
-  // header chip: next card countdown
+  box.querySelectorAll(".pick-btn").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation();
+    togglePick(b.dataset.pk, b.dataset.name);
+  }));
+  // header chips: live / next card / pick record
+  const liveNow = !offline && events.some(ev => ev.fights.some(f => f.live));
+  let chips = "";
+  if (liveNow) chips += '<span class="chip live"><span class="pulse"></span><b>LIVE</b>&nbsp;&middot; auto-updating</span>';
   const next = events.find(ev => new Date(ev.date) > new Date(Date.now() - 10 * 3600000));
-  if (next) {
+  if (next && !liveNow) {
     const { days } = fmtEventDate(next.date);
     const when = new Date(next.date).toDateString() === new Date().toDateString() ? "tonight"
       : days <= 0 ? "today" : days === 1 ? "tomorrow" : "in " + (days + 1) + " days";
     const short = next.name.split(":")[0];
-    document.getElementById("headChips").innerHTML =
-      `<span class="chip"><span class="pulse"></span>Next card: <b>${esc(short)}</b>&nbsp;${when}</span>`;
+    chips += `<span class="chip"><span class="pulse"></span>Next card: <b>${esc(short)}</b>&nbsp;${when}</span>`;
   }
+  const rec = pickRecord();
+  if (rec.w + rec.l > 0) chips += `<span class="chip picks">&#127919; Your picks: <b>${rec.w}-${rec.l}</b>${rec.u ? "&nbsp;&middot; " + rec.u + " upset" + (rec.u > 1 ? "s" : "") + " called" : ""}</span>`;
+  document.getElementById("headChips").innerHTML = chips;
+  if (!offline) scheduleNextPoll(events);
 }
 
 function renderEvent(ev, idx) {
@@ -583,12 +709,23 @@ function renderEvent(ev, idx) {
       <div class="side">${avatar(me.f2.name, 64, "blue", me.f2.id)}<div class="nm">${esc(me.f2.name)}</div><div class="rc">${esc(me.f2.record)}</div></div>
     </div>` : "";
 
-  return `<div class="event ${idx === 0 ? "next" : ""}">
+  // per-event pick tally
+  let pw = 0, pl = 0, pending = 0;
+  ev.fights.forEach(f => {
+    const pk = pairKey(f.f1.name, f.f2.name);
+    if (!PICKS[pk]) return;
+    const h = PICK_HIST[pk];
+    if (h) { h.w ? pw++ : pl++; } else pending++;
+  });
+  const tally = (pw + pl + pending) ? `<div class="pick-tally">&#127919; Your picks on this card: ${pw + pl ? `<b>${pw}-${pl}</b>` : ""}${pw + pl && pending ? " &middot; " : ""}${pending ? `<b>${pending}</b> waiting on results` : ""}</div>` : "";
+  const anyLive = ev.fights.some(f => f.live);
+
+  return `<div class="event ${idx === 0 ? "next" : ""}" data-ev="${esc(norm(ev.name))}">
     <div class="event-head">
       <div class="event-top">
         <div class="datebox"><span class="mo">${esc(mo)}</span><span class="da">${da}</span></div>
         <div style="min-width:0">
-          <div class="event-kind">${kind} ${badge} ${titleBadge}</div>
+          <div class="event-kind">${kind} ${anyLive ? '<span class="badge tonight">&#9679; Live now</span>' : badge} ${titleBadge}</div>
           <div class="event-name">${esc(ev.name.replace(/^UFC Fight Night:\s*/i, ""))}</div>
           <div class="event-sub">${date}<span class="dot">·</span>${time} your time${ev.venue ? '<span class="dot">·</span>' + esc(ev.venue) : ""} ${analyzed}</div>
         </div>
@@ -597,6 +734,7 @@ function renderEvent(ev, idx) {
       <div class="chev">&#9656;</div>
     </div>
     <div class="event-body">
+      ${tally}
       ${meta && meta.note ? '<div class="event-note">' + meta.note + "</div>" : ""}
       <div class="card-label main">Main card</div>
       ${useMains.map(f => renderFight(f, true)).join("")}
@@ -613,7 +751,28 @@ function renderFight(f, isMain) {
   const status = f.live ? '<span class="winner-tag" style="color:var(--gold-bright)">&#9679; Live now</span>'
     : w ? '<span class="winner-tag">Final &middot; ' + esc(w) + ' won</span>'
     : f.done ? '<span class="winner-tag">Final</span>' : "";
-  return `<div class="fight">
+
+  // pick'em UI
+  const pk = pairKey(f.f1.name, f.f2.name);
+  const myPick = PICKS[pk];
+  const pickable = !f.done && !f.live && f.f1.name !== "TBA" && f.f2.name !== "TBA";
+  const lastName = n => esc((n || "").trim().split(/\s+/).pop());
+  let pickHtml = "";
+  if (pickable) {
+    const btn = (ff) => `<button class="pick-btn ${myPick === norm(ff.name) ? "sel" : ""}" data-pk="${esc(pk)}" data-name="${esc(norm(ff.name))}">${myPick === norm(ff.name) ? "&#127919; " : ""}Pick ${lastName(ff.name)}</button>`;
+    pickHtml = `<div class="pick-row">${btn(f.f1)}${btn(f.f2)}</div>`;
+  } else if (myPick && f.live) {
+    const picked = myPick === norm(f.f1.name) ? f.f1.name : f.f2.name;
+    pickHtml = `<div class="pick-result" style="border-color:var(--hairline);color:var(--ink-2);background:var(--surface-2)">&#127919; You picked ${lastName(picked)} &middot; in progress</div>`;
+  } else if (myPick && w) {
+    const won = norm(w) === myPick;
+    const h = PICK_HIST[pk];
+    pickHtml = won
+      ? `<div class="pick-result win">&#127919; You called it${h && h.u ? " &middot; underdog &mdash; you beat the books!" : ""}</div>`
+      : `<div class="pick-result loss">&#10007; Not this time &middot; you had ${lastName(myPick === norm(f.f1.name) ? f.f1.name : f.f2.name)}</div>`;
+  }
+
+  return `<div class="fight" data-pk="${esc(pk)}">
     <div class="fight-row">
       <div class="fight-meta">${esc(f.weight)} ${mu && mu.title ? '<span class="badge title">&#127942; ' + esc(mu.title) + "</span>" : ""} ${status}</div>
       <div class="matchline">
@@ -621,6 +780,7 @@ function renderFight(f, isMain) {
         <div class="vs">VS</div>
         <div class="fighter right">${avatar(f.f2.name, 44, "blue", f.f2.id)}<div><div class="fname">${esc(f.f2.name)}</div><div class="frec">${esc(f.f2.record)}</div></div></div>
       </div>
+      ${pickHtml}
       ${hasBreakdown ? '<div class="tap-hint"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>Tap for the breakdown</div>' : ""}
     </div>
     ${hasBreakdown ? '<div class="breakdown">' + renderBreakdown(mu, p1, p2, f) + "</div>" : ""}
