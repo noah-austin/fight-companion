@@ -399,7 +399,7 @@
    Live schedule: ESPN public API · headshots: ESPN CDN · analysis baked.
    ===================================================================== */
 
-const ANALYSIS_STAMP = "August 30, 2026";
+const ANALYSIS_STAMP = "August 31, 2026";
 const SPINOFF_RX = /contender series|dana white|ultimate fighter|road to ufc|tuf\b/i;
 
 /* ---------- baked data (filled below) ---------- */
@@ -778,7 +778,38 @@ Object.assign(FIGHTERS, {
     "Dominant wrestling carried him through the TUF 34 bracket via hard-nosed decisions",
     "10-3 with a regional title already at 22 — veteran seasoning for his age"],
     weaknesses: ["Wins on control, not damage — close rounds can slip away against a flashier finisher", "Osmanli knows his game intimately from the TUF house"],
-    history: "The Kyrgyz grappler out-wrestled everyone Michael Bisping put in front of him on The Ultimate Fighter. <b>The final is teammate-vs-teammate: his blanket wrestling against Osmanli's submission tricks, winner takes the UFC contract.</b>" }
+    history: "The Kyrgyz grappler out-wrestled everyone Michael Bisping put in front of him on The Ultimate Fighter. <b>The final is teammate-vs-teammate: his blanket wrestling against Osmanli's submission tricks, winner takes the UFC contract.</b>" },
+  normadumont: { name: "Norma Dumont", nick: "The Immortal", age: 35, country: "Brazil", style: "Patient boxer-grappler — heavy hands behind a stiff jab, strong in the clinch", strengths: [
+    "Ranked #2 at women's bantamweight after a six-fight win streak that made her the division's most consistent contender",
+    "Big for the weight class and hard to move — wins the clinch and the cage-wrestling exchanges"],
+    weaknesses: ["That streak just ended: Joselyne Edwards upset her on the cards in April", "Deliberate, low-volume pace can hand away close rounds"],
+    history: "Dumont has quietly been the most reliable name in a thin division for years, stacking six straight wins before Joselyne Edwards out-worked her in April. <b>At 35 and ranked #2, this co-main is about getting the streak — and the title conversation — back.</b>" },
+  ailinperez: { name: "Ailin Perez", nick: "Fiona", age: 31, country: "Argentina", style: "Grinding top-control wrestler with a showman's personality", strengths: [
+    "Six straight wins since 2023, most recently a decision over Macy Chiasson in February",
+    "Smothering ground control — she takes people down and stays there for fifteen minutes",
+    "One of the sport's genuine characters, which has made her a fan favorite"],
+    weaknesses: ["Only one finish in that six-fight run — she wins rounds, she doesn't end fights", "Lost her UFC debut in 2022; Dumont is by far the biggest name she has faced"],
+    history: "Argentina's breakout women's fighter lost her UFC debut and has not lost since, riding control-heavy decisions to the #4 ranking. <b>Beat Dumont and she is one win from a title shot; it is the biggest fight of her career either way.</b>" },
+  rodolfobellato: { name: "Rodolfo Bellato", nick: "Trator", age: 29, country: "Brazil", style: "Bulldozing pressure fighter — forward march, big hooks, heavy top game", strengths: [
+    "Genuine one-shot power — stopped Luke Fernandez inside a round in March",
+    "Relentless forward pressure that drags opponents into brawls they didn't sign up for"],
+    weaknesses: ["Chaotic style leaves him open on the way in", "Bumpy UFC run — a no-contest and a loss in an otherwise promising stretch"],
+    history: "Nicknamed 'Tractor' for a reason, Bellato walks people down until something breaks. His UFC spell has been eventful rather than smooth, but the March TKO of Fernandez put him back on track. <b>A thin light heavyweight division means two good wins go a long way.</b>" },
+  christianedwards: { name: "Christian Edwards", nick: "Pain", age: 27, country: "USA", style: "Athletic power striker with a wrestling base", strengths: [
+    "Started his pro career 5-0 and just stopped previously-unbeaten Glendal Whitney in February",
+    "Young for the division at 27, with room to still be improving"],
+    weaknesses: ["Rough patch on the regional scene — his Bellator run ended in three straight losses", "Barely any UFC mileage against a heavier hitter"],
+    history: "A Bellator product who hit a wall mid-career and rebuilt on the regional circuit, Edwards arrived in the UFC in May 2026. <b>This is his chance to prove the comeback is real against a Brazilian who ends fights early.</b>" },
+  yazminjauregui: { name: "Yazmin Jauregui", nick: "", age: 27, country: "Mexico (Tijuana)", style: "High-volume boxer — combinations, pressure, hands never stop", strengths: [
+    "Exciting, crowd-pleasing pace — she throws more punches than almost anyone at 115",
+    "11-2 with a Mexican fan base that turns out for her"],
+    weaknesses: ["Out of action since September 2024 — two years of rust", "Her last fight was a submission loss; grapplers are the puzzle she hasn't solved"],
+    history: "The Tijuana boxer burst into the UFC with an instant Fight of the Night in 2022 and looked like Mexico's next star at strawweight, then two setbacks and a long layoff stalled everything. <b>At 27 she's young enough for a full reset — this is the fight that starts it.</b>" },
+  vanessademopoulos: { name: "Vanessa Demopoulos", nick: "Lil Monster", age: 37, country: "USA", style: "Scrappy submission hunter — armbars and chaos", strengths: [
+    "Four career submission wins and a willingness to attack from anywhere, including off her back",
+    "Enormous heart and one of the most likeable personalities on the roster"],
+    weaknesses: ["Three-fight losing streak — almost certainly fighting for her roster spot", "Gives up size, speed and volume to almost everyone at 115"],
+    history: "A former pole-dancing instructor who talked her way into MMA late, Demopoulos became a cult favorite for her celebrations as much as her armbars. <b>Three straight losses at 37 means this one is very likely do-or-die.</b>" }
 });
 
 /* ============ FIGHTER PROFILES — UFC Paris (Sep 5) ============ */
@@ -977,8 +1008,14 @@ Object.assign(MATCHUPS, {
     note: "A matchup first booked in 2024 that finally happens: Japan's world-class wrestler (and Road to UFC champ) against a TUF 29 finalist coming back from a two-plus-year layoff. Both are 3-1 in the UFC. Nakamura's athletic ceiling is the story; Hiestand's grit and rust are the questions." },
   "ilimbekakylbekuulu|mehemmedeliosmanli": { odds: "Close line expected",
     note: "The TUF 34 bantamweight final — and it's teammate-vs-teammate, since both were Michael Bisping picks. Osmanli's flashy submissions (he hit the show's first-ever buggy choke) against Akylbek Uulu's grinding Kyrgyz wrestling. Both are 22. Winner takes the contract." },
+  "ailinperez|normadumont": { odds: "Close line expected — check live odds",
+    note: "The co-main, and the most meaningful fight on the card: #2 vs #4 at women's bantamweight. Dumont's size and clinch boxing against Perez's takedowns and top control. Dumont is trying to restart a streak Joselyne Edwards ended in April; Perez has won six straight and is one win from the title picture." },
+  "christianedwards|rodolfobellato": { odds: "Lines not posted at write-up time",
+    note: "Two light heavyweights who hurt people: Bellato's bulldozing pressure and one-shot power against Edwards' athleticism and wrestling base. Neither man has a reliable off switch, so this very likely doesn't reach the judges. In a division this thin, the winner climbs fast." },
+  "vanessademopoulos|yazminjauregui": { odds: "Jauregui expected to be favored",
+    note: "Volume vs desperation. Jauregui's non-stop boxing should out-land Demopoulos everywhere on the feet — but Demopoulos is on a three-fight skid, is almost certainly fighting for her job, and only needs one scramble to find an armbar. Jauregui's own two-year layoff is the wildcard." },
 
-  "danhooker|salahdineparnasse": { odds: "Parnasse -400, Hooker +300 — remarkable for a UFC debutant",
+  "danhooker|salahdineparnasse": { odds: "Parnasse -400 to -480, Hooker +300 to +357 — remarkable for a UFC debutant",
     note: "Classic crossroads fight: the UFC's #10 lightweight and battle-worn brawler vs Europe's most decorated non-UFC champion, debuting at home in Paris. If Parnasse wins he likely inherits a ranking overnight; if Hooker's five-round pace holds up, he wrecks the UFC's newest star-making project." },
   "axelsola|faresziam": { odds: "Near pick'em",
     note: "A rare all-French co-main: Ziam's long southpaw kickboxing and veteran patience against Sola's explosive finishing surge (he choked Bonfim unconscious six weeks before this card). Winner becomes France's lightweight standard-bearer." },
@@ -1027,8 +1064,8 @@ EVENT_META.push(
     note: "The flyweight title rematch of the 26-second freak-injury title change — plus a five-round lightweight eliminator where the winner is expected to get champion Gaethje next.",
     mainCard: ["alexandrepantoja|joshuavan", "armantsarukyan|mauricioruffy", "doohochoi|patriciopitbull", "brianortega|renatomoicano", "alonzomenifield|iwobaraniewski"] },
   { match: ["rosas jr. vs. barcelos", "rosas jr vs barcelos", "rosas"], titles: "",
-    note: "APEX card in Las Vegas, headlined by the first main event for both men — plus The Ultimate Fighter 34 finals. Fight order was still shuffling at write-up time, so some breakdown fights may land on the prelims.",
-    mainCard: ["raonibarcelos|raulrosasjr", "monteljackson|rickysimon", "bradyhiestand|rinyanakamura", "ilimbekakylbekuulu|mehemmedeliosmanli"] }
+    note: "APEX card in Las Vegas, headlined by the first main event for both men. The order firmed up in the last week: Norma Dumont vs Ailin Perez is now the co-main, and both Ultimate Fighter 34 finals — plus Nakamura vs Hiestand — dropped to the prelims. Breakdowns are written for those prelim fights too; tap them.",
+    mainCard: ["raonibarcelos|raulrosasjr", "ailinperez|normadumont", "monteljackson|rickysimon", "christianedwards|rodolfobellato", "vanessademopoulos|yazminjauregui"] }
 );
 
 /* ============ FALLBACK SNAPSHOT (if live feed unreachable) ============ */
@@ -1043,7 +1080,6 @@ EVENT_META.push(
       F("Featherweight", "Losene Keita", "16-2-0", "Muhammad Naimov", "13-4-0"),
       F("Heavyweight", "Mario Pinto", "9-0-0", "Ryan Spann", "22-10-0"),
       F("Light Heavyweight", "Oumar Sy", "11-0-0", "Modestas Bukauskas", "18-6-0"),
-      F("Featherweight", "Nathaniel Wood", "20-6-0", "Mairon Santos", "17-1-0"),
       F("Featherweight", "Kurtis Campbell", "10-1-0", "Trevor Peek", "10-3-0"),
       F("Welterweight", "Daniil Donchenko", "", "Punahele Soriano", ""),
       F("W Bantamweight", "Nora Cornolle", "10-2-0", "Klaudia Sygula", "8-1-0"),
@@ -1063,7 +1099,8 @@ EVENT_META.push(
       F("Middleweight", "Yousri Belgaroui", "10-3-0", "Djorden Santos", ""),
       F("Featherweight", "Ramiro Jimenez", "11-0-0", "Rodrigo Vera", "22-1-1"),
       F("W Flyweight", "JJ Aldrich", "15-7-0", "Regina Tarin", "8-0-0"),
-      F("Lightweight", "Rafa Garcia", "19-4-0", "Rongzhu", "28-6-0")
+      F("Lightweight", "Rafa Garcia", "19-4-0", "Rongzhu", "28-6-0"),
+      F("Lightweight", "Drakkar Klose", "16-3-1", "Tommy Gantt", "12-0-0")
     ]},
     { name: "UFC 331: Van vs. Pantoja 2", date: "2026-09-20T01:00Z", venue: "Crypto.com Arena, Los Angeles", fights: [
       F("Flyweight", "Joshua Van", "17-2-0", "Alexandre Pantoja", "30-6-0"),
@@ -1082,20 +1119,21 @@ EVENT_META.push(
     ]},
     { name: "UFC Fight Night: Rosas Jr. vs. Barcelos", date: "2026-09-26T22:00Z", venue: "UFC APEX, Las Vegas", fights: [
       F("Bantamweight", "Raul Rosas Jr.", "12-1-0", "Raoni Barcelos", "22-5-0"),
+      F("W Bantamweight", "Norma Dumont", "13-3-0", "Ailin Perez", "13-2-0"),
       F("Bantamweight", "Montel Jackson", "15-4-0", "Ricky Simon", "22-7-1"),
+      F("Light Heavyweight", "Rodolfo Bellato", "13-3-1", "Christian Edwards", "8-5-0"),
+      F("W Strawweight", "Yazmin Jauregui", "11-2-0", "Vanessa Demopoulos", "11-8-0"),
       F("Bantamweight", "Brady Hiestand", "9-2-0", "Rinya Nakamura", "10-1-0"),
       F("Bantamweight", "Mehemmedeli Osmanli", "12-1-0", "Ilimbek Akylbek Uulu", "10-3-0"),
-      F("W Bantamweight", "Norma Dumont", "13-3-0", "Ailin Perez", "13-2-0"),
-      F("Lightweight", "Josiah Harrell", "11-1-0", "Elves Brener", "16-6-0"),
+      F("W Strawweight", "Melissa Amaya", "8-0-0", "Valesca Machado", "15-4-0"),
       F("Bantamweight", "John Castaneda", "21-8-1", "Alatengheili", "17-10-2"),
+      F("Lightweight", "Josiah Harrell", "11-1-0", "Elves Brener", "16-6-0"),
       F("Middleweight", "Rodolfo Vieira", "11-5-0", "Robert Bryczek", "18-7-0"),
-      F("Light Heavyweight", "Rodolfo Bellato", "13-3-1", "Christian Edwards", "8-5-0"),
-      F("W Strawweight", "Vanessa Demopoulos", "11-8-0", "Yazmin Jauregui", "11-2-0"),
-      F("W Strawweight", "Melissa Amaya", "8-0-0", "Valesca Machado", "")
+      F("Welterweight", "Mickey Gall", "8-6-0", "Sedriques Dumas", "10-3-0")
     ]}
   );
 })();
-/* ============ BELTS & RANKINGS (snapshot: Aug 30, 2026, post-UFC Shanghai) ============ */
+/* ============ BELTS & RANKINGS (snapshot: Aug 31, 2026, post-UFC Shanghai) ============ */
 DIVISIONS.men = [
   { name: "Heavyweight", weight: "265 lb", champ: { name: "Tom Aspinall", record: "15-3", country: "England" },
     interim: { name: "Ciryl Gane", record: "14-2", country: "France" },
