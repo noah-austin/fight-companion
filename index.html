@@ -310,6 +310,28 @@
   .chip.picks { border-color: rgba(227,165,58,0.4); }
   .upd-note { color: var(--ink-3); font-size: 10.5px; }
 
+  /* ---------- notifications & calendar ---------- */
+  .evt-actions { display: flex; gap: 8px; margin-top: 11px; }
+  .evt-btn {
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    background: var(--surface-2); border: 1px solid var(--hairline); color: var(--ink-2);
+    border-radius: 9px; padding: 8px 6px; font-size: 11px; font-weight: 700; cursor: pointer;
+    text-transform: uppercase; letter-spacing: .4px; font-family: var(--disp);
+  }
+  .evt-btn.on { background: rgba(227,165,58,0.12); border-color: rgba(227,165,58,0.45); color: var(--gold-bright); }
+  #toasts { position: fixed; top: 10px; left: 10px; right: 10px; z-index: 200; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+  .toast {
+    max-width: 660px; margin: 0 auto; width: 100%;
+    background: rgba(23,23,26,0.97); border: 1px solid rgba(232,72,77,0.5); border-radius: 13px;
+    padding: 11px 14px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    display: flex; gap: 10px; align-items: center; pointer-events: auto;
+    animation: toastIn .25s ease;
+  }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(-12px);} to { opacity: 1; transform: none;} }
+  .toast .t-em { font-size: 20px; flex-shrink: 0; }
+  .toast .t-title { font-family: var(--disp); font-size: 14.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; line-height: 1.15;}
+  .toast .t-body { color: var(--ink-2); font-size: 12px; margin-top: 1px; }
+
   /* ---------- add-to-home-screen banner ---------- */
   #a2hs {
     display: none; position: relative;
@@ -651,9 +673,94 @@ document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && LAST_EVENTS && !LAST_OFFLINE && isCardWindow(LAST_EVENTS) && !pollTimer) loadEvents();
 });
 
+/* ---------- fight-start alerts (toasts + system notifications where allowed) ---------- */
+let ALERTS_ON = false;
+try { ALERTS_ON = localStorage.getItem("fc-alerts") === "1"; } catch (e) {}
+const canSysNotify = () => ("Notification" in window) && Notification.permission === "granted";
+
+function toast(em, title, body) {
+  let holder = document.getElementById("toasts");
+  if (!holder) { holder = document.createElement("div"); holder.id = "toasts"; document.body.appendChild(holder); }
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.innerHTML = `<div class="t-em">${em}</div><div><div class="t-title">${esc(title)}</div><div class="t-body">${esc(body)}</div></div>`;
+  el.addEventListener("click", () => el.remove());
+  holder.appendChild(el);
+  setTimeout(() => el.remove(), 8000);
+}
+
+function fireAlert(em, title, body) {
+  if (!ALERTS_ON) return;
+  toast(em, title, body);
+  if (canSysNotify()) {
+    try {
+      const icon = (document.querySelector('link[rel="apple-touch-icon"]') || {}).href;
+      new Notification(title, { body, icon, tag: title });
+    } catch (e) { /* iOS and some browsers refuse local notifications — the toast already showed */ }
+  }
+}
+
+async function toggleAlerts(btn) {
+  if (!ALERTS_ON && ("Notification" in window) && Notification.permission === "default") {
+    try { await Notification.requestPermission(); } catch (e) {}
+  }
+  ALERTS_ON = !ALERTS_ON;
+  try { localStorage.setItem("fc-alerts", ALERTS_ON ? "1" : "0"); } catch (e) {}
+  rerenderPreservingState();
+  if (ALERTS_ON) toast("🔔", "Fight alerts on", canSysNotify() ? "You'll get notified as each fight starts and finishes." : "You'll see alerts here while the app is open. (iPhones don't allow web notifications outside the app — use 🗓 Remind me for a real calendar alarm.)");
+}
+
+// diff fight statuses between polls and alert on transitions
+let PREV_STATUS = null;
+function alertOnChanges(events) {
+  const cur = {};
+  events.forEach(ev => ev.fights.forEach(f => {
+    cur[pairKey(f.f1.name, f.f2.name)] = { live: f.live, done: f.done, f, ev: ev.name };
+  }));
+  if (PREV_STATUS) {
+    Object.keys(cur).forEach(pk => {
+      const now = cur[pk], was = PREV_STATUS[pk];
+      if (!was) return;
+      const names = now.f.f1.name + " vs " + now.f.f2.name;
+      if (now.live && !was.live && !was.done) fireAlert("🔴", names + " — starting now", now.ev);
+      if (now.done && !was.done) {
+        const w = now.f.f1.winner ? now.f.f1.name : now.f.f2.winner ? now.f.f2.name : null;
+        const picked = PICKS[pk];
+        if (picked && w) fireAlert(norm(w) === picked ? "🎯" : "❌", w + " wins", norm(w) === picked ? "You called it!" : "Your pick came up short.");
+        else if (w) fireAlert("🏁", w + " wins", names);
+      }
+    });
+  }
+  PREV_STATUS = cur;
+}
+
+/* ---------- add-to-calendar (.ics with built-in alarms) ---------- */
+function downloadIcs(evName, evDate, venue) {
+  const dt = new Date(evDate);
+  const fmt = d => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const end = new Date(dt.getTime() + 6 * 3600000);
+  const uid = norm(evName) + "@fight-companion";
+  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Fight Companion//EN",
+    "BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + fmt(new Date()),
+    "DTSTART:" + fmt(dt), "DTEND:" + fmt(end),
+    "SUMMARY:🥊 " + evName.replace(/,/g, "\\,"),
+    "LOCATION:" + (venue || "").replace(/,/g, "\\,"),
+    "DESCRIPTION:Fight card reminder from Fight Companion — noah-austin.github.io/fight-companion",
+    "BEGIN:VALARM", "TRIGGER:-PT1H", "ACTION:DISPLAY", "DESCRIPTION:🥊 " + evName.replace(/,/g, "\\,") + " starts in 1 hour", "END:VALARM",
+    "BEGIN:VALARM", "TRIGGER:PT0M", "ACTION:DISPLAY", "DESCRIPTION:🥊 " + evName.replace(/,/g, "\\,") + " is starting", "END:VALARM",
+    "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+  const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+  const a = document.createElement("a");
+  a.href = url; a.download = norm(evName).slice(0, 30) + ".ics";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  toast("🗓", "Added to your calendar file", "Open it and confirm — your phone will remind you 1 hour before and at start time.");
+}
+
 function renderEvents(events, box, offline) {
   LAST_EVENTS = events; LAST_OFFLINE = offline;
   settlePicks(events);
+  if (!offline) alertOnChanges(events);
   let html = "";
   if (offline) html += '<div class="error-box"><b>Couldn\'t reach the live schedule</b><br>Showing the last saved snapshot instead.<br><button class="refresh-btn" onclick="loadEvents()">Try again</button></div>';
   html += events.map((ev, i) => renderEvent(ev, i)).join("");
@@ -664,6 +771,14 @@ function renderEvents(events, box, offline) {
   box.querySelectorAll(".pick-btn").forEach(b => b.addEventListener("click", e => {
     e.stopPropagation();
     togglePick(b.dataset.pk, b.dataset.name);
+  }));
+  box.querySelectorAll(".ics-btn").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation();
+    downloadIcs(b.dataset.n, b.dataset.d, b.dataset.v);
+  }));
+  box.querySelectorAll(".alert-btn").forEach(b => b.addEventListener("click", e => {
+    e.stopPropagation();
+    toggleAlerts(b);
   }));
   // header chips: live / next card / pick record
   const liveNow = !offline && events.some(ev => ev.fights.some(f => f.live));
@@ -731,6 +846,10 @@ function renderEvent(ev, idx) {
         </div>
       </div>
       ${hero}
+      <div class="evt-actions">
+        <button class="evt-btn ics-btn" data-n="${esc(ev.name)}" data-d="${esc(ev.date)}" data-v="${esc(ev.venue || "")}">&#128467; Remind me</button>
+        <button class="evt-btn alert-btn ${ALERTS_ON ? "on" : ""}">&#128276; Fight alerts: ${ALERTS_ON ? "on" : "off"}</button>
+      </div>
       <div class="chev">&#9656;</div>
     </div>
     <div class="event-body">
