@@ -439,7 +439,7 @@
    Live schedule: ESPN public API · headshots: ESPN CDN · analysis baked.
    ===================================================================== */
 
-const ANALYSIS_STAMP = "September 8, 2026";
+const ANALYSIS_STAMP = "September 13, 2026";
 const SPINOFF_RX = /contender series|dana white|ultimate fighter|road to ufc|tuf\b/i;
 
 /* ---------- baked data (filled below) ---------- */
@@ -1091,79 +1091,6 @@ Object.assign(FIGHTERS, {
     history: "A former pole-dancing instructor who talked her way into MMA late, Demopoulos became a cult favorite for her celebrations as much as her armbars. <b>Three straight losses at 37 means this one is very likely do-or-die.</b>" }
 });
 
-/* ============ FIGHTER PROFILES — Noche UFC, Glendale AZ (Sep 12) ============ */
-Object.assign(FIGHTERS, {
-  jeansilva: { name: "Jean Silva", nick: "Lord", age: 29, country: "Brazil (Fighting Nerds)", style: "Ultra-aggressive pressure striker with elite KO power", strengths: [
-    "88% finish rate — stopped Bryce Mitchell, Drew Dober and Charles Jourdain in highlight fashion",
-    "Rebounded from his only UFC loss by out-pointing top-10 Arnold Allen in January",
-    "Durable chin plus strong takedown defense (~79%)"],
-    weaknesses: ["KO'd by Diego Lopes (spinning back elbow) at last year's Noche UFC — reckless brawling got him caught", "Emotional, wild style can leak defense"],
-    history: "A viral Brazilian slugger from the 'Fighting Nerds' camp who ripped off six straight UFC wins with trash talk and finishes before Lopes stopped him. Ranked around #6 at featherweight, he headlines Noche UFC for the second straight year. <b>A win keeps him one or two fights from a title shot; losing to an unranked late replacement would be a disaster.</b>" },
-  josemigueldelgado: { name: "Jose Miguel Delgado", nick: "", age: 28, country: "USA (Yuma, Arizona — home-state fight)", style: "Aggressive power striker famous for fight-ending knees; long 5'11\" frame", strengths: [
-    "Back-to-back 2026 wins over veteran Andre Fili and unbeaten Austin Bashi",
-    "Real finishing power — a 26-second KO of Hyder Amil and a highlight-reel Contender Series knee KO",
-    "Size and reach advantages over Silva, in his backyard"],
-    weaknesses: ["Taking the biggest fight of his life on under a month's notice", "Has never fought five rounds", "Lone UFC loss: outworked by Nathaniel Wood"],
-    history: "An Arizona product who won his UFC deal on the Contender Series in 2024 and has gone 4-1 with scary knockouts. When Yair Rodriguez pulled out, <b>Delgado jumped into a five-round main event essentially at home on 3½ weeks' notice.</b> An upset of top-ten Silva would rocket him into the rankings overnight." },
-  brandonmoreno: { name: "Brandon Moreno", nick: "The Assassin Baby", age: 32, country: "Mexico (Tijuana)", style: "Well-rounded: crisp boxing, BJJ black belt, relentless pace", strengths: [
-    "Former two-time UFC flyweight champion — 35 pro fights of experience, wars with Figueiredo, Pantoja, Royval",
-    "11 submission wins and a gas tank that never fades"],
-    weaknesses: ["Two-fight skid: TKO'd by Taira, then upset on the cards by Lone'er Kavanagh in February", "Heavy career mileage at 32 — real questions about decline"],
-    history: "The beloved Tijuana native who became Mexico's first UFC champion and headlined the original Noche UFC. He's lost three of four, including a shocking upset in Mexico City in February. <b>This is close to a must-win to stay relevant at flyweight.</b>" },
-  josephmorales: { name: "Joseph Morales", nick: "Bopo", age: 31, country: "USA (Team Alpha Male)", style: "Submission-first grappler (triangles, chokes) with improving boxing", strengths: [
-    "Won The Ultimate Fighter 33, then guillotined Matt Schnell in round 1 of his return",
-    "10 finishes (8 by submission) — dangerous everywhere on the mat",
-    "Unbeaten since 2018 — one of the division's best comeback stories"],
-    weaknesses: ["Both career losses came in his first UFC stint (2018) before he was cut", "Moreno is by far the best opponent of his career"],
-    history: "A former teenage prodigy who was in the UFC at 23, got released after two losses in 2018, and spent seven years rebuilding. He clawed back through TUF and smoked Schnell in his return. <b>Beating a legend like Moreno puts him straight into the flyweight rankings.</b>" },
-  tommymcmillen: { name: "Tommy McMillen", nick: "Tommy Gun", age: 28, country: "USA (Montana; trains with Sean O'Malley's camp)", style: "High-volume striker with a state-champ wrestling base", strengths: [
-    "11-0 with 10 finishes — 9 in the first round",
-    "Reportedly broke the UFC's three-round significant-strike record (252) in his July win",
-    "Relentless pace behind a 6'0\" featherweight frame"],
-    weaknesses: ["Only two UFC fights — unproven against elite opposition", "Willingness to brawl at volume invites counters from a one-shot KO artist"],
-    history: "A Montana fighter raised in the sport by his pro-fighter dad, McMillen won his contract in 2025 and has been a human highlight reel since. <b>This unbeaten-vs-unbeaten showdown crowns one of featherweight's prospects to watch.</b>" },
-  marwanrahiki: { name: "Marwan Rahiki", nick: "Freaky", age: 24, country: "Morocco (fights out of Australia)", style: "Explosive kickboxing-based knockout artist", strengths: [
-    "9-0 with a 100% finish rate — 8 knockouts",
-    "Broke an opponent's jaw in his March debut, then KO'd Ollie Schmid in under 3 minutes in Perth",
-    "Just 24 with a 72\" reach — massive upside"],
-    weaknesses: ["Rarely sees a third round — cardio unproven against McMillen's record-setting volume", "Grappling largely untested at UFC level"],
-    history: "A Moroccan carpenter-turned-fighter who moved to Australia at 19 to chase MMA and has knocked out nearly everyone put in front of him. <b>He's predicting a KO of McMillen to announce himself as a star.</b>" },
-  manonfiorot: { name: "Manon Fiorot", nick: "The Beast", age: 36, country: "France (Nice)", style: "Rangy, technical karate/kickboxing striker; elite distance control", strengths: [
-    "Ranked #2 — wins over Erin Blanchfield, Rose Namajunas, and a 74-second TKO of Jasudavicius in October",
-    "Never been KO'd; elite takedown defense and physical strength"],
-    weaknesses: ["Came up short in her one title shot — lost the late rounds to Shevchenko", "At 36, the window is closing"],
-    history: "The French striker ran through the flyweight division for years before dropping a razor-close decision to Valentina Shevchenko in her 2025 title shot, then blasted Jasudavicius in 74 seconds. <b>This former-challenger-vs-former-champ bout is effectively the eliminator for the next title shot after Natalia Silva's.</b>" },
-  alexagrasso: { name: "Alexa Grasso", nick: "", age: 33, country: "Mexico (Guadalajara)", style: "Slick volume boxer with a sneaky submission game", strengths: [
-    "Former UFC flyweight champion — famously submitted Valentina Shevchenko in 2023",
-    "Just KO'd Maycee Barber with a first-round punch in March — a statement return",
-    "Never been KO'd in 23 fights; deep five-round title experience"],
-    weaknesses: ["1-2-1 in the four fights before the Barber win", "Longer, rangier strikers can outpoint her — exactly Fiorot's profile"],
-    history: "Mexico's first female UFC champion shocked the world by choking out Shevchenko in 2023, then lost the trilogy and slid down the rankings. Her first-round KO of Barber revived her. <b>On Mexican Independence weekend — her signature stage — a win over #2 Fiorot puts her back in line for the belt.</b>" },
-  waldocortesacosta: { name: "Waldo Cortes-Acosta", nick: "Salsa Boy", age: 34, country: "Dominican Republic", style: "Heavy-handed boxer (ex-pro boxing) with real durability", strengths: [
-    "Ranked ~#5 after KO'ing Delija, Gaziev and Derrick Lewis in a three-month span",
-    "Never been knocked out in 27 fights",
-    "One of the division's most active fighters"],
-    weaknesses: ["Outpointed by Volkov in May when he stepped up in class", "Low wrestling output — a bad matchup against Blaydes' takedowns"],
-    history: "A former pro boxer from the Dominican Republic who became one of the UFC's most active heavyweights. Volkov cooled off his four-fight tear in May. <b>Beating a name like Blaydes repairs his top-5 standing in a thin division where two wins can mean a title shot.</b>" },
-  curtisblaydes: { name: "Curtis Blaydes", nick: "Razor", age: 35, country: "USA", style: "Elite wrestler with brutal ground-and-pound", strengths: [
-    "One of the best pure wrestlers in heavyweight history — record takedown numbers, wins over Volkov (twice) and Lewis",
-    "21 UFC fights of experience",
-    "Showed shocking heart in an all-time war with Josh Hokit in April"],
-    weaknesses: ["Historically vulnerable to one-punch power (KO losses to Ngannou, Lewis, Pavlovich, Aspinall)", "Lost 2 of 3 and turns 36 soon, with a lot of damage absorbed"],
-    history: "A perennial contender who has beaten nearly everyone outside the champions, Blaydes fell short in his 2024 interim title shot and then lost a slugfest to unbeaten Josh Hokit. <b>His wrestling is the classic antidote to Cortes-Acosta — but another loss likely ends his contender status for good.</b>" },
-  davidmartinez: { name: "David Martinez", nick: "Black Spartan", age: 28, country: "Mexico (Mexico City)", style: "Sharp counter-striker with KO power and a heavy low-kick game", strengths: [
-    "14-1 on a 10-fight win streak — already beat Rob Font and ex-title-challenger Chito Vera",
-    "Ranked in the bantamweight top 10 after just three UFC fights",
-    "Never been knocked out; 67% career finish rate"],
-    weaknesses: ["Only three UFC fights — a big experience gap against 30-fight veterans", "Recent wins were decisions; hasn't finished ranked opposition yet"],
-    history: "Mexico's fastest-rising star came through the Contender Series in 2024 and has already beaten Rob Font and Chito Vera. <b>On Noche UFC, beating a proven veteran like Ige keeps his surge toward the top five on schedule.</b>" },
-  danige: { name: "Dan Ige", nick: "50k", age: 35, country: "USA (Hawaii)", style: "Compact power boxer with a wrestling base and iron toughness", strengths: [
-    "Two decades of elite experience — has fought Holloway, Emmett, Lopes and Pitbull",
-    "Real one-punch KO power for the weight class"],
-    weaknesses: ["Lost 3 of 4, including his first-ever stoppage loss in February", "Making his first-ever cut to 135 lbs at age 35 — nobody knows how his body responds"],
-    history: "The Hawaiian slugger has been featherweight's beloved gatekeeper-to-the-stars for eight years. After dropping three of four he's rolling the dice on a bantamweight debut at 35. <b>He's the designated veteran test for Mexico's hottest prospect — an upset would instantly reboot his career.</b>" }
-});
-
 /* ============ FIGHTER PROFILES — UFC 332 (Oct 3, Salt Lake City) ============ */
 Object.assign(FIGHTERS, {
   nataliasilva: { name: "Natalia Silva", nick: "", age: 29, country: "Brazil", style: "Fast, elusive taekwondo-based striker — kicks from everywhere, hard to touch", strengths: [
@@ -1264,19 +1191,6 @@ Object.assign(MATCHUPS, {
   "vanessademopoulos|yazminjauregui": { odds: "Jauregui expected to be favored",
     note: "Volume vs desperation. Jauregui's non-stop boxing should out-land Demopoulos everywhere on the feet — but Demopoulos is on a three-fight skid, is almost certainly fighting for her job, and only needs one scramble to find an armbar. Jauregui's own two-year layoff is the wildcard." },
 
-  "jeansilva|josemigueldelgado": { odds: "Silva -428, Delgado +324",
-    note: "A short-notice hometown lottery ticket: Delgado has the length and fight-ending knees to hurt anyone, against a top-6 buzzsaw who walks through fire to land bombs. Silva's chin, volume and pace over five rounds should overwhelm a man who's never gone past three — but the first ten minutes are live for a Delgado flash finish." },
-  "brandonmoreno|josephmorales": { odds: "Moreno a modest favorite — check live lines",
-    note: "Fading-legend vs surging-comeback. Moreno holds every experience and technique edge, but Morales' submission game is a genuine threat if Moreno's recent durability issues resurface. Moreno's ranking — and arguably his career — vs Morales completing a seven-year redemption arc into the top 10." },
-  "marwanrahiki|tommymcmillen": { odds: "Lines not posted at write-up time",
-    note: "The purest violence guarantee on the card: an 11-0 record-breaking volume machine against a 9-0 finisher with a 100% stoppage rate. McMillen's wrestling and pace should compound over rounds; Rahiki's one-shot power is the equalizer early. Someone's zero goes." },
-  "alexagrasso|manonfiorot": { odds: "Fiorot expected to be favored",
-    note: "A de facto title eliminator between the last two women to challenge Shevchenko. Fiorot's range, size and takedown defense are a stylistic nightmare for Grasso, who needs to close distance behind boxing combinations or find a scramble for her trademark back-take. Winner queues up for gold." },
-  "curtisblaydes|waldocortesacosta": { odds: "Lines not posted at write-up time",
-    note: "The oldest question in MMA: boxer vs wrestler. If Blaydes' takedown entries are still there at 35, he can grind Salsa Boy out for fifteen minutes; if the first shots get stuffed, Blaydes' historically fragile chin is in serious danger. Top-5 positioning in a wide-open division." },
-  "danige|davidmartinez": { odds: "Martinez expected to be a sizable favorite",
-    note: "A textbook prospect-vs-veteran test on Mexican Independence weekend. Martinez's speed, kicks and counters should compound against an Ige coming off a KO loss and cutting to 135 for the first time at 35 — but Ige's right hand makes him dangerous for exactly as long as the fight lasts." },
-
   "alexandrepantoja|joshuavan": { title: "Flyweight title", odds: "A true pick'em — Van -107, Pantoja -113",
     note: "The rematch of the strangest title change in years: Pantoja's arm gave out 26 seconds in, and the 26 seconds answered nothing. It's Van's volume striking and takedown defense against Pantoja's scrambles and back-takes. If the rebuilt arm holds and Pantoja drags Van into grappling exchanges, he's live to reclaim the belt; if Van keeps it standing at his pace, the 36-year-old coming off surgery drowns in output." },
   "armantsarukyan|mauricioruffy": { title: "Title eliminator (5 rounds)", odds: "Tsarukyan -380, Ruffy +303",
@@ -1285,6 +1199,10 @@ Object.assign(MATCHUPS, {
     note: "A pure striker's crossroads fight: Choi's fast southpaw counters and body work against Pitbull's compact one-shot counters. Choi has momentum and (relative) youth; Pitbull's low output has already lost him two UFC decisions, so unless he lands the bomb, Choi's volume likely takes it — with a legend's career on the line." },
   "brianortega|renatomoicano": { odds: "Moicano expected to be favored given recent form",
     note: "A rematch nine years in the making — Ortega guillotined Moicano in 2017. Moicano's jab-and-move should out-point Ortega at range, but Ortega's chin and top-tier submissions make every scramble dangerous. Hometown lightweight debut for T-City: fresh weight class or same fading fighter?" },
+  "alexandervolkanovski|movsarevloev": { title: "Featherweight title", odds: "Lines not posted at write-up time",
+    note: "Old guard vs new: Volkanovski, 37 and one of the best featherweights ever, against Movsar Evloev, who is 20-0 and has never really been in trouble. It's the classic striker-vs-wrestler question — Evloev wants to smother him for 25 minutes, Volkanovski wants to make it a fight. Evloev has waited years for this shot." },
+  "merabdvalishvili|petryan": { title: "Bantamweight title", odds: "Lines not posted at write-up time",
+    note: "The rubber match. Yan won the first, Dvalishvili won the second and took the belt, Yan took it back in December. Dvalishvili's pace and takedown volume against Yan's precision boxing — whoever leaves Abu Dhabi with the belt has Song Yadong waiting, who knocked out Umar Nurmagomedov and demanded the next shot." },
   "nataliasilva|wangcong": { title: "Flyweight title (vacant)", odds: "Silva expected to be a clear favorite — check live lines",
     note: "For the belt Valentina Shevchenko gave up: she told the UFC she'd be out at least a year, so the title is vacant and these two fight for it. Silva's speed and kicking range against Wang's compact power. Silva has beaten three former champions in a row without ever really being hit; Wang needs to walk her down and land something heavy." },
   "deivesonfigueiredo|paytontalbott": { odds: "Talbott expected to be favored — check live lines",
@@ -1296,12 +1214,9 @@ MATCHUPS["doohochoi|patriciofreire"] = MATCHUPS["doohochoi|patriciopitbull"]; //
 
 /* ============ EVENT META — which fights are the main card ============ */
 EVENT_META.push(
-  { match: ["silva vs. delgado", "silva vs delgado", "rodriguez vs. silva", "noche"], titles: "",
-    note: "Noche UFC — the annual Mexican Independence weekend card. Original headliner Yair Rodriguez pulled out injured on Aug 19; Arizona's own Jose Delgado stepped into the main event on 3½ weeks' notice.",
-    mainCard: ["jeansilva|josemigueldelgado", "brandonmoreno|josephmorales", "marwanrahiki|tommymcmillen", "alexagrasso|manonfiorot", "curtisblaydes|waldocortesacosta", "danige|davidmartinez"] },
-  { match: ["ufc 331", "van vs. pantoja", "van vs pantoja"], titles: "1 title fight",
-    note: "The flyweight title rematch of the 26-second freak-injury title change — plus a five-round lightweight eliminator where the winner is expected to get champion Gaethje next.",
-    mainCard: ["alexandrepantoja|joshuavan", "armantsarukyan|mauricioruffy", "doohochoi|patriciopitbull", "brianortega|renatomoicano", "alonzomenifield|iwobaraniewski"] },
+  { match: ["ufc 333", "volkanovski vs. evloev", "volkanovski vs evloev"], titles: "2 title fights",
+    note: "Abu Dhabi, and the biggest card of the fall: two belts on the line. Volkanovski defends featherweight against an unbeaten wrestler, and the Yan–Dvalishvili trilogy settles a series that's 1-1. Full fighter breakdowns get written closer to the date.",
+    mainCard: ["alexandervolkanovski|movsarevloev", "merabdvalishvili|petryan"] },
   { match: ["ufc 332", "silva vs. wang", "silva vs wang"], titles: "1 title fight",
     note: "Salt Lake City, four weeks out and still filling in. The flyweight belt is vacant — Valentina Shevchenko told the UFC she'd be out at least a year — so Natalia Silva and Wang Cong fight for it, with former champ Deiveson Figueiredo against prospect Payton Talbott underneath. Breakdowns for the rest of the card get written as it firms up.",
     mainCard: ["nataliasilva|wangcong", "deivesonfigueiredo|paytontalbott", "johnnywalker|mickparkin", "ismailnaurdiev|marvinvettori"] },
@@ -1314,21 +1229,6 @@ EVENT_META.push(
 (function () {
   const F = (weight, n1, r1, n2, r2) => ({ weight, f1: { name: n1, record: r1, winner: false }, f2: { name: n2, record: r2, winner: false }, done: false, live: false });
   FALLBACK_EVENTS.push(
-    { name: "UFC Fight Night: Silva vs. Delgado", date: "2026-09-12T21:00Z", venue: "Desert Diamond Arena, Glendale AZ", fights: [
-      F("Featherweight", "Jean Silva", "17-3-0", "Jose Miguel Delgado", "12-2-0"),
-      F("Flyweight", "Brandon Moreno", "23-10-2", "Joseph Morales", "15-2-0"),
-      F("Featherweight", "Tommy McMillen", "11-0-0", "Marwan Rahiki", "9-0-0"),
-      F("W Flyweight", "Manon Fiorot", "13-2-0", "Alexa Grasso", "17-5-1"),
-      F("Heavyweight", "Waldo Cortes-Acosta", "17-3-0", "Curtis Blaydes", "19-6-0"),
-      F("Bantamweight", "David Martinez", "14-1-0", "Dan Ige", "19-11-0"),
-      F("Flyweight", "Tim Elliott", "22-14-1", "Edgar Chairez", "14-6-0"),
-      F("Welterweight", "Ignacio Bahamondes", "17-7-0", "Muslim Salikhov", "22-6-0"),
-      F("Middleweight", "Yousri Belgaroui", "10-3-0", "Djorden Santos", ""),
-      F("Featherweight", "Ramiro Jimenez", "11-0-0", "Rodrigo Vera", "22-1-1"),
-      F("W Flyweight", "JJ Aldrich", "15-7-0", "Regina Tarin", "8-0-0"),
-      F("Lightweight", "Rafa Garcia", "19-4-0", "Rongzhu", "28-6-0"),
-      F("Lightweight", "Drakkar Klose", "16-3-1", "Tommy Gantt", "12-0-0")
-    ]},
     { name: "UFC 331: Van vs. Pantoja 2", date: "2026-09-20T01:00Z", venue: "Crypto.com Arena, Los Angeles", fights: [
       F("Flyweight", "Joshua Van", "17-2-0", "Alexandre Pantoja", "30-6-0"),
       F("Lightweight", "Arman Tsarukyan", "23-3-0", "Mauricio Ruffy", "14-2-0"),
@@ -1365,16 +1265,20 @@ EVENT_META.push(
       F("Middleweight", "Marvin Vettori", "", "Ismail Naurdiev", ""),
       F("Lightweight", "Bobby Green", "", "Esteban Ribovics", ""),
       F("Middleweight", "Roman Kopylov", "", "Ateba Gautier", "")
+    ]},
+    { name: "UFC 333: Volkanovski vs. Evloev", date: "2026-10-24T18:00Z", venue: "Etihad Arena, Abu Dhabi", fights: [
+      F("Featherweight", "Alexander Volkanovski", "28-4-0", "Movsar Evloev", "20-0-0"),
+      F("Bantamweight", "Petr Yan", "20-5-0", "Merab Dvalishvili", "21-5-0")
     ]}
   );
 })();
-/* ============ BELTS & RANKINGS (snapshot: Sep 8, 2026, post-UFC Paris) ============ */
+/* ============ BELTS & RANKINGS (snapshot: Sep 13, 2026, post-Noche UFC) ============ */
 DIVISIONS.men = [
   { name: "Heavyweight", weight: "265 lb", champ: { name: "Tom Aspinall", record: "15-3", country: "England" },
     interim: { name: "Ciryl Gane", record: "14-2", country: "France" },
     beltFacts: "Aspinall became undisputed champ in June 2025 when <b>Jon Jones retired</b>. <b>0 defenses</b> — his first (vs Gane, Oct 2025) ended in a no-contest when an eye poke left him unable to continue.",
-    top5: [{ rank: "IC", name: "Ciryl Gane", record: "14-2" }, { rank: 2, name: "Alexander Volkov", record: "40-11" }, { rank: 3, name: "Sergei Pavlovich", record: "21-3" }, { rank: 4, name: "Josh Hokit", record: "10-0" }, { rank: 5, name: "Waldo Cortes-Acosta", record: "17-3" }],
-    story: "Why two belts? The eye-poke injury kept Aspinall out, so Gane won an <b>interim</b> (temporary) title by knocking out Alex Pereira at the White House card in June. The unification rematch is <b>agreed in principle but STILL unbooked</b>. UFC 332 (Oct 3) has since filled its main event slot without them, so the talk has moved to <b>UFC 334 on Nov 14 at Madison Square Garden</b> — or December's UFC 335 if Aspinall isn't cleared in time. He's had three eye surgeries and is training again, but his manager says hurdles remain. Nearer term: Cortes-Acosta vs Blaydes at Noche UFC (Sep 12) shuffles the top five again." },
+    top5: [{ rank: "IC", name: "Ciryl Gane", record: "14-2" }, { rank: 2, name: "Alexander Volkov", record: "40-11" }, { rank: 3, name: "Sergei Pavlovich", record: "21-3" }, { rank: 4, name: "Josh Hokit", record: "10-0" }],
+    story: "Why two belts? The eye-poke injury kept Aspinall out, so Gane won an <b>interim</b> (temporary) title by knocking out Alex Pereira at the White House card in June. The unification rematch is <b>agreed in principle but STILL unbooked</b>. UFC 332 (Oct 3) has since filled its main event slot without them, so the talk has moved to <b>UFC 334 on Nov 14 at Madison Square Garden</b> — or December's UFC 335 if Aspinall isn't cleared in time. He's had three eye surgeries and is training again, but his manager says hurdles remain. Movement below: <b>Curtis Blaydes out-wrestled Waldo Cortes-Acosta over three rounds at Noche UFC (Sep 12)</b> in a slow one, knocking Cortes-Acosta off his run and pushing Blaydes back toward the top 10. We've left the fifth spot blank here until the UFC posts its official re-rank on Tuesday." },
   { name: "Light Heavyweight", weight: "205 lb", champ: { name: "Carlos Ulberg", record: "15-1", country: "New Zealand" },
     beltFacts: "Won the <b>vacant</b> belt in April 2026 with a first-round KO of Jiří Procházka — but <b>tore his ACL in that fight and is out until 2027</b>. <b>0 defenses.</b>",
     top5: [{ rank: 1, name: "Magomed Ankalaev", record: "20-2-1" }, { rank: 2, name: "Jiří Procházka", record: "32-6-1" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Khalil Rountree Jr.", record: "15-7" }, { rank: 5, name: "Navajo Stirling", record: "11-0" }],
@@ -1409,9 +1313,9 @@ P4P.men = [{ name: "Islam Makhachev", record: "29-1" }, { name: "Alexander Volka
 
 /* ============ STORYLINES & UFC 101 ============ */
 STORYLINES.push(
-  { em: "🇫🇷", title: "Parnasse arrives, and Hooker's run ends", body: [
-    "France finally got the star it was promised. <b>Salahdine Parnasse knocked Dan Hooker out in 2 minutes 35 seconds of round one</b> in Paris on Sep 5 — a liver kick, then a clean finish — in his very first UFC fight. He was a ~-430 favorite despite being the debutant, which almost never happens, and he made it look easy.",
-    "For Hooker, who came in ranked #10, it's a third straight loss for the first time in his career at 36. The rest of the card was violent too: <b>Axel Sola knocked out Fares Ziam</b> with a left hook to win the all-French co-main as the betting underdog, Losene Keita finished Muhammad Naimov in round one, and Michael Page out-pointed Nursulton Ruziboev to stay unbeaten in his last four."] },
+  { em: "🇲🇽", title: "Noche UFC: Grasso spoils the eliminator", body: [
+    "The Mexican Independence card delivered on Sep 12. <b>Alexa Grasso beat Manon Fiorot</b> in what was supposed to be Fiorot's route back to a title shot — the former champ's second big win of the year, and it scrambles the flyweight picture. <b>Jean Silva submitted Jose Delgado in round three</b> to keep his main event, and Brandon Moreno edged Joseph Morales on a split decision to snap his skid.",
+    "Elsewhere: Mexico's David Martinez stayed unbeaten in the UFC by out-pointing Dan Ige and ruining his bantamweight debut, Tommy McMillen moved to 12-0, and Curtis Blaydes out-wrestled Waldo Cortes-Acosta in a quiet heavyweight decision. A week earlier in Paris, <b>Salahdine Parnasse knocked Dan Hooker out in round one of his UFC debut</b> — the best debut of the year."] },
   { em: "🐐", title: "Makhachev owns the record books", body: [
     "At UFC 330 Islam Makhachev out-pointed Ian Machado Garry for his first welterweight defense and his <b>17th straight UFC win — breaking Anderson Silva's all-time record</b> (16) that stood for 14 years. He named <b>Carlos Prates</b> as the most deserving next challenger, waved off unbeaten Michael Morales, and hinted he misses lightweight — where a Topuria superfight still lurks."] },
   { em: "🗓️", title: "UFC 333 is loaded (Oct 24, Abu Dhabi)", body: [
