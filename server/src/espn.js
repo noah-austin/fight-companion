@@ -55,15 +55,22 @@ export function extractMoneylines(comp, f1Id, f2Id, items = comp.odds) {
   };
   const provider = o.provider?.name || "espn";
 
-  const comps = comp.competitors || [];
-  const home = comps.find((c) => c.homeAway === "home") || comps[0];
-  const away = comps.find((c) => c.homeAway === "away") || comps[1];
-  const homeMl = pick(o.homeTeamOdds), awayMl = pick(o.awayTeamOdds);
-  if (homeMl != null && awayMl != null && home && away) {
-    return idOf(home) === String(f1Id)
-      ? { f1_ml: homeMl, f2_ml: awayMl, source: provider }
-      : { f1_ml: awayMl, f2_ml: homeMl, source: provider };
+  // MMA uses homeAthleteOdds/awayAthleteOdds (team-sport feeds use *TeamOdds); each side
+  // names its athlete via a $ref URL, which is the exact mapping — no home/away guessing.
+  const sideId = (side) => { const m = /athletes\/(\d+)/.exec(side?.athlete?.$ref || ""); return m ? m[1] : side?.athlete?.id != null ? String(side.athlete.id) : null; };
+  const homeS = o.homeAthleteOdds || o.homeTeamOdds, awayS = o.awayAthleteOdds || o.awayTeamOdds;
+  const homeMl = pick(homeS), awayMl = pick(awayS);
+  if (homeMl != null && awayMl != null) {
+    const hId = sideId(homeS), aId = sideId(awayS);
+    if (hId === String(f1Id) || aId === String(f2Id)) return { f1_ml: homeMl, f2_ml: awayMl, source: provider };
+    if (aId === String(f1Id) || hId === String(f2Id)) return { f1_ml: awayMl, f2_ml: homeMl, source: provider };
+    const comps = comp.competitors || [];
+    const home = comps.find((c) => c.homeAway === "home") || comps[0];
+    if (home) return idOf(home) === String(f1Id)
+      ? { f1_ml: homeMl, f2_ml: awayMl, source: provider + "-homeaway" }
+      : { f1_ml: awayMl, f2_ml: homeMl, source: provider + "-homeaway" };
   }
+  const comps = comp.competitors || [];
 
   const m = /([A-Z][A-Z' .-]+?)\s*([-+]\d{3,4})\b/.exec(String(o.details || "").toUpperCase());
   if (m) {
@@ -92,11 +99,28 @@ function methodFrom(text) {
   return { kind: "win", method: null };
 }
 
-// Finished fights carry a `details` array the scoreboard omits for upcoming ones; flatten
-// any text in it so the method regexes get a look.
+// Finished fights carry a `details` array: a play-by-play log ("Walkout", "Knockdown",
+// "Submission Attempt", ...) plus one result entry, e.g. "Unofficial Winner Decision" or
+// "Unofficial Winner Kotko" (ESPN's spelling of KO/TKO). Only that entry decides the method.
+function methodFromDetails(c) {
+  if (!Array.isArray(c.details)) return null;
+  for (const d of c.details) {
+    const t = String(d.type?.text || d.text || "").trim();
+    const m = /^(?:unofficial\s+)?winner\s+(.+)$/i.exec(t);
+    if (!m) continue;
+    const k = m[1].toUpperCase();
+    if (/DECISION|\bDEC\b|UNANIMOUS|SPLIT|MAJORITY/.test(k)) return { kind: "win", method: "DEC" };
+    if (/KOTKO|\bKO\b|TKO|KNOCKOUT/.test(k)) return { kind: "win", method: "KO" };
+    if (/SUBMISSION|\bSUB\b/.test(k)) return { kind: "win", method: "SUB" };
+    if (/DISQUALIF|\bDQ\b/.test(k)) return { kind: "win", method: "DQ" };
+    if (/NO CONTEST|\bNC\b/.test(k)) return { kind: "nc" };
+    if (/DRAW/.test(k)) return { kind: "draw" };
+  }
+  return null;
+}
 function detailsText(c) {
   if (!Array.isArray(c.details)) return "";
-  return c.details.map((d) => [d.type?.text, d.type?.abbreviation, d.text, d.shortText, d.description].filter(Boolean).join(" ")).join(" | ");
+  return c.details.map((d) => d.type?.text || d.text || "").filter(Boolean).join(" | ");
 }
 
 export function normalizeEvent(ev) {
@@ -107,8 +131,8 @@ export function normalizeEvent(ev) {
     const a = cs[0] || {}, b = cs[1] || {};
     const f1_id = idOf(a), f2_id = idOf(b);
     const st = c.status?.type || {};
-    const extra = detailsText(c);
-    const detail = [st.detail, st.shortDetail, st.description, c.status?.displayClock, extra].filter(Boolean).join(" | ");
+    const statusText = [st.detail, st.shortDetail, st.description].filter(Boolean).join(" | ");
+    const detail = [statusText, c.status?.displayClock, detailsText(c)].filter(Boolean).join(" | ");
     const rounds = c.format?.regulation?.periods === 5 ? 5 : 3;
     const { f1_ml, f2_ml, source } = extractMoneylines(c, f1_id, f2_id);
 
@@ -117,7 +141,7 @@ export function normalizeEvent(ev) {
     if (FINAL.has(st.name)) {
       status = "final";
       const winner = a.winner === true ? a : b.winner === true ? b : null;
-      const parsed = methodFrom(detail);
+      const parsed = methodFromDetails(c) || methodFrom(statusText);
       const period = Number(c.status?.period);
       const clock = c.status?.displayClock || "";
       if (!winner) result_kind = parsed.kind === "win" ? null : parsed.kind;   // no winner flag: draw/NC or unknown
