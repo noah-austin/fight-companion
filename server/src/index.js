@@ -81,6 +81,7 @@ app.post("/bets", requireUser, wrap(async (req, res) => {
     const { rows: [f] } = await c.query(`SELECT * FROM fights WHERE id=$1 FOR UPDATE`, [fight_id]);
     if (!f) throw httpErr(404, "no such fight");
     if (f.event_id !== await upcomingEventId(c)) throw httpErr(409, "bets are open on the next card only");
+    if (f.is_main === false) throw httpErr(409, "main card only — prelims aren't on the book");
     if (f.status !== "scheduled") throw httpErr(409, "that fight has already started");
     if (f.start_at && new Date(f.start_at) <= new Date()) throw httpErr(409, "that fight has already started");
     if (pick_id !== f.f1_id && pick_id !== f.f2_id) throw httpErr(400, "pick one of the two fighters");

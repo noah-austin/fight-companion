@@ -2,14 +2,15 @@
 // is live or within an hour of starting, otherwise every 15 minutes.
 
 import { q, tx } from "./db.js";
-import { fetchScoreboard, normalizeEvent, fetchOdds, extractMoneylines } from "./espn.js";
+import { fetchScoreboard, normalizeEvent, fetchOdds, extractMoneylines, fetchCompetition, cardSegmentOf } from "./espn.js";
 import { grade } from "./pricing.js";
 
 export const lastRaw = new Map();   // fight id -> raw ESPN competition, for /admin/debug
 
 // Log what ESPN actually sends so the odds/result parsers can be verified from Railway
 // logs alone (this sandbox can't reach the API). Raw samples are dumped once per process.
-let dumpedOdds = false, dumpedFinal = false, dumpedCoreOdds = false;
+let dumpedOdds = false, dumpedFinal = false, dumpedCoreOdds = false, dumpedComp = false;
+const segmentSeen = new Map();   // fight id -> card segment (or null when ESPN has none), once per process
 const clip = (o, n = 1800) => { const t = JSON.stringify(o); return t.length > n ? t.slice(0, n) + "…" : t; };
 function logShape(ev) {
   const withLines = ev.fights.filter((f) => f.f1_ml != null && f.f2_ml != null).length;
@@ -39,6 +40,17 @@ export async function syncOnce() {
         const ml = extractMoneylines(f.raw, f.f1_id, f.f2_id, items);
         if (ml.f1_ml != null && ml.f2_ml != null) { f.f1_ml = ml.f1_ml; f.f2_ml = ml.f2_ml; f.odds_source = ml.source; }
       }
+      // Which segment each fight is on, from the core competition resource, once per fight.
+      for (const f of ev.fights) {
+        if (!segmentSeen.has(f.id)) {
+          const comp = await fetchCompetition(ev.id, f.id);
+          if (comp && !dumpedComp) { dumpedComp = true; console.log(`[shape] core competition keys (${f.f1_name} vs ${f.f2_name}): ${Object.keys(comp).join(",")}; cardSegment=${clip(comp.cardSegment ?? null, 300)}`); }
+          if (comp) segmentSeen.set(f.id, cardSegmentOf(comp));   // a failed fetch is retried next sync
+        }
+        f.card_segment = segmentSeen.get(f.id) ?? null;
+      }
+      const labelled = ev.fights.filter((f) => f.card_segment).length;
+      console.log(`[card] ${ev.name}: ${labelled}/${ev.fights.length} fights labelled [${[...new Set(ev.fights.map((f) => f.card_segment).filter(Boolean))].join(",") || "none"}]`);
     }
     logShape(ev);
     await q(
@@ -51,9 +63,10 @@ export async function syncOnce() {
       // Never overwrite a manual settlement, and keep the last non-null line if ESPN drops it on fight night.
       await q(
         `INSERT INTO fights (id, event_id, order_idx, weight, rounds, f1_id, f1_name, f2_id, f2_name, f1_ml, f2_ml,
-                             start_at, status, winner_id, result_kind, method, round, end_time, raw_detail, updated_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,now())
+                             start_at, status, winner_id, result_kind, method, round, end_time, raw_detail, card_segment, updated_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,now())
          ON CONFLICT (id) DO UPDATE SET
+           card_segment=COALESCE(EXCLUDED.card_segment, fights.card_segment),
            order_idx=EXCLUDED.order_idx, weight=EXCLUDED.weight, rounds=EXCLUDED.rounds,
            f1_id=EXCLUDED.f1_id, f1_name=EXCLUDED.f1_name, f2_id=EXCLUDED.f2_id, f2_name=EXCLUDED.f2_name,
            f1_ml=COALESCE(EXCLUDED.f1_ml, fights.f1_ml), f2_ml=COALESCE(EXCLUDED.f2_ml, fights.f2_ml),
@@ -67,9 +80,18 @@ export async function syncOnce() {
            raw_detail=CASE WHEN fights.raw_detail='MANUAL' THEN 'MANUAL' ELSE EXCLUDED.raw_detail END,
            updated_at=now()`,
         [f.id, ev.id, f.order_idx, f.weight, f.rounds, f.f1_id, f.f1_name, f.f2_id, f.f2_name, f.f1_ml, f.f2_ml,
-         f.start_at, f.status, f.winner_id, f.result_kind, f.method, f.round, f.end_time, f.raw_detail]
+         f.start_at, f.status, f.winner_id, f.result_kind, f.method, f.round, f.end_time, f.raw_detail, f.card_segment ?? null]
       );
     }
+    // Main card = ESPN's "Main Card" label when the card has labels; otherwise the last
+    // five fights in ESPN's chronological order (main event last).
+    await q(
+      `UPDATE fights f SET is_main = CASE
+         WHEN EXISTS (SELECT 1 FROM fights x WHERE x.event_id = f.event_id AND x.card_segment IS NOT NULL)
+           THEN COALESCE(f.card_segment ILIKE '%main%', FALSE)
+         ELSE f.order_idx >= (SELECT COUNT(*) FROM fights x WHERE x.event_id = f.event_id) - 5 END
+       WHERE f.event_id = $1`, [ev.id]
+    );
   }
   settled += await settleFinished();
   return { events: events.length, settled };

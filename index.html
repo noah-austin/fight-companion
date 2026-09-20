@@ -1635,12 +1635,14 @@ function btBookNote() {
 function renderBtBook() {
   const d = BT.detail;
   if (!d) return `<div class="bt-card"><div class="bt-empty">No cards on the board yet.</div></div>`;
-  const fights = [...d.fights].reverse();   // main event first
+  const fights = d.fights.filter(f => f.is_main !== false).reverse();   // main card only, main event first
+  const prelims = d.fights.length - fights.length;
   return `<div class="bt-card">
     <div class="bt-title">${esc(d.event.name)}</div>
     <div class="bt-sub">${new Date(d.event.date).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}${d.event.venue ? " · " + esc(d.event.venue) : ""}</div>
     ${btBookNote()}
     ${fights.map(renderBtFight).join("")}
+    ${prelims ? `<div class="bt-empty" style="margin-top:8px">Main card only — ${prelims} prelim${prelims === 1 ? "" : "s"} aren't on the book.</div>` : ""}
   </div>`;
 }
 

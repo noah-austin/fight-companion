@@ -40,6 +40,11 @@ CREATE TABLE IF NOT EXISTS fights (
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS fights_event_idx ON fights(event_id);
+-- Main card vs prelims (added Sep 20). card_segment is ESPN's label from the core
+-- competition resource ("Main Card" / "Prelims" / "Early Prelims"); is_main is derived
+-- from it per event, falling back to "the last five fights" when ESPN gives no labels.
+ALTER TABLE fights ADD COLUMN IF NOT EXISTS card_segment TEXT;
+ALTER TABLE fights ADD COLUMN IF NOT EXISTS is_main BOOLEAN NOT NULL DEFAULT TRUE;
 
 -- Every user starts each card with the same bankroll. Row created lazily on first bet.
 CREATE TABLE IF NOT EXISTS bankrolls (

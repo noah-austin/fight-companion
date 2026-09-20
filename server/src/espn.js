@@ -38,6 +38,26 @@ export async function fetchOdds(eventId, compId) {
   }
 }
 
+// Core competition resource: the only place ESPN says which segment a fight is on.
+// Returns the raw JSON or null; never throws.
+let compErrLogged = false;
+export async function fetchCompetition(eventId, compId) {
+  try {
+    const res = await fetch(`${CORE}/events/${eventId}/competitions/${compId}`, { headers: UA });
+    if (!res.ok) { if (!compErrLogged) { compErrLogged = true; console.log(`[card] core competition ${res.status} for ${eventId}/${compId}`); } return null; }
+    return await res.json();
+  } catch (e) {
+    if (!compErrLogged) { compErrLogged = true; console.log(`[card] core competition fetch failed: ${e.message}`); }
+    return null;
+  }
+}
+// "Main Card" / "Prelims" / "Early Prelims" when ESPN labels it, else null.
+export function cardSegmentOf(comp) {
+  const seg = comp?.cardSegment;
+  const name = seg?.name || seg?.description || seg?.text || (typeof seg === "string" ? seg : null);
+  return name ? String(name).trim() : null;
+}
+
 const idOf = (c) => (c?.id != null ? String(c.id) : c?.athlete?.id != null ? String(c.athlete.id) : null);
 
 // --- odds ---------------------------------------------------------------------------
