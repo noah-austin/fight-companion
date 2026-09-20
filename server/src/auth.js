@@ -45,6 +45,14 @@ export function requireUser(req, res, next) {
   catch { res.status(401).json({ error: "session expired, sign in again" }); }
 }
 
+// Like requireUser but anonymous is fine: sets req.user only when a valid token is present.
+export function maybeUser(req, _res, next) {
+  const h = req.headers.authorization || "";
+  const token = h.startsWith("Bearer ") ? h.slice(7) : null;
+  if (token) { try { req.user = jwt.verify(token, SECRET); } catch { /* ignore */ } }
+  next();
+}
+
 export function requireAdmin(req, res, next) {
   requireUser(req, res, () => (req.user.is_admin ? next() : res.status(403).json({ error: "admin only" })));
 }

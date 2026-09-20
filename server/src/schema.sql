@@ -46,6 +46,19 @@ CREATE INDEX IF NOT EXISTS fights_event_idx ON fights(event_id);
 ALTER TABLE fights ADD COLUMN IF NOT EXISTS card_segment TEXT;
 ALTER TABLE fights ADD COLUMN IF NOT EXISTS is_main BOOLEAN NOT NULL DEFAULT TRUE;
 
+-- Web Push subscriptions (added Sep 20). One row per device; user_id is set once that
+-- device signs in to Bets so settlement pushes can be personal. Dead endpoints are pruned.
+CREATE TABLE IF NOT EXISTS push_subs (
+  endpoint    TEXT PRIMARY KEY,
+  p256dh      TEXT NOT NULL,
+  auth        TEXT NOT NULL,
+  user_id     INT REFERENCES users(id) ON DELETE SET NULL,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+-- Small server-side settings (VAPID key pair is generated into here on first boot).
+CREATE TABLE IF NOT EXISTS kv (k TEXT PRIMARY KEY, v TEXT NOT NULL);
+
 -- Every user starts each card with the same bankroll. Row created lazily on first bet.
 CREATE TABLE IF NOT EXISTS bankrolls (
   user_id     INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,

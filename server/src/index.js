@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { q, tx, applySchema } from "./db.js";
-import { signup, login, sign, requireUser, requireAdmin, httpErr } from "./auth.js";
+import { signup, login, sign, requireUser, requireAdmin, maybeUser, httpErr } from "./auth.js";
+import { initPush, pushEnabled, vapidPublicKey, saveSubscription, removeSubscription, sendTo, broadcast } from "./push.js";
 import { price, grade, METHODS } from "./pricing.js";
 import { startPoller, syncOnce, settleFinished, lastRaw } from "./settle.js";
 
@@ -60,6 +61,19 @@ app.get("/events/:id", wrap(async (req, res) => {
       WHERE br.event_id=$1 GROUP BY u.username, br.starting ORDER BY settled_pl DESC`, [event.id]
   );
   res.json({ event, fights: fights.map(publicFight), bets: bets.map(publicBet), bankrolls });
+}));
+
+// ---- push notifications --------------------------------------------------------------
+app.get("/push/key", (_req, res) => res.json({ enabled: pushEnabled(), key: vapidPublicKey() }));
+app.post("/push/subscribe", maybeUser, wrap(async (req, res) => { await saveSubscription(req.body?.subscription, req.user?.id); res.json({ ok: true }); }));
+app.delete("/push/subscribe", wrap(async (req, res) => { if (req.body?.endpoint) await removeSubscription(req.body.endpoint); res.json({ ok: true }); }));
+// Fire one notification at the caller's own device so they can see alerts work.
+app.post("/push/test", wrap(async (req, res) => {
+  const s = req.body?.subscription;
+  if (!s?.endpoint || !s?.keys?.p256dh || !s?.keys?.auth) throw httpErr(400, "bad subscription");
+  const sent = await sendTo([{ endpoint: s.endpoint, p256dh: s.keys.p256dh, auth: s.keys.auth }],
+    { title: "🔔 Fight alerts are on", body: "You'll hear from us when main-card fights start and finish, and when your bets settle.", tag: "test" });
+  res.json({ sent });
 }));
 
 // ---- bets ---------------------------------------------------------------------------
@@ -154,6 +168,12 @@ app.get("/leaderboard", wrap(async (_req, res) => {
 
 // ---- admin ------------------------------------------------------------------------------
 app.post("/admin/sync", requireAdmin, wrap(async (_req, res) => res.json(await syncOnce())));
+// Admin broadcast to every subscribed device, e.g. "Main card starts in 30 minutes".
+app.post("/admin/push", requireAdmin, wrap(async (req, res) => {
+  const { title, body } = req.body || {};
+  if (!title) throw httpErr(400, "title required");
+  res.json({ sent: await broadcast({ title: String(title).slice(0, 80), body: String(body || "").slice(0, 200), tag: "admin-" + Date.now() }) });
+}));
 
 // Grant or revoke admin. The first signup is admin automatically; this lets the league
 // owner hand it to someone else (or strip it from a test account).
@@ -208,5 +228,6 @@ app.use((err, _req, res, _next) => {
 
 const port = Number(process.env.PORT || 3000);
 await applySchema();
+await initPush().catch((e) => console.error("[push] init failed:", e.message));
 app.listen(port, () => console.log(`fight-companion server on :${port}`));
 startPoller();

@@ -4,6 +4,12 @@
 import { q, tx } from "./db.js";
 import { fetchScoreboard, normalizeEvent, fetchOdds, extractMoneylines, fetchCompetition, cardSegmentOf } from "./espn.js";
 import { grade } from "./pricing.js";
+import { broadcast, notifyUser } from "./push.js";
+
+const lastName = (n) => String(n || "").replace(/\s+(Jr\.?|Sr\.?|II|III|IV)$/i, "").trim().split(/\s+/).pop();
+const shortEvent = (n) => String(n || "").replace(/^UFC Fight Night:\s*/i, "");
+const methodText = (m) => (m === "KO" ? "KO/TKO" : m === "SUB" ? "submission" : m === "DEC" ? "decision" : m === "DQ" ? "DQ" : "");
+const money = (n) => "$" + Math.round(Number(n)).toLocaleString("en-US");
 
 export const lastRaw = new Map();   // fight id -> raw ESPN competition, for /admin/debug
 
@@ -62,6 +68,9 @@ export async function syncOnce() {
        ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, date=EXCLUDED.date, venue=EXCLUDED.venue, status=EXCLUDED.status, updated_at=now()`,
       [ev.id, ev.name, ev.date, ev.venue, ev.status]
     );
+    // Statuses before this sync, so fight-start and result pushes fire once per transition.
+    const { rows: prevRows } = await q(`SELECT id, status FROM fights WHERE event_id=$1`, [ev.id]);
+    const prevStatus = new Map(prevRows.map((r) => [r.id, r.status]));
     for (const f of ev.fights) {
       lastRaw.set(f.id, f.raw);
       // Never overwrite a manual settlement, and keep the last non-null line if ESPN drops it on fight night.
@@ -96,6 +105,24 @@ export async function syncOnce() {
          ELSE f.order_idx >= (SELECT COUNT(*) FROM fights x WHERE x.event_id = f.event_id) - 5 END
        WHERE f.event_id = $1`, [ev.id]
     );
+    // Push alerts for main-card transitions (only for fights we had seen before).
+    const { rows: mainRows } = await q(`SELECT id FROM fights WHERE event_id=$1 AND is_main`, [ev.id]);
+    const mains = new Set(mainRows.map((r) => r.id));
+    for (const f of ev.fights) {
+      if (!prevStatus.has(f.id) || prevStatus.get(f.id) === f.status || !mains.has(f.id)) continue;
+      const a = lastName(f.f1_name), b = lastName(f.f2_name);
+      if (f.status === "live") {
+        await broadcast({ title: `🥊 ${a} vs ${b} is starting`, body: `${shortEvent(ev.name)} · ${f.weight || ""}${f.rounds === 5 ? " · 5 rounds" : ""}`, tag: `start-${f.id}` });
+      } else if (f.status === "final") {
+        if (f.result_kind === "win" && f.winner_id) {
+          const w = f.winner_id === f.f1_id ? a : b, l = f.winner_id === f.f1_id ? b : a;
+          const how = f.method === "DEC" ? "by decision" : f.method ? `by ${methodText(f.method)}${f.round ? " in round " + f.round : ""}` : "";
+          await broadcast({ title: `🏁 ${w} beats ${l}`, body: `${how ? how + " · " : ""}${shortEvent(ev.name)}`.trim(), tag: `final-${f.id}` });
+        } else if (f.result_kind === "draw" || f.result_kind === "nc") {
+          await broadcast({ title: `🏁 ${a} vs ${b}: ${f.result_kind === "draw" ? "draw" : "no contest"}`, body: shortEvent(ev.name), tag: `final-${f.id}` });
+        }
+      }
+    }
   }
   settled += await settleFinished();
   return { events: events.length, settled };
@@ -118,6 +145,11 @@ export async function settleFinished() {
     const payout = outcome === "won" ? b.potential : outcome === "void" ? b.stake : 0;
     await q(`UPDATE bets SET status=$2, payout=$3, settled_at=now() WHERE id=$1`, [b.id, outcome, payout]);
     n++;
+    const legs = `${lastName(b.pick_name)}${b.method ? " by " + methodText(b.method) : ""}${b.round ? " in R" + b.round : ""}`;
+    const payload = outcome === "won" ? { title: `💰 You won ${money(Number(payout) - Number(b.stake))}`, body: `${money(b.stake)} on ${legs} paid ${money(payout)}.` }
+      : outcome === "lost" ? { title: `💀 Lost ${money(b.stake)}`, body: `${legs} didn't come in.` }
+      : { title: `↩️ ${money(b.stake)} refunded`, body: `${legs} · fight was a draw, no contest or cancelled.` };
+    notifyUser(b.user_id, { ...payload, tag: `bet-${b.id}` }).catch((e) => console.log("[push] bet notify failed:", e.message));
   }
   return n;
 }

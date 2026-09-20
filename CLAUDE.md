@@ -14,13 +14,13 @@ Built with Claude (Cowork) Aug 15–16, 2026; refreshed twice weekly since. The 
 
 ## Architecture — one file, design is FROZEN
 
-Everything lives in `index.html` (~230KB): CSS, JS, base64-embedded Barlow Condensed font, PWA manifest + icons as data URLs, add-to-home-screen banner, three bottom tabs (Fight Cards / Belts & Ranks / Catch Up).
+Everything lives in `index.html` (~260KB): CSS, JS, base64-embedded Barlow Condensed font, add-to-home-screen banner, four bottom tabs (Fight Cards / Belts & Ranks / Catch Up / Bets). Since Sep 20 the PWA manifest and icons are real files (`manifest.webmanifest`, `icon-192.png`, `icon-512.png`) and `sw.js` is the push service worker — required for Web Push on iOS. A refresh never touches those.
 
 Also in the renderer (added Aug 31, don't strip during refreshes — they live outside the data blocks and survive automatically):
 
 - **Fight-night live mode**: when a card is in its ~8h window or any fight is IN_PROGRESS, the page polls ESPN every 60s (5 min when a card starts within 2h), shows a LIVE header chip and per-event "Live now" badges, and preserves open cards/picks UI across re-renders.
 - **"Beat the Books" pick'em**: tap-to-pick buttons on upcoming fights, stored in localStorage per device (`fc-picks`, `fc-pick-hist`). Results settle automatically from ESPN winner flags; underdog calls are detected by parsing the favorite out of `MATCHUPS[...].odds` text (best-effort — keep odds text in the "Name -NNN, Name +NNN" style so the parser works). All-time record shows as a header chip.
-- **Notifications (added Sep 2)**: per-event "🗓 Remind me" button generates a client-side .ics with alarms (-1h and at start); "🔔 Fight alerts" toggle (`fc-alerts` in localStorage) fires in-app toasts + system Notifications (where the platform allows local web notifications — Android/desktop yes, iOS no) on fight-start and result transitions detected by the live poll. No server, no push subscriptions — do not add a push service.
+- **Notifications**: per-event "🗓 Remind me" button generates a client-side .ics with alarms (-1h and at start). "Fight alerts" (added Sep 2, rebuilt Sep 20 as real Web Push) lives in the **settings sheet** (⚙️ gear in the header, next to ↻): turning it on asks for notification permission, registers `sw.js` and subscribes the device with the Bets API (`/push/subscribe`, VAPID keys generated on first boot into the `kv` table). The server pushes main-card fight starts and results, plus per-user bet settlements, from `settle.js`. On iPhone it works only for the Home-Screen (standalone) install — the sheet says so. `fc-alerts` in localStorage mirrors the switch; in-app toasts still fire while the app is open. Files outside `index.html` that this needs: `sw.js` (push only, deliberately no fetch handler), `manifest.webmanifest`, `icon-192.png`, `icon-512.png`.
 
 **Do NOT redesign, restructure, or "improve" the design.** Noah approved it. A refresh touches ONLY the data blocks listed below plus `ANALYSIS_STAMP`. If a design change seems needed, leave it for Noah to request.
 
