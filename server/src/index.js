@@ -12,6 +12,16 @@ app.use(cors({ origin: (process.env.CORS_ORIGINS || "https://noah-austin.github.
 const STARTING_BANKROLL = Number(process.env.STARTING_BANKROLL || 1000);
 const wrap = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
+// The one card the book is open on: the earliest event that isn't finished. A card stays
+// "next" while it's live (remaining fights are still bettable) and hands off once every
+// fight is final. The 12-hour floor covers a card ESPN never closes out.
+async function upcomingEventId(c = { query: q }) {
+  const { rows: [e] } = await c.query(
+    `SELECT id FROM events WHERE status <> 'final' AND date > now() - interval '12 hours' ORDER BY date ASC LIMIT 1`
+  );
+  return e ? e.id : null;
+}
+
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
 // ---- auth ---------------------------------------------------------------------------
@@ -31,7 +41,7 @@ app.get("/events", wrap(async (req, res) => {
     : { rows: [] };
   const byEvent = Object.fromEntries(events.map((e) => [e.id, []]));
   for (const f of fights) byEvent[f.event_id].push(publicFight(f));
-  res.json({ events: events.map((e) => ({ ...e, fights: byEvent[e.id] })) });
+  res.json({ upcoming_id: await upcomingEventId(), events: events.map((e) => ({ ...e, fights: byEvent[e.id] })) });
 }));
 
 app.get("/events/:id", wrap(async (req, res) => {
@@ -70,6 +80,7 @@ app.post("/bets", requireUser, wrap(async (req, res) => {
   const bet = await tx(async (c) => {
     const { rows: [f] } = await c.query(`SELECT * FROM fights WHERE id=$1 FOR UPDATE`, [fight_id]);
     if (!f) throw httpErr(404, "no such fight");
+    if (f.event_id !== await upcomingEventId(c)) throw httpErr(409, "bets are open on the next card only");
     if (f.status !== "scheduled") throw httpErr(409, "that fight has already started");
     if (f.start_at && new Date(f.start_at) <= new Date()) throw httpErr(409, "that fight has already started");
     if (pick_id !== f.f1_id && pick_id !== f.f2_id) throw httpErr(400, "pick one of the two fighters");

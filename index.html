@@ -432,6 +432,7 @@
   .bt-quote .win { font-family: var(--disp); font-size: 28px; font-weight: 700; color: var(--gold-bright); line-height: 1; }
   .bt-quote .x { font-size: 12px; color: var(--ink-3); margin-left: 6px; }
   .bt-locked { font-size: 12.5px; color: var(--ink-3); margin-top: 6px; }
+  .bt-note { margin: 10px 0 4px; padding: 9px 12px; border-radius: 12px; font-size: 13px; color: var(--gold-bright); background: rgba(227,165,58,0.10); border: 1px solid rgba(227,165,58,0.3); }
   .bt-mine { margin-top: 8px; display: grid; gap: 6px; }
   .bt-bet { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--surface-2); border-radius: 12px; padding: 9px 11px; font-size: 13px; }
   .bt-bet .who { font-weight: 700; }
@@ -1549,8 +1550,12 @@ async function btRefresh() {
   BT.events = ev.events || [];
   BT.feed = feed.feed || [];
   BT.board = board;
+  // The book is open on one card at a time: the earliest one that isn't finished. The server
+  // enforces the same rule; the fallback keeps the UI honest if it's an older build.
+  BT.upcomingId = ev.upcoming_id || (BT.events.filter(e => e.status !== "final" && new Date(e.date) > Date.now() - 12 * 36e5)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))[0] || {}).id || null;
   if (!BT.eventId || !BT.events.some(e => e.id === BT.eventId)) {
-    const pick = BT.events.find(e => e.status === "live") || BT.events.find(e => e.status === "scheduled") || BT.events[BT.events.length - 1];
+    const pick = BT.events.find(e => e.id === BT.upcomingId) || BT.events.find(e => e.status === "live") || BT.events.find(e => e.status === "scheduled") || BT.events[BT.events.length - 1];
     BT.eventId = pick ? pick.id : null;
   }
   BT.detail = BT.eventId ? await btApi("/events/" + BT.eventId) : null;
@@ -1596,7 +1601,7 @@ function renderBtTop() {
   const ev = BT.detail && BT.detail.event;
   const rank = e => (e.status === "live" ? 0 : e.status === "scheduled" ? 1 : 2);
   const list = [...BT.events].sort((a, b) => rank(a) - rank(b) || (rank(a) === 2 ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date)));
-  const label = e => e.name.replace(/^UFC Fight Night:\s*/i, "") + (e.status === "live" ? "  \u2022 LIVE" : e.status === "final" ? "  \u2022 final" : "");
+  const label = e => e.name.replace(/^UFC Fight Night:\s*/i, "") + (e.status === "live" ? "  \u2022 LIVE" : e.status === "final" ? "  \u2022 final" : e.id === BT.upcomingId ? "  \u2022 up next" : "  \u2022 not open yet");
   return `<div class="bt-card">
     <div class="bt-topbar">
       <div class="bt-user">${esc(BT.user.username)}${BT.user.is_admin ? "<small>admin</small>" : ""}</div>
@@ -1620,6 +1625,13 @@ function renderBtNav() {
   return `<div class="bt-seg">${b("book", "Bet slip")}${b("feed", "Activity")}${b("board", "Leaderboard")}</div>`;
 }
 
+function btBookNote() {
+  const d = BT.detail; if (!d || d.event.status === "final" || d.event.id === BT.upcomingId) return "";
+  const next = BT.events.find(e => e.id === BT.upcomingId);
+  const nm = next ? next.name.replace(/^UFC Fight Night:\s*/i, "") : "the current card";
+  return `<div class="bt-note">Betting opens once ${esc(nm)} is in the books. Only the next card takes bets.</div>`;
+}
+
 function renderBtBook() {
   const d = BT.detail;
   if (!d) return `<div class="bt-card"><div class="bt-empty">No cards on the board yet.</div></div>`;
@@ -1627,6 +1639,7 @@ function renderBtBook() {
   return `<div class="bt-card">
     <div class="bt-title">${esc(d.event.name)}</div>
     <div class="bt-sub">${new Date(d.event.date).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}${d.event.venue ? " · " + esc(d.event.venue) : ""}</div>
+    ${btBookNote()}
     ${fights.map(renderBtFight).join("")}
   </div>`;
 }
@@ -1635,7 +1648,8 @@ function renderBtFight(f) {
   const slip = BT.slip[f.id] || {};
   const mine = (BT.detail.bets || []).filter(b => b.fight_id === f.id && b.username === BT.user.username);
   const others = (BT.detail.bets || []).filter(b => b.fight_id === f.id && b.username !== BT.user.username);
-  const locked = f.status !== "scheduled" || (f.start_at && new Date(f.start_at) <= new Date());
+  const notYet = BT.detail.event.id !== BT.upcomingId && f.status === "scheduled";   // a later card: view only
+  const locked = notYet || f.status !== "scheduled" || (f.start_at && new Date(f.start_at) <= new Date());
   const hasLine = f.f1_ml != null && f.f2_ml != null;
   const fav = hasLine ? (f.f1_ml < f.f2_ml ? f.f1_id : f.f2_id) : null;
   const status = f.status === "live" ? '<span style="color:var(--gold-bright)">&#9679; live</span>'
@@ -1673,7 +1687,7 @@ function renderBtFight(f) {
     <div class="bt-fmeta">${esc(f.weight || "")}${f.rounds === 5 ? " · 5 rounds" : ""}${status ? " · " + status : ""}${!hasLine && !locked ? " · no line yet" : ""}</div>
     <div class="bt-sides">${side(f.f1_id, f.f1_name, f.f1_ml)}${side(f.f2_id, f.f2_name, f.f2_ml)}</div>
     ${slipHtml}
-    ${locked && !status ? '<div class="bt-locked">Locked — this fight has started.</div>' : ""}
+    ${locked && !status && !notYet ? '<div class="bt-locked">Locked — this fight has started.</div>' : ""}
     ${mine.length || others.length ? `<div class="bt-mine">${mine.map(b => betRow(b, true)).join("")}${others.map(b => betRow(b, false)).join("")}</div>` : ""}
   </div>`;
 }
