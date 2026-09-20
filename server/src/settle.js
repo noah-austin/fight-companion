@@ -2,14 +2,14 @@
 // is live or within an hour of starting, otherwise every 15 minutes.
 
 import { q, tx } from "./db.js";
-import { fetchScoreboard, normalizeEvent } from "./espn.js";
+import { fetchScoreboard, normalizeEvent, fetchOdds, extractMoneylines } from "./espn.js";
 import { grade } from "./pricing.js";
 
 export const lastRaw = new Map();   // fight id -> raw ESPN competition, for /admin/debug
 
 // Log what ESPN actually sends so the odds/result parsers can be verified from Railway
 // logs alone (this sandbox can't reach the API). Raw samples are dumped once per process.
-let dumpedOdds = false, dumpedFinal = false;
+let dumpedOdds = false, dumpedFinal = false, dumpedCoreOdds = false;
 const clip = (o, n = 1800) => { const t = JSON.stringify(o); return t.length > n ? t.slice(0, n) + "…" : t; };
 function logShape(ev) {
   const withLines = ev.fights.filter((f) => f.f1_ml != null && f.f2_ml != null).length;
@@ -19,7 +19,7 @@ function logShape(ev) {
     if (f.status === "final" || f.status === "cancelled")
       console.log(`[sync]   ${f.status.toUpperCase()} ${f.f1_name} vs ${f.f2_name} -> kind=${f.result_kind} winner=${f.winner_id} method=${f.method} round=${f.round} detail="${f.raw_detail}"`);
     if (!dumpedOdds && Array.isArray(f.raw?.odds) && f.raw.odds.length) { dumpedOdds = true; console.log(`[shape] odds sample (${f.f1_name} vs ${f.f2_name}): ${clip(f.raw.odds)}`); }
-    if (!dumpedFinal && f.status === "final") { dumpedFinal = true; console.log(`[shape] final status sample: ${clip({ status: f.raw?.status, competitors: (f.raw?.competitors || []).map((c) => ({ id: c.id, winner: c.winner, homeAway: c.homeAway, name: c.athlete?.displayName })) })}`); }
+    if (!dumpedFinal && f.status === "final") { dumpedFinal = true; console.log(`[shape] final sample: ${clip({ status: f.raw?.status, details: f.raw?.details, competitors: (f.raw?.competitors || []).map((c) => ({ id: c.id, athleteId: c.athlete?.id, winner: c.winner, homeAway: c.homeAway, name: c.athlete?.displayName })) }, 2600)}`); }
   }
   if (!dumpedOdds && ev.fights.length) console.log(`[shape] no odds array on any fight of ${ev.name}; first fight keys: ${Object.keys(ev.fights[0].raw || {}).join(",")}`);
 }
@@ -29,6 +29,17 @@ export async function syncOnce() {
   let settled = 0;
   for (const raw of events) {
     const ev = normalizeEvent(raw);
+    // Lines come from the core odds resource, one call per upcoming fight (~45 days out).
+    if (ev.status !== "final" && new Date(ev.date) - Date.now() < 45 * 864e5) {
+      for (const f of ev.fights) {
+        if (f.status !== "scheduled") continue;
+        const items = await fetchOdds(ev.id, f.id);
+        if (!items.length) continue;
+        if (!dumpedCoreOdds) { dumpedCoreOdds = true; console.log(`[shape] core odds sample (${f.f1_name} vs ${f.f2_name}): ${clip(items[0], 2200)}`); }
+        const ml = extractMoneylines(f.raw, f.f1_id, f.f2_id, items);
+        if (ml.f1_ml != null && ml.f2_ml != null) { f.f1_ml = ml.f1_ml; f.f2_ml = ml.f2_ml; f.odds_source = ml.source; }
+      }
+    }
     logShape(ev);
     await q(
       `INSERT INTO events (id, name, date, venue, status, updated_at) VALUES ($1,$2,$3,$4,$5,now())

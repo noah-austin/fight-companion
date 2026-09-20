@@ -1,53 +1,78 @@
 // ESPN public MMA feed: the same scoreboard the app polls, plus defensive extraction of
 // odds and results. Every parser here tolerates missing fields; the raw competition is
-// kept so /admin/debug can show exactly what ESPN sent when something doesn't parse.
+// kept so /admin/debug and the sync logs show exactly what ESPN sent.
+//
+// Verified from production (Sep 20 2026):
+//  - the scoreboard carries NO odds; lines live on the core per-competition odds resource
+//  - a finished fight's status says only "Final", but status.period + displayClock are set,
+//    so a decision is inferred from "5:00 in the last round" and the finish round otherwise
+//  - fighter ids are on the competitor object, not always on competitor.athlete
 
 const SCOREBOARD = "https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard";
+const CORE = "https://sports.core.api.espn.com/v2/sports/mma/leagues/ufc";
 const SPINOFF_RX = /contender series|dana white|ultimate fighter|road to ufc|tuf\b/i;
+const UA = { "user-agent": "fight-companion/0.1" };
 
 const ymd = (d) => d.toISOString().slice(0, 10).replace(/-/g, "");
 
 export async function fetchScoreboard({ daysBack = 2, daysAhead = 75 } = {}) {
   const start = new Date(Date.now() - daysBack * 864e5);
   const end = new Date(Date.now() + daysAhead * 864e5);
-  const url = `${SCOREBOARD}?dates=${ymd(start)}-${ymd(end)}`;
-  const res = await fetch(url, { headers: { "user-agent": "fight-companion/0.1" } });
+  const res = await fetch(`${SCOREBOARD}?dates=${ymd(start)}-${ymd(end)}`, { headers: UA });
   if (!res.ok) throw new Error(`ESPN ${res.status}`);
   const data = await res.json();
   return (data.events || []).filter((ev) => !SPINOFF_RX.test(ev.name || ""));
 }
 
+// Core odds resource for one fight. Returns the items array (possibly empty); never throws.
+let oddsErrLogged = false;
+export async function fetchOdds(eventId, compId) {
+  try {
+    const res = await fetch(`${CORE}/events/${eventId}/competitions/${compId}/odds`, { headers: UA });
+    if (!res.ok) { if (!oddsErrLogged) { oddsErrLogged = true; console.log(`[odds] core odds ${res.status} for ${eventId}/${compId}`); } return []; }
+    const data = await res.json();
+    return Array.isArray(data.items) ? data.items : [];
+  } catch (e) {
+    if (!oddsErrLogged) { oddsErrLogged = true; console.log(`[odds] core odds fetch failed: ${e.message}`); }
+    return [];
+  }
+}
+
+const idOf = (c) => (c?.id != null ? String(c.id) : c?.athlete?.id != null ? String(c.athlete.id) : null);
+
 // --- odds ---------------------------------------------------------------------------
-// ESPN attaches sportsbook lines under competition.odds[]. Shapes vary by sport and over
-// time, so try the structured fields first and fall back to parsing the details string.
-export function extractMoneylines(comp, f1Id, f2Id) {
-  const o = Array.isArray(comp.odds) ? comp.odds[0] : null;
+// Given an odds items array (scoreboard or core), find both moneylines. Structured
+// home/away fields first, then the "PANTOJA -113" details string as a fallback.
+export function extractMoneylines(comp, f1Id, f2Id, items = comp.odds) {
+  const o = Array.isArray(items) ? items[0] : null;
   if (!o) return { f1_ml: null, f2_ml: null, source: null };
 
   const pick = (side) => {
-    const v = side && (side.moneyLine ?? side.moneyline ?? side.current?.moneyLine?.american ?? side.odds);
+    if (!side) return null;
+    const v = side.moneyLine ?? side.moneyline ?? side.current?.moneyLine?.american ?? side.odds;
     const n = typeof v === "string" ? parseInt(v.replace(/[^-+\d]/g, ""), 10) : Number(v);
     return Number.isFinite(n) && n !== 0 ? n : null;
   };
+  const provider = o.provider?.name || "espn";
 
-  // Structured: homeTeamOdds / awayTeamOdds keyed to competitors by homeAway.
-  const home = comp.competitors?.find((c) => c.homeAway === "home");
-  const away = comp.competitors?.find((c) => c.homeAway === "away");
-  let f1 = null, f2 = null;
-  if (home && away) {
-    const homeMl = pick(o.homeTeamOdds), awayMl = pick(o.awayTeamOdds);
-    if (String(home.id) === String(f1Id)) { f1 = homeMl; f2 = awayMl; } else { f1 = awayMl; f2 = homeMl; }
+  const comps = comp.competitors || [];
+  const home = comps.find((c) => c.homeAway === "home") || comps[0];
+  const away = comps.find((c) => c.homeAway === "away") || comps[1];
+  const homeMl = pick(o.homeTeamOdds), awayMl = pick(o.awayTeamOdds);
+  if (homeMl != null && awayMl != null && home && away) {
+    return idOf(home) === String(f1Id)
+      ? { f1_ml: homeMl, f2_ml: awayMl, source: provider }
+      : { f1_ml: awayMl, f2_ml: homeMl, source: provider };
   }
-  if (f1 != null && f2 != null) return { f1_ml: f1, f2_ml: f2, source: o.provider?.name || "espn" };
 
-  // Fallback: details like "PANTOJA -113" names the favorite; give the other side a
-  // symmetric line so both fighters are bettable. Marked so we can see it in debug.
-  const m = /([A-Z][A-Z' .-]+?)\s*([-+]\d{3,4})/.exec(o.details || "");
+  const m = /([A-Z][A-Z' .-]+?)\s*([-+]\d{3,4})\b/.exec(String(o.details || "").toUpperCase());
   if (m) {
     const fav = parseInt(m[2], 10);
-    const favIsF1 = comp.competitors?.[0]?.athlete?.displayName?.toUpperCase().includes(m[1].trim().split(" ").pop());
-    const dog = fav < 0 ? Math.abs(fav) : -fav;
-    return favIsF1 ? { f1_ml: fav, f2_ml: dog, source: "espn-details" } : { f1_ml: dog, f2_ml: fav, source: "espn-details" };
+    const surname = m[1].trim().split(/\s+/).pop();
+    const f1Name = (comps[0]?.athlete?.displayName || comps[0]?.athlete?.fullName || "").toUpperCase();
+    const favIsF1 = f1Name.includes(surname);
+    const dog = fav < 0 ? Math.abs(fav) : -fav;   // symmetric line when only the favorite is quoted
+    return favIsF1 ? { f1_ml: fav, f2_ml: dog, source: `${provider}-details` } : { f1_ml: dog, f2_ml: fav, source: `${provider}-details` };
   }
   return { f1_ml: null, f2_ml: null, source: null };
 }
@@ -67,11 +92,11 @@ function methodFrom(text) {
   return { kind: "win", method: null };
 }
 
-function roundFrom(text, status) {
-  const p = status?.period;
-  if (Number.isFinite(p) && p > 0) return p;
-  const m = /\bR(?:OUND)?\s*(\d)\b/i.exec(text || "");
-  return m ? parseInt(m[1], 10) : null;
+// Finished fights carry a `details` array the scoreboard omits for upcoming ones; flatten
+// any text in it so the method regexes get a look.
+function detailsText(c) {
+  if (!Array.isArray(c.details)) return "";
+  return c.details.map((d) => [d.type?.text, d.type?.abbreviation, d.text, d.shortText, d.description].filter(Boolean).join(" ")).join(" | ");
 }
 
 export function normalizeEvent(ev) {
@@ -80,10 +105,11 @@ export function normalizeEvent(ev) {
   const fights = comps.map((c, i) => {
     const cs = c.competitors || [];
     const a = cs[0] || {}, b = cs[1] || {};
-    const f1_id = a.athlete?.id != null ? String(a.athlete.id) : null;
-    const f2_id = b.athlete?.id != null ? String(b.athlete.id) : null;
+    const f1_id = idOf(a), f2_id = idOf(b);
     const st = c.status?.type || {};
-    const detail = [st.detail, st.shortDetail, st.description, c.status?.displayClock].filter(Boolean).join(" | ");
+    const extra = detailsText(c);
+    const detail = [st.detail, st.shortDetail, st.description, c.status?.displayClock, extra].filter(Boolean).join(" | ");
+    const rounds = c.format?.regulation?.periods === 5 ? 5 : 3;
     const { f1_ml, f2_ml, source } = extractMoneylines(c, f1_id, f2_id);
 
     let status = "scheduled", result_kind = null, winner_id = null, method = null, round = null;
@@ -92,17 +118,22 @@ export function normalizeEvent(ev) {
       status = "final";
       const winner = a.winner === true ? a : b.winner === true ? b : null;
       const parsed = methodFrom(detail);
+      const period = Number(c.status?.period);
+      const clock = c.status?.displayClock || "";
       if (!winner) result_kind = parsed.kind === "win" ? null : parsed.kind;   // no winner flag: draw/NC or unknown
-      else { result_kind = "win"; winner_id = String(winner.athlete?.id); method = parsed.method; }
-      round = method === "DEC" ? null : roundFrom(detail, c.status);
+      else {
+        result_kind = "win"; winner_id = idOf(winner); method = parsed.method;
+        // Went the full distance -> decision, even when ESPN's text is just "Final".
+        if (method == null && period === rounds && /^5:00$/.test(clock)) method = "DEC";
+      }
+      round = method === "DEC" ? null : Number.isFinite(period) && period > 0 ? period : null;
     }
     if (st.name === "STATUS_CANCELED" || st.name === "STATUS_POSTPONED") { status = "cancelled"; result_kind = "cancelled"; }
 
-    const fmt = c.format?.regulation?.periods;
     return {
       id: String(c.id), order_idx: i,
       weight: c.type?.text || c.type?.abbreviation || null,
-      rounds: fmt === 5 ? 5 : 3,
+      rounds,
       f1_id, f1_name: a.athlete?.displayName || a.athlete?.fullName || "TBA",
       f2_id, f2_name: b.athlete?.displayName || b.athlete?.fullName || "TBA",
       f1_ml, f2_ml, odds_source: source,
