@@ -51,10 +51,11 @@ export async function fetchCompetition(eventId, compId) {
     return null;
   }
 }
-// "Main Card" / "Prelims" / "Early Prelims" when ESPN labels it, else null.
+// Verified Sep 20: cardSegment = {id, name: "main"|"prelims1"|"prelims2", description: "Main Card"|"Prelims"|"Early Prelims"}.
+// Returns the readable description, else the slug, else null.
 export function cardSegmentOf(comp) {
   const seg = comp?.cardSegment;
-  const name = seg?.name || seg?.description || seg?.text || (typeof seg === "string" ? seg : null);
+  const name = seg?.description || seg?.name || seg?.text || (typeof seg === "string" ? seg : null);
   return name ? String(name).trim() : null;
 }
 

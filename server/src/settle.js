@@ -40,15 +40,19 @@ export async function syncOnce() {
         const ml = extractMoneylines(f.raw, f.f1_id, f.f2_id, items);
         if (ml.f1_ml != null && ml.f2_ml != null) { f.f1_ml = ml.f1_ml; f.f2_ml = ml.f2_ml; f.odds_source = ml.source; }
       }
-      // Which segment each fight is on, from the core competition resource, once per fight.
-      for (const f of ev.fights) {
-        if (!segmentSeen.has(f.id)) {
-          const comp = await fetchCompetition(ev.id, f.id);
-          if (comp && !dumpedComp) { dumpedComp = true; console.log(`[shape] core competition keys (${f.f1_name} vs ${f.f2_name}): ${Object.keys(comp).join(",")}; cardSegment=${clip(comp.cardSegment ?? null, 300)}`); }
-          if (comp) segmentSeen.set(f.id, cardSegmentOf(comp));   // a failed fetch is retried next sync
-        }
-        f.card_segment = segmentSeen.get(f.id) ?? null;
+    }
+    // Which segment each fight is on (main card vs prelims), from the core competition
+    // resource. Fetched once per fight per process, for past cards too so results views match.
+    for (const f of ev.fights) {
+      if (!segmentSeen.has(f.id)) {
+        const comp = await fetchCompetition(ev.id, f.id);
+        if (comp && !dumpedComp) { dumpedComp = true; console.log(`[shape] core competition cardSegment (${f.f1_name} vs ${f.f2_name}): ${clip(comp.cardSegment ?? null, 300)}`); }
+        if (comp) segmentSeen.set(f.id, cardSegmentOf(comp));   // a failed fetch is retried next sync
       }
+      f.card_segment = segmentSeen.get(f.id) ?? null;
+    }
+    if (!segmentSeen.has("logged:" + ev.id)) {
+      segmentSeen.set("logged:" + ev.id, true);
       const labelled = ev.fights.filter((f) => f.card_segment).length;
       console.log(`[card] ${ev.name}: ${labelled}/${ev.fights.length} fights labelled [${[...new Set(ev.fights.map((f) => f.card_segment).filter(Boolean))].join(",") || "none"}]`);
     }
