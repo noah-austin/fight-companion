@@ -439,7 +439,7 @@
    Live schedule: ESPN public API · headshots: ESPN CDN · analysis baked.
    ===================================================================== */
 
-const ANALYSIS_STAMP = "September 13, 2026";
+const ANALYSIS_STAMP = "September 20, 2026";
 const SPINOFF_RX = /contender series|dana white|ultimate fighter|road to ufc|tuf\b/i;
 
 /* ---------- baked data (filled below) ---------- */
@@ -1197,8 +1197,6 @@ Object.assign(MATCHUPS, {
     note: "Grappler-vs-killer with a shot at champion Gaethje on the line. Tsarukyan should chain-wrestle Ruffy exactly the way Saint Denis did before submitting him — but he has to survive the opening exchanges against a man who just vaporized Fiziev and Chandler, after 10 months on the shelf. Five rounds favor Tsarukyan's engine." },
   "doohochoi|patriciopitbull": { odds: "Lines not posted at write-up time — expect Choi a modest favorite",
     note: "A pure striker's crossroads fight: Choi's fast southpaw counters and body work against Pitbull's compact one-shot counters. Choi has momentum and (relative) youth; Pitbull's low output has already lost him two UFC decisions, so unless he lands the bomb, Choi's volume likely takes it — with a legend's career on the line." },
-  "brianortega|renatomoicano": { odds: "Moicano expected to be favored given recent form",
-    note: "A rematch nine years in the making — Ortega guillotined Moicano in 2017. Moicano's jab-and-move should out-point Ortega at range, but Ortega's chin and top-tier submissions make every scramble dangerous. Hometown lightweight debut for T-City: fresh weight class or same fading fighter?" },
   "alexandervolkanovski|movsarevloev": { title: "Featherweight title", odds: "Lines not posted at write-up time",
     note: "Old guard vs new: Volkanovski, 37 and one of the best featherweights ever, against Movsar Evloev, who is 20-0 and has never really been in trouble. It's the classic striker-vs-wrestler question — Evloev wants to smother him for 25 minutes, Volkanovski wants to make it a fight. Evloev has waited years for this shot." },
   "merabdvalishvili|petryan": { title: "Bantamweight title", odds: "Lines not posted at write-up time",
@@ -1207,6 +1205,8 @@ Object.assign(MATCHUPS, {
     note: "For the belt Valentina Shevchenko gave up: she told the UFC she'd be out at least a year, so the title is vacant and these two fight for it. Silva's speed and kicking range against Wang's compact power. Silva has beaten three former champions in a row without ever really being hit; Wang needs to walk her down and land something heavy." },
   "deivesonfigueiredo|paytontalbott": { odds: "Talbott expected to be favored — check live lines",
     note: "Prospect vs former champ, and the classic question that comes with it: does Figueiredo have one more night left at 38, or is Talbott simply faster and fresher? Figueiredo's power and guillotine are live for as long as the fight lasts; Talbott's movement and volume should win the rounds if it goes long." },
+  "gablesteveson|seansharaf": { odds: "Steveson -1500 — one of the heaviest favorites on the card",
+    note: "Promoted to open the main card when Ortega pulled out. Steveson is the Olympic gold medalist wrestler the UFC has been bringing along slowly — unbeaten, but against carefully picked opposition, and still raw as a striker. Sharaf is the designated test: if he can stay off his back for a round, the questions about Steveson's stand-up get loud." },
   "alonzomenifield|iwobaraniewski": { odds: "Baraniewski expected to be favored as the unbeaten prospect",
     note: "Prospect-versus-gatekeeper with symmetrical violence: both men hurt people early, so someone likely gets finished inside two rounds. Menifield just proved against Zhang Mingyang that he ends hype trains; Baraniewski's rankings debut depends on weathering the first five minutes." }
 });
@@ -1217,6 +1217,9 @@ EVENT_META.push(
   { match: ["ufc 333", "volkanovski vs. evloev", "volkanovski vs evloev"], titles: "2 title fights",
     note: "Abu Dhabi, and the biggest card of the fall: two belts on the line. Volkanovski defends featherweight against an unbeaten wrestler, and the Yan–Dvalishvili trilogy settles a series that's 1-1. Full fighter breakdowns get written closer to the date.",
     mainCard: ["alexandervolkanovski|movsarevloev", "merabdvalishvili|petryan"] },
+  { match: ["ufc 331", "van vs. pantoja", "van vs pantoja"], titles: "1 title fight",
+    note: "The flyweight title rematch of the 26-second freak-injury title change — plus a five-round lightweight eliminator where the winner is expected to get champion Gaethje next. Late change: Brian Ortega pulled out injured, so his rematch with Renato Moicano is off and Gable Steveson vs Sean Sharaf was promoted to open the main card.",
+    mainCard: ["alexandrepantoja|joshuavan", "armantsarukyan|mauricioruffy", "doohochoi|patriciopitbull", "alonzomenifield|iwobaraniewski", "gablesteveson|seansharaf"] },
   { match: ["ufc 332", "silva vs. wang", "silva vs wang"], titles: "1 title fight",
     note: "Salt Lake City, four weeks out and still filling in. The flyweight belt is vacant — Valentina Shevchenko told the UFC she'd be out at least a year — so Natalia Silva and Wang Cong fight for it, with former champ Deiveson Figueiredo against prospect Payton Talbott underneath. Breakdowns for the rest of the card get written as it firms up.",
     mainCard: ["nataliasilva|wangcong", "deivesonfigueiredo|paytontalbott", "johnnywalker|mickparkin", "ismailnaurdiev|marvinvettori"] },
@@ -1233,7 +1236,6 @@ EVENT_META.push(
       F("Flyweight", "Joshua Van", "17-2-0", "Alexandre Pantoja", "30-6-0"),
       F("Lightweight", "Arman Tsarukyan", "23-3-0", "Mauricio Ruffy", "14-2-0"),
       F("Featherweight", "Patricio Pitbull", "37-9-0", "Dooho Choi", "17-4-1"),
-      F("Lightweight", "Renato Moicano", "21-7-1", "Brian Ortega", "16-5-0"),
       F("Light Heavyweight", "Alonzo Menifield", "18-6-1", "Iwo Baraniewski", "9-0-0"),
       F("Heavyweight", "Gable Steveson", "4-0-0", "Sean Sharaf", "4-2-0"),
       F("Bantamweight", "Marlon Vera", "23-12-1", "Charles Jourdain", "18-8-1"),
