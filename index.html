@@ -357,6 +357,19 @@
     padding: 8px; cursor: pointer;
   }
 
+
+  /* ---------- site refresh button + new-version nudge ---------- */
+  header .wrap { position: relative; }
+  .brand { padding-right: 60px; }
+  .reload-btn { position: absolute; top: -6px; right: 0; z-index: 3; width: 44px; height: 44px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); border: 1px solid var(--hairline); color: var(--ink-2); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .reload-btn:active { transform: scale(.94); }
+  .reload-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .reload-btn.spin svg { animation: reloadSpin .8s linear infinite; }
+  .reload-btn.new { border-color: rgba(227,165,58,0.65); color: var(--gold-bright); box-shadow: 0 0 0 3px rgba(227,165,58,0.16); }
+  .reload-btn.new::after { content: ""; position: absolute; top: 3px; right: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold-bright); border: 2px solid var(--page); }
+  @keyframes reloadSpin { to { transform: rotate(360deg); } }
+  header { padding-top: calc(26px + env(safe-area-inset-top)); }
+
   /* ---------- phone hygiene ---------- */
   html, body { overflow-x: clip; max-width: 100%; }
   body { position: relative; -webkit-text-size-adjust: 100%; }
@@ -464,6 +477,7 @@
 
 <header>
   <div class="wrap">
+    <button class="reload-btn" id="reloadBtn" type="button" aria-label="Refresh the app" title="Refresh"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg></button>
     <div class="brand"><h1>Fight <span class="red">Companion</span></h1></div>
     <div class="tagline">Real UFC cards only — no Contender Series, no noise. Built for casual fans.</div>
     <div class="head-chips" id="headChips"></div>
@@ -1749,6 +1763,46 @@ document.getElementById("page-bets").addEventListener("submit", async e => {
 document.querySelector('.tab[data-page="bets"]').addEventListener("click", () => betsLoad());
 // keep the book fresh while a card is live
 setInterval(() => { if (BT.loaded && BT.user && document.getElementById("page-bets").classList.contains("active")) btRefresh().then(renderBets).catch(() => {}); }, 60000);
+
+/* ---------- site refresh: hard reload + "new version" nudge ----------
+   A home-screen app has no address bar and GitHub Pages caches for 10 min,
+   so the ↻ button loads a cache-busting URL (then scrubs the param), and on
+   every resume a same-origin HEAD compares the page's ETag to the one we
+   loaded with and lights the button up when a newer build is live. */
+(function () {
+  const btn = document.getElementById("reloadBtn");
+  if (!btn) return;
+  const isHttp = /^https?:$/.test(location.protocol);
+  const pageUrl = location.pathname + location.search;
+  if (isHttp && /[?&]v=\d+/.test(location.search)) {
+    try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
+  }
+  let tag = null, announced = null;
+  async function versionTag() {
+    const r = await fetch(location.pathname, { method: "HEAD", cache: "no-store" });
+    return (r.headers.get("etag") || "") + "|" + (r.headers.get("last-modified") || "");
+  }
+  async function check() {
+    if (!isHttp) return;
+    try {
+      const t = await versionTag();
+      if (tag === null) { tag = t; return; }
+      if (t !== "|" && t !== tag && announced !== t) {
+        announced = t;
+        btn.classList.add("new"); btn.title = "New version available — tap to update";
+        toast("✨", "New version available", "Tap the ↻ button up top to update.");
+      }
+    } catch (e) {}
+  }
+  check();
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") check(); });
+  setInterval(() => { if (document.visibilityState === "visible") check(); }, 15 * 60e3);
+  btn.addEventListener("click", () => {
+    btn.classList.add("spin"); btn.disabled = true;
+    const fresh = location.pathname + "?v=" + Date.now() + location.hash;
+    try { location.replace(fresh); } catch (e) { location.href = fresh; }
+  });
+})();
 
 renderBelts();
 renderLearn();
