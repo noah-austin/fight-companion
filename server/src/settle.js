@@ -7,11 +7,29 @@ import { grade } from "./pricing.js";
 
 export const lastRaw = new Map();   // fight id -> raw ESPN competition, for /admin/debug
 
+// Log what ESPN actually sends so the odds/result parsers can be verified from Railway
+// logs alone (this sandbox can't reach the API). Raw samples are dumped once per process.
+let dumpedOdds = false, dumpedFinal = false;
+const clip = (o, n = 1800) => { const t = JSON.stringify(o); return t.length > n ? t.slice(0, n) + "…" : t; };
+function logShape(ev) {
+  const withLines = ev.fights.filter((f) => f.f1_ml != null && f.f2_ml != null).length;
+  const sources = [...new Set(ev.fights.map((f) => f.odds_source).filter(Boolean))];
+  console.log(`[sync] ${ev.name} (${ev.status}): ${ev.fights.length} fights, ${withLines} with lines [${sources.join(",") || "none"}]`);
+  for (const f of ev.fights) {
+    if (f.status === "final" || f.status === "cancelled")
+      console.log(`[sync]   ${f.status.toUpperCase()} ${f.f1_name} vs ${f.f2_name} -> kind=${f.result_kind} winner=${f.winner_id} method=${f.method} round=${f.round} detail="${f.raw_detail}"`);
+    if (!dumpedOdds && Array.isArray(f.raw?.odds) && f.raw.odds.length) { dumpedOdds = true; console.log(`[shape] odds sample (${f.f1_name} vs ${f.f2_name}): ${clip(f.raw.odds)}`); }
+    if (!dumpedFinal && f.status === "final") { dumpedFinal = true; console.log(`[shape] final status sample: ${clip({ status: f.raw?.status, competitors: (f.raw?.competitors || []).map((c) => ({ id: c.id, winner: c.winner, homeAway: c.homeAway, name: c.athlete?.displayName })) })}`); }
+  }
+  if (!dumpedOdds && ev.fights.length) console.log(`[shape] no odds array on any fight of ${ev.name}; first fight keys: ${Object.keys(ev.fights[0].raw || {}).join(",")}`);
+}
+
 export async function syncOnce() {
   const events = await fetchScoreboard();
   let settled = 0;
   for (const raw of events) {
     const ev = normalizeEvent(raw);
+    logShape(ev);
     await q(
       `INSERT INTO events (id, name, date, venue, status, updated_at) VALUES ($1,$2,$3,$4,$5,now())
        ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, date=EXCLUDED.date, venue=EXCLUDED.venue, status=EXCLUDED.status, updated_at=now()`,

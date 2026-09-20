@@ -143,6 +143,21 @@ app.get("/leaderboard", wrap(async (_req, res) => {
 // ---- admin ------------------------------------------------------------------------------
 app.post("/admin/sync", requireAdmin, wrap(async (_req, res) => res.json(await syncOnce())));
 
+// Grant or revoke admin. The first signup is admin automatically; this lets the league
+// owner hand it to someone else (or strip it from a test account).
+app.post("/admin/promote", requireAdmin, wrap(async (req, res) => {
+  const username = String(req.body?.username || "").toLowerCase();
+  const is_admin = req.body?.is_admin !== false;
+  const { rowCount } = await q(`UPDATE users SET is_admin=$2 WHERE username=$1`, [username, is_admin]);
+  if (!rowCount) throw httpErr(404, "no such user");
+  res.json({ username, is_admin });
+}));
+
+app.get("/admin/users", requireAdmin, wrap(async (_req, res) => {
+  const { rows } = await q(`SELECT id, username, is_admin, created_at FROM users ORDER BY id`);
+  res.json({ users: rows });
+}));
+
 // Settle a fight by hand when ESPN is wrong or missing method/round. Marks it MANUAL so the
 // poller never overwrites it.
 app.post("/admin/settle", requireAdmin, wrap(async (req, res) => {
