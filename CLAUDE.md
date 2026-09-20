@@ -24,6 +24,18 @@ Also in the renderer (added Aug 31, don't strip during refreshes — they live o
 
 **Do NOT redesign, restructure, or "improve" the design.** Noah approved it. A refresh touches ONLY the data blocks listed below plus `ANALYSIS_STAMP`. If a design change seems needed, leave it for Noah to request.
 
+### Bets — server-side sportsbook (added Sep 20 2026, at Noah's request; the design freeze was lifted for this feature only)
+
+A play-money book for Noah and his friends. Fourth bottom tab, **Bets**. Everyone gets a fresh **$1,000 per card**; you bet any amount on any fight — winner, winner + method (KO/SUB/DEC), winner + round, or all three — priced from the real DraftKings moneyline × base-rate multipliers × a 5% vig. Bets lock when the fight starts and are **public the moment they're placed**. Leaderboard is cumulative profit/loss. The old device-only "Beat the Books" pick'em is retired: its UI is gone, its code is left inert in the script and can be deleted in a cleanup.
+
+- **Backend:** `server/` (Node 20, Express, Postgres, no ORM). Deployed on Railway, project `fight-companion`, service `api`, root directory `/server`, Postgres template alongside. Public URL `https://api-production-34f6c.up.railway.app` (hard-coded as `BETS_API` in index.html). Railway builds on every push to `main` that touches `server/`.
+- **Env vars on the api service:** `DATABASE_URL` (reference to Postgres), `JWT_SECRET`, `INVITE_CODE` (what friends type to sign up), `CORS_ORIGINS` (`https://noah-austin.github.io`), `STARTING_BANKROLL`. Values live only in Railway.
+- **Accounts:** username + password, invite code to join. **The first account created is admin**; `/admin/promote` hands admin to others. Noah must be the first signup.
+- **Pricing** is in `server/src/pricing.js` and **mirrored in `BT_PRICING` in index.html** for the instant quote. Change both together.
+- **Settlement** (`server/src/settle.js`, `espn.js`) polls ESPN every minute during a card, every 15 min otherwise. Facts learned in production: the scoreboard has **no odds** — lines come from the core resource `.../events/{id}/competitions/{id}/odds` (DraftKings, `homeAthleteOdds`/`awayAthleteOdds`, athlete id in a `$ref`); a finished fight's status just says "Final" but `status.period` + `displayClock` are set; the method is in the `details` entry `"Unofficial Winner Decision|Kotko|Submission"` (Kotko = KO/TKO), everything else in `details` is play-by-play noise; 5:00 of the last round with no entry = decision. Draw/NC/cancelled → stake refunded. A bet whose method/round can't be determined sits `needs_manual`; `/admin/settle` fixes it and marks the fight `MANUAL` so the poller never overwrites it.
+- **The refresh must not touch `server/`, the Bets CSS (`.bt-*`), the `#page-bets` section, or the Bets script block.** The `MATCHUPS[...].odds` text is prose for the breakdowns only; the book prices from ESPN.
+- Can't be exercised from the Claude sandbox (Railway and ESPN are egress-blocked): verify the backend from Railway deploy logs (`[sync]`/`[shape]` lines) and the UI with the mocked-API Playwright script pattern used on Sep 20.
+
 ### Live-data layer (no maintenance needed)
 
 On page load the app fetches ESPN's public scoreboard (`https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=YYYYMMDD-YYYYMMDD`, rolling window), filters spin-offs via `SPINOFF_RX`, and renders events, records, live status, and winners. Fighter headshots come from `https://a.espncdn.com/i/headshots/mma/players/full/{espnId}.png` with an initials fallback. **ESPN lists fights chronologically — earliest prelim first, main event LAST.** The code relies on `EVENT_META` for main-card ordering and falls back to "last fight = main event" for unanalyzed events. Don't break this.
@@ -49,7 +61,7 @@ All in the inline `<script>`, clearly marked with `/* ============ ... */` comme
 
 1. Read the current `index.html` from `main` (never rebuild from scratch).
 2. Research via web search, verified against 2+ current sources (ESPN, UFC.com, Sherdog, MMA media — facts must reflect today, not training data): next ~4 real UFC events (main-card lineups, per-fighter breakdowns, matchup notes with betting odds), men's champions + top 5 + division storylines, P4P top 10, big-picture storylines, ESPN ids for new fighters.
-3. Replace only the data blocks + stamp. Drop past events; add newly announced ones.
+3. Replace only the data blocks + stamp. Drop past events; add newly announced ones. Never edit `server/` or any Bets-tab code (see the Bets section).
 4. Verify: extract the inline script and `node --check` it. If Playwright is available (`executablePath: '/opt/pw-browsers/chromium'`), render and click through the three tabs — the ESPN fetch failing in a sandbox is EXPECTED (it exercises the fallback path); any other JS error is a real bug.
 5. Commit to `main` with a message like `Weekly refresh: <date>` and push. No PRs.
 
