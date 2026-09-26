@@ -573,7 +573,7 @@
    Live schedule: ESPN public API · headshots: ESPN CDN · analysis baked.
    ===================================================================== */
 
-const ANALYSIS_STAMP = "September 20, 2026";
+const ANALYSIS_STAMP = "September 26, 2026";
 const SPINOFF_RX = /contender series|dana white|ultimate fighter|road to ufc|tuf\b/i;
 
 /* ---------- baked data (filled below) ---------- */
@@ -1272,20 +1272,63 @@ Object.assign(FIGHTERS, {
 });
 FIGHTERS.patriciofreire = FIGHTERS.patriciopitbull; // ESPN sometimes lists him by his real surname
 /* ============ MATCHUP NOTES ============ */
+Object.assign(FIGHTERS, {
+  sedriquesdumas: { name: "Sedriques Dumas", nick: "The Reaper", age: 31, country: "USA", style: "Long, rangy kickboxer with a wrestling base — 6-foot-3 with a 79-inch reach", strengths: [
+      "Size: he is built like a light heavyweight, which is partly why this fight moved up to 205 pounds",
+      "Real power when he commits — four of his ten wins are knockouts, and he starts fast",
+      "Awkward, unpredictable rhythm that has given better-credentialed opponents trouble early"],
+    weaknesses: [
+      "Durability: all five of his UFC losses came by stoppage, usually once he tired or got hit clean",
+      "Fades — fights start bright and unravel by round two",
+      "Consistency, in and out of the cage; a long, well-publicized arrest record made this booking a tabloid story"],
+    history: "Florida product who came through Dana White's Contender Series in 2022 and has been in the UFC since 2023 — but it hasn't gone well: <b>3-5 with a no contest in the UFC, three straight losses, 1-5 in his last six</b>. He was booked against Mickey Gall at middleweight; Gall pulled out, a short-notice debutant stepped in, and the fight moved to light heavyweight. This looks very much like his last chance to keep his job." },
+  luishernandez: { name: "Luis Hernandez", nick: "The Stache", age: 30, country: "USA", style: "Compact, aggressive finisher — jiu-jitsu brown belt, heavy kicks, hunts the back", strengths: [
+      "8-0 with eight finishes (five submissions, three knockouts) — nobody has heard a final bell against him",
+      "Rear-naked choke specialist: that is how he won his UFC contract two weeks ago",
+      "Fearless of size — he is 5-foot-9 and just choked out a 6-foot-4 Frenchman on the Contender Series"],
+    weaknesses: [
+      "Short notice and a big step up: this is his UFC debut, eleven days after his last fight",
+      "Giving up six inches of height and reach — Dumas can keep him on the end of punches",
+      "His eight opponents were regional-level; the UFC is a different tier"],
+    history: "A full-time Miami-Dade sheriff's deputy — <b>the first active-duty police officer to fight in the UFC</b>. Owns one of the fastest knockouts in MMA history (a head kick a few seconds in, on the Florida regional scene) and a regional 185-pound belt. Won his UFC deal on Sep 15 by choking out Hugo Guillon on Dana White's Contender Series, then took this fight on short notice when Mickey Gall pulled out. The cop-vs-ex-con angle went viral, and the UFC leaned into it by putting the fight on the main card." },
+  melissaamaya: { name: "Melissa Amaya", nick: "Mamba", age: 31, country: "USA", style: "Two-way finisher — pressure boxing with a slick submission game underneath", strengths: [
+      "8-0 with five straight finishes: TKO'd Giovanna Canuto and choked out Anna Melisano to reach the final",
+      "Beat the tournament's No. 1 seed in the show's very first fight — already the upset story of the season",
+      "Composure and cardio: a full-time nurse who trains nights at Sikjitsu in Spokane"],
+    weaknesses: [
+      "Eight pro fights and never fought amateur — Machado has more than twice the experience",
+      "The market makes her a +190 underdog; it expects veteran savvy to win the rounds",
+      "Has not yet faced someone who stays calm when the fight hits the mat"],
+    history: "From Chaparral, New Mexico; a University of New Mexico nursing grad (2018) who moved to Spokane, Washington and works at a dental clinic between training sessions. Skipped the amateur ranks entirely, turned pro and has never lost. A Daniel Cormier pick on The Ultimate Fighter 34, she beat the top seed in episode one and finished her way to the final — <b>against her own teammate</b>. The winner gets the UFC contract." },
+  valescamachado: { name: "Valesca Machado", nick: "Tina Black", age: 30, country: "Brazil", style: "Experienced Muay Thai striker — orthodox, walks forward, wins rounds", strengths: [
+      "Nineteen pro fights of experience against Amaya's eight — she has seen everything",
+      "Former Invicta FC strawweight champion; beat current UFC fighter Julia Polastri back in Brazil",
+      "Four-fight win streak, and the market's -230 favorite for a reason"],
+    weaknesses: [
+      "Low output — around 2.4 significant strikes a minute, so a busier opponent can steal rounds",
+      "Has been finished before, and Amaya's submissions are the live danger",
+      "Teammate fight: both were Cormier picks, so Amaya knows her game as well as she knows Amaya's"],
+    history: "Turned pro in Brazil in 2016, went 8-2 on the regional scene, then won the Invicta FC strawweight belt — the best women's promotion outside the UFC. Took the Ultimate Fighter route to a contract at 30, came through Team Cormier's bracket with two wins, and now fights her own teammate for it. Oddsmakers expect her to out-point Amaya over three rounds." }
+});
+
 Object.assign(MATCHUPS, {
-  "raonibarcelos|raulrosasjr": { odds: "Lines not posted at write-up time — expect Rosas favored as the surging prospect",
+  "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
+    note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
+  "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
+    note: "The Ultimate Fighter 34 women's final, and it's teammate-vs-teammate too (both were Daniel Cormier picks). Machado's experience and Muay Thai against Amaya's perfect record and finishing instinct. Oddsmakers expect a decision — Machado wins rounds, Amaya wins scrambles — so if it hits the mat, the underdog gets interesting. Winner takes the contract." },
+  "raonibarcelos|raulrosasjr": { odds: "Rosas -155, Barcelos +130 — the public money is on the veteran",
     note: "Youth-vs-experience in its purest form: 21-year-old Rosas, the youngest signee in UFC history, against a 39-year-old veteran who has already beaten two other men on this card (Jackson and Simon) during his five-fight streak. Both are on five-fight runs; both are grapplers — but Barcelos' boxing is the sharper standup, and Rosas has never done five rounds. First main event for each." },
-  "monteljackson|rickysimon": { odds: "Check live lines",
+  "monteljackson|rickysimon": { odds: "Jackson -225, Simon +185",
     note: "Barcelos' last two victims fight each other: Jackson's rare one-punch power and length against Simon's bottomless-gas-tank wrestling. Classic KO-artist-vs-grinder — Simon has to survive the early bombs to drown Jackson late. Winner stays in the top-15 hunt at 135." },
-  "bradyhiestand|rinyanakamura": { odds: "Nakamura expected to be a sizable favorite",
+  "bradyhiestand|rinyanakamura": { odds: "Nakamura -380, Hiestand +300",
     note: "A matchup first booked in 2024 that finally happens: Japan's world-class wrestler (and Road to UFC champ) against a TUF 29 finalist coming back from a two-plus-year layoff. Both are 3-1 in the UFC. Nakamura's athletic ceiling is the story; Hiestand's grit and rust are the questions." },
-  "ilimbekakylbekuulu|mehemmedeliosmanli": { odds: "Close line expected",
+  "ilimbekakylbekuulu|mehemmedeliosmanli": { odds: "Osmanli -285, Akylbek Uulu +230",
     note: "The TUF 34 bantamweight final — and it's teammate-vs-teammate, since both were Michael Bisping picks. Osmanli's flashy submissions (he hit the show's first-ever buggy choke) against Akylbek Uulu's grinding Kyrgyz wrestling. Both are 22. Winner takes the contract." },
-  "ailinperez|normadumont": { odds: "Close line expected — check live odds",
+  "ailinperez|normadumont": { odds: "Perez -155, Dumont +130",
     note: "The co-main, and the most meaningful fight on the card: #2 vs #4 at women's bantamweight. Dumont's size and clinch boxing against Perez's takedowns and top control. Dumont is trying to restart a streak Joselyne Edwards ended in April; Perez has won six straight and is one win from the title picture." },
-  "christianedwards|rodolfobellato": { odds: "Lines not posted at write-up time",
+  "christianedwards|rodolfobellato": { odds: "Bellato -185, Edwards +154",
     note: "Two light heavyweights who hurt people: Bellato's bulldozing pressure and one-shot power against Edwards' athleticism and wrestling base. Neither man has a reliable off switch, so this very likely doesn't reach the judges. In a division this thin, the winner climbs fast." },
-  "vanessademopoulos|yazminjauregui": { odds: "Jauregui expected to be favored",
+  "vanessademopoulos|yazminjauregui": { odds: "Jauregui -1050, Demopoulos +675 — the biggest favorite on the card",
     note: "Volume vs desperation. Jauregui's non-stop boxing should out-land Demopoulos everywhere on the feet — but Demopoulos is on a three-fight skid, is almost certainly fighting for her job, and only needs one scramble to find an armbar. Jauregui's own two-year layoff is the wildcard." },
 
   "alexandrepantoja|joshuavan": { title: "Flyweight title", odds: "A true pick'em — Van -107, Pantoja -113",
@@ -1321,8 +1364,8 @@ EVENT_META.push(
     note: "Salt Lake City, four weeks out and still filling in. The flyweight belt is vacant — Valentina Shevchenko told the UFC she'd be out at least a year — so Natalia Silva and Wang Cong fight for it, with former champ Deiveson Figueiredo against prospect Payton Talbott underneath. Breakdowns for the rest of the card get written as it firms up.",
     mainCard: ["nataliasilva|wangcong", "deivesonfigueiredo|paytontalbott", "johnnywalker|mickparkin", "ismailnaurdiev|marvinvettori"] },
   { match: ["rosas jr. vs. barcelos", "rosas jr vs barcelos", "rosas"], titles: "",
-    note: "Card at the Meta APEX in Las Vegas (the UFC's own small arena — Meta took over the naming rights this year), headlined by the first main event for both men. The order firmed up in the last week: Norma Dumont vs Ailin Perez is now the co-main, and both Ultimate Fighter 34 finals — plus Nakamura vs Hiestand — dropped to the prelims. Breakdowns are written for those prelim fights too; tap them.",
-    mainCard: ["raonibarcelos|raulrosasjr", "ailinperez|normadumont", "monteljackson|rickysimon", "christianedwards|rodolfobellato", "vanessademopoulos|yazminjauregui"] }
+    note: "Card at the Meta APEX in Las Vegas (the UFC's own small arena — Meta took over the naming rights this year), headlined by the first main event for both men. Final shape of the main card: Rosas–Barcelos, the Dumont–Perez co-main, the viral cop-vs-ex-con fight (Hernandez–Dumas, moved to light heavyweight after Mickey Gall pulled out), and both Ultimate Fighter 34 finals. Jackson–Simon, Bellato–Edwards, Nakamura–Hiestand and Jauregui–Demopoulos are on the prelims — breakdowns are written for those too; tap them. Everyone made weight.",
+    mainCard: ["raonibarcelos|raulrosasjr", "ailinperez|normadumont", "luishernandez|sedriquesdumas", "ilimbekakylbekuulu|mehemmedeliosmanli", "melissaamaya|valescamachado"] }
 );
 
 /* ============ FALLBACK SNAPSHOT (if live feed unreachable) ============ */
@@ -1346,16 +1389,16 @@ EVENT_META.push(
     { name: "UFC Fight Night: Rosas Jr. vs. Barcelos", date: "2026-09-26T22:00Z", venue: "Meta APEX, Las Vegas", fights: [
       F("Bantamweight", "Raul Rosas Jr.", "12-1-0", "Raoni Barcelos", "22-5-0"),
       F("W Bantamweight", "Norma Dumont", "13-3-0", "Ailin Perez", "13-2-0"),
-      F("Bantamweight", "Montel Jackson", "15-4-0", "Ricky Simon", "22-7-1"),
-      F("Light Heavyweight", "Rodolfo Bellato", "13-3-1", "Christian Edwards", "8-5-0"),
-      F("W Strawweight", "Yazmin Jauregui", "11-2-0", "Vanessa Demopoulos", "11-8-0"),
-      F("Bantamweight", "Brady Hiestand", "9-2-0", "Rinya Nakamura", "10-1-0"),
+      F("Light Heavyweight", "Luis Hernandez", "8-0-0", "Sedriques Dumas", "10-5-0"),
       F("Bantamweight", "Mehemmedeli Osmanli", "12-1-0", "Ilimbek Akylbek Uulu", "10-3-0"),
       F("W Strawweight", "Melissa Amaya", "8-0-0", "Valesca Machado", "15-4-0"),
-      F("Bantamweight", "John Castaneda", "21-8-1", "Alatengheili", "17-10-2"),
-      F("Lightweight", "Josiah Harrell", "11-1-0", "Elves Brener", "16-6-0"),
+      F("Bantamweight", "Brady Hiestand", "9-2-0", "Rinya Nakamura", "10-1-0"),
       F("Middleweight", "Rodolfo Vieira", "11-5-0", "Robert Bryczek", "18-7-0"),
-      F("Welterweight", "Mickey Gall", "8-6-0", "Sedriques Dumas", "10-3-0")
+      F("Light Heavyweight", "Rodolfo Bellato", "13-3-1", "Christian Edwards", "8-5-0"),
+      F("Lightweight", "Josiah Harrell", "11-1-0", "Elves Brener", "16-6-0"),
+      F("Bantamweight", "Montel Jackson", "15-4-0", "Ricky Simon", "22-7-1"),
+      F("Bantamweight", "John Castaneda", "21-8-1", "Alatengheili", "17-10-2"),
+      F("W Strawweight", "Yazmin Jauregui", "11-2-0", "Vanessa Demopoulos", "11-8-0")
     ]},
     { name: "UFC 332: Silva vs. Wang", date: "2026-10-04T02:00Z", venue: "Delta Center, Salt Lake City", fights: [
       F("W Flyweight", "Natalia Silva", "20-5-1", "Wang Cong", "10-1-0"),
@@ -1392,8 +1435,8 @@ DIVISIONS.men = [
     story: "Makhachev out-pointed Garry to own the record books outright. Who's next? <b>He named Carlos Prates as 'the most deserving guy'</b> and dismissed unbeaten Michael Morales over inactivity (the two nearly brawled in the crowd at UFC 330). Prates has since signed a new eight-fight contract and says <b>the UFC promised him the title shot next</b>; he's pushing for UFC 334 at Madison Square Garden in November, but nothing is signed. Makhachev has also mused that welterweights 'are stronger and hit harder' — fueling talk of an eventual lightweight return and the dream Topuria superfight." },
   { name: "Lightweight", weight: "155 lb", champ: { name: "Justin Gaethje", record: "28-5", country: "USA" },
     beltFacts: "At 37, won the interim belt in Jan 2026 (beat Paddy Pimblett), then <b>upset Ilia Topuria by TKO at the June White House card</b> to become undisputed champ. <b>0 defenses.</b>",
-    top5: [{ rank: 1, name: "Ilia Topuria", record: "17-1" }, { rank: 2, name: "Arman Tsarukyan", record: "23-3" }, { rank: 3, name: "Charles Oliveira", record: "37-11" }, { rank: 4, name: "Max Holloway", record: "28-9" }, { rank: 5, name: "Paddy Pimblett", record: "24-4" }],
-    story: "The feel-good story of the year — the ultimate fan-favorite brawler finally won the big one on the White House lawn. Topuria's camp is <b>publicly demanding an immediate rematch</b>, but the UFC booked <b>Tsarukyan vs Mauricio Ruffy as a five-round eliminator at UFC 331 (Sep 19)</b> — the winner is widely expected to get Gaethje instead." },
+    top5: [{ rank: 1, name: "Ilia Topuria", record: "17-1" }, { rank: 2, name: "Arman Tsarukyan", record: "24-3" }, { rank: 3, name: "Charles Oliveira", record: "37-11" }, { rank: 4, name: "Max Holloway", record: "28-9" }, { rank: 5, name: "Paddy Pimblett", record: "24-4" }],
+    story: "The feel-good story of the year — the ultimate fan-favorite brawler finally won the big one on the White House lawn. Topuria's camp wants an immediate rematch, but <b>Arman Tsarukyan settled the argument at UFC 331: a first-round knockout of Mauricio Ruffy</b> in a five-round eliminator. He is the clear No. 1 contender, and Gaethje vs Tsarukyan is the fight the UFC is expected to book next." },
   { name: "Featherweight", weight: "145 lb", champ: { name: "Alexander Volkanovski", record: "28-4", country: "Australia" },
     beltFacts: "Regained the vacant belt in April 2025, then defended it against Diego Lopes in Sydney in Jan 2026. <b>1 defense</b> this reign.",
     top5: [{ rank: 1, name: "Movsar Evloev", record: "20-0" }, { rank: 2, name: "Diego Lopes", record: "28-8" }, { rank: 3, name: "Lerone Murphy", record: "17-1-1" }, { rank: 4, name: "Aljamain Sterling", record: "26-5" }, { rank: 5, name: "Yair Rodriguez", record: "21-5" }],
@@ -1402,16 +1445,19 @@ DIVISIONS.men = [
     beltFacts: "Regained the belt in Dec 2025 with a decision over Merab Dvalishvili, avenging his 2023 loss. <b>0 defenses</b> this reign.",
     top5: [{ rank: 1, name: "Merab Dvalishvili", record: "21-5" }, { rank: 2, name: "Sean O'Malley", record: "20-3" }, { rank: 3, name: "Song Yadong", record: "24-9-1" }, { rank: 4, name: "Umar Nurmagomedov", record: "20-2" }, { rank: 5, name: "Mario Bautista", record: "18-3" }],
     story: "The division flipped overnight: <b>Song Yadong knocked Umar Nurmagomedov out cold in Shanghai (Aug 29)</b> — a second-round uppercut as Umar shot for a takedown — and immediately demanded a title shot. Meanwhile <b>Yan vs Merab III co-headlines UFC 333 (Oct 24, Abu Dhabi)</b>; they're 1-1, winner settles it, and Song now has the loudest claim on whoever leaves Abu Dhabi with the belt. Youth watch: Raul Rosas Jr. gets his first main event Sep 26." },
-  { name: "Flyweight", weight: "125 lb", champ: { name: "Joshua Van", record: "17-2", country: "Myanmar/USA" },
-    beltFacts: "Won the belt in Dec 2025 — a 26-second TKO when Pantoja's arm gave out — then <b>defended it properly with a round-5 TKO of Tatsuro Taira</b> in May. 1 defense.",
-    top5: [{ rank: 1, name: "Alexandre Pantoja", record: "30-6" }, { rank: 2, name: "Manel Kape", record: "23-7" }, { rank: 3, name: "Brandon Royval", record: "18-9" }, { rank: 4, name: "Tatsuro Taira", record: "18-2" }, { rank: 5, name: "Kyoji Horiguchi", record: "34-5" }],
-    story: "At 24, Van is <b>the youngest champion on the roster</b> and one of the UFC's fastest-rising stars. The unfinished business gets settled: <b>Van vs Pantoja 2 headlines UFC 331 on Sep 19 in Los Angeles</b> — full breakdown in the Fights tab." }
+  { name: "Flyweight", weight: "125 lb", champ: { name: "Joshua Van", record: "18-2", country: "Myanmar/USA" },
+    beltFacts: "Won the belt in Dec 2025 — a 26-second TKO when Pantoja's arm gave out — defended with a round-5 TKO of Tatsuro Taira in May, then <b>settled it for real at UFC 331 on Sep 19: a clean five-round decision over Pantoja</b>. 2 defenses.",
+    top5: [{ rank: 1, name: "Manel Kape", record: "23-7" }, { rank: 2, name: "Alexandre Pantoja", record: "30-7" }, { rank: 3, name: "Brandon Royval", record: "18-9" }, { rank: 4, name: "Tatsuro Taira", record: "18-2" }, { rank: 5, name: "Kyoji Horiguchi", record: "34-5" }],
+    story: "At 24, Van is <b>the youngest champion on the roster</b> and, after out-striking Pantoja for 25 minutes, a top-five pound-for-pound fighter on most media lists. Pantoja slid to #2 behind <b>Manel Kape, the obvious next challenger</b>. A Van–Kape fight would be the first real test of whether anyone at 125 can slow him down." }
 ];
 P4P.explain = "<b>Pound-for-pound</b> is a fun, hypothetical ranking: who's the best fighter if weight didn't matter? It compares champions and stars across divisions by skill and résumé. No belt attached — pure bragging rights.";
-P4P.men = [{ name: "Islam Makhachev", record: "29-1" }, { name: "Alexander Volkanovski", record: "28-4" }, { name: "Petr Yan", record: "20-5" }, { name: "Justin Gaethje", record: "28-5" }, { name: "Ilia Topuria", record: "17-1" }, { name: "Tom Aspinall", record: "15-3" }, { name: "Sean Strickland", record: "31-7" }, { name: "Merab Dvalishvili", record: "21-5" }, { name: "Alex Pereira", record: "13-4" }, { name: "Ciryl Gane", record: "14-2" }];
+P4P.men = [{ name: "Islam Makhachev", record: "29-1" }, { name: "Alexander Volkanovski", record: "28-4" }, { name: "Petr Yan", record: "20-5" }, { name: "Joshua Van", record: "18-2" }, { name: "Justin Gaethje", record: "28-5" }, { name: "Ilia Topuria", record: "17-1" }, { name: "Tom Aspinall", record: "15-3" }, { name: "Sean Strickland", record: "31-7" }, { name: "Merab Dvalishvili", record: "21-5" }, { name: "Arman Tsarukyan", record: "24-3" }];
 
 /* ============ STORYLINES & UFC 101 ============ */
 STORYLINES.push(
+  { em: "🏆", title: "UFC 331: Van proves it, Tsarukyan is next", body: [
+    "The rematch answered what the 26-second first fight couldn't: <b>Joshua Van out-struck Alexandre Pantoja for five full rounds</b> and kept the flyweight belt on Sep 19 in Los Angeles. No fluke, no injury — the 24-year-old is the real thing, and he jumped into the top five of most pound-for-pound lists overnight. Manel Kape is now the No. 1 contender.",
+    "Underneath, <b>Arman Tsarukyan knocked Mauricio Ruffy out with an elbow in round one</b> of a five-round eliminator and should get champion Justin Gaethje next. Patricio Pitbull turned back the clock with a first-round KO of Dooho Choi. And the shock of the night: Olympic gold medalist <b>Gable Steveson, a -1500 favorite, was knocked out in 12 seconds by Sean Sharaf</b> — the biggest upset in the UFC this year."] },
   { em: "🇲🇽", title: "Noche UFC: Grasso spoils the eliminator", body: [
     "The Mexican Independence card delivered on Sep 12. <b>Alexa Grasso beat Manon Fiorot</b> in what was supposed to be Fiorot's route back to a title shot — the former champ's second big win of the year, and it scrambles the flyweight picture. <b>Jean Silva submitted Jose Delgado in round three</b> to keep his main event, and Brandon Moreno edged Joseph Morales on a split decision to snap his skid.",
     "Elsewhere: Mexico's David Martinez stayed unbeaten in the UFC by out-pointing Dan Ige and ruining his bantamweight debut, Tommy McMillen moved to 12-0, and Curtis Blaydes out-wrestled Waldo Cortes-Acosta in a quiet heavyweight decision. A week earlier in Paris, <b>Salahdine Parnasse knocked Dan Hooker out in round one of his UFC debut</b> — the best debut of the year."] },
@@ -1475,7 +1521,7 @@ EXPLAINERS.push(
     "John Castaneda": "4063869", "Alatengheili": "3154389", "Rodolfo Vieira": "4426250", "Robert Bryczek": "4341572",
     "Josiah Harrell": "5149546", "Elves Brener": "5110006", "Rodolfo Bellato": "5060489", "Christian Edwards": "4799517",
     "Norma Dumont": "4418784", "Ailin Perez": "5075333", "Vanessa Demopoulos": "4683395", "Yazmin Jauregui": "5063403",
-    "Melissa Amaya": "5169699", "Valesca Machado": "4836549",
+    "Melissa Amaya": "5169699", "Valesca Machado": "4836549", "Sedriques Dumas": "5060467", "Luis Hernandez": "5369427",
     "Islam Makhachev": "3332412", "Ian Machado Garry": "4738092",
     "Tom Aspinall": "4010976", "Ciryl Gane": "4426000", "Carlos Ulberg": "4695736", "Sean Strickland": "3093653",
     "Justin Gaethje": "3022345", "Alexander Volkanovski": "3949584", "Petr Yan": "4293517", "Joshua Van": "5120301",
