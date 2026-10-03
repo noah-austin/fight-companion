@@ -573,7 +573,7 @@
    Live schedule: ESPN public API · headshots: ESPN CDN · analysis baked.
    ===================================================================== */
 
-const ANALYSIS_STAMP = "September 26, 2026";
+const ANALYSIS_STAMP = "October 3, 2026";
 const SPINOFF_RX = /contender series|dana white|ultimate fighter|road to ufc|tuf\b/i;
 
 /* ---------- baked data (filled below) ---------- */
@@ -1311,7 +1311,76 @@ Object.assign(FIGHTERS, {
     history: "Turned pro in Brazil in 2016, went 8-2 on the regional scene, then won the Invicta FC strawweight belt — the best women's promotion outside the UFC. Took the Ultimate Fighter route to a contract at 30, came through Team Cormier's bracket with two wins, and now fights her own teammate for it. Oddsmakers expect her to out-point Amaya over three rounds." }
 });
 
+Object.assign(FIGHTERS, {
+  kinggreen: { name: "King Green", nick: "", age: 40, country: "USA", style: "Slick, hands-down counter boxer — the shoulder-roll defense, a stiff jab, and a surprising wrestling option", strengths: [
+      "Hard to hit clean: slips and rolls punches better than almost anyone at 155, even at 40",
+      "On the best run of his career — four straight wins, three by finish (Zellhuber, Stephens, McKinney)",
+      "Underrated wrestling: takedowns beat Ribovics twice, and Green shoots far more often than the Argentine does"],
+    weaknesses: [
+      "Age — he is 40 and fighting for the fourth time this year; the chin has been cracked before",
+      "Low kicks: the hands-down style leaves his lead leg open, and Ribovics kicks hard",
+      "Can coast and talk his way into losing close rounds"],
+    history: "Formerly Bobby Green — he legally changed his name to King in 2024. A UFC fixture since 2013, forever the entertaining gatekeeper, until this late-career surge: <b>four straight wins at 39 and 40</b> with a knockout of Jeremy Stephens and a stoppage of Terrance McKinney. A win here, in his home-state-adjacent Mountain time zone, would put him on the edge of the top 15 for the first time in years." },
+  estebanribovics: { name: "Esteban Ribovics", nick: "El Gringo", age: 30, country: "Argentina", style: "High-volume kickboxer — hard low kicks set up hooks, and he never stops coming forward", strengths: [
+      "Pace and output — three Fight of the Night bonuses in his last seven, and he is coming off a knockout of Edson Barboza in August",
+      "Kicks: he chops the lead leg early and it changes the whole fight",
+      "Durable and happy in a brawl — he has never been knocked out"],
+    weaknesses: [
+      "Wrestling defense: two of his three UFC losses came to grapplers who took him down (Gamrot submitted him in April)",
+      "Missed weight by half a pound — forfeits 20 percent of his purse and can't earn a bonus tonight",
+      "Can be out-boxed by a sharper counter-puncher when the brawl doesn't materialize"],
+    history: "Argentina's best lightweight and a cult favorite for his all-action fights. 16-3 overall, 5-2 in the UFC, with a Fight of the Year contender against Daniel Zellhuber in 2024 and a stoppage of Barboza at UFC 330 in August. Lost to Mateusz Gamrot by submission in April — the grappling hole is still the question. Came in heavy at Friday's weigh-in, so the fight goes ahead at a catchweight." },
+  robertosoldic: { name: "Roberto Soldic", nick: "Robocop", age: 31, country: "Croatia", style: "Explosive knockout artist — compact power in both hands, hunts the finish from the opening bell", strengths: [
+      "Power: 18 of his 21 wins are knockouts, eleven of them in round one",
+      "Pedigree — a two-division KSW champion (welterweight twice, middleweight once), the biggest European promotion outside the UFC",
+      "Has beaten Dricus du Plessis, the former UFC middleweight champ, in a 2018 rematch"],
+    weaknesses: [
+      "Rust: this is his first MMA fight in 19 months, after a stop-start spell in ONE Championship",
+      "UFC debut nerves plus a 7,000-foot elevation drop into Salt Lake City — cardio is the unknown",
+      "Wrestlers have bothered him before; he would rather stand and trade"],
+    history: "Bosnian-born Croatian, 21-4, and for years the best welterweight not in the UFC. Ruled KSW, then had a frustrating run in ONE Championship (a no contest, cancelled bouts) before <b>finally signing with the UFC in September on short notice</b>. Unbeaten in seven. Debuts against a fellow puncher, so it should not take long either way." },
+  khaoswilliams: { name: "Khaos Williams", nick: "The Oxfighter", age: 32, country: "USA", style: "One-punch right hand — a sprinter's start, with eight first-round finishes", strengths: [
+      "Early power: nine of his 16 wins are knockouts, eight of them in round one",
+      "Six-foot frame with a 77-inch reach — he is the longer man here",
+      "Snapped a two-fight skid with a first-round TKO of Nikolay Veretennikov in May"],
+    weaknesses: [
+      "Fades badly when it goes past round one; his output drops off a cliff",
+      "Lost two of his last three — a decision to Andreas Gustafsson and a submission to Gabriel Bonfim",
+      "Tends to wait for the one big shot and gets out-worked in between"],
+    history: "Detroit-area knockout artist who announced himself with 27-second and 30-second KOs in his first two UFC fights back in 2020. Since then: streaky — big wins, then flat decision losses. 16-5 overall, 7-4 in the UFC. Against Soldic the first round is everything: both men are at their most dangerous in the opening minutes." },
+  romankopylov: { name: "Roman Kopylov", nick: "", age: 34, country: "Russia", style: "Southpaw kickboxer — body kicks, counter left hand, and a chin that has never been cracked", strengths: [
+      "Durability: 20 pro fights and he has never been stopped by strikes — his five losses are decisions and submissions",
+      "Twelve knockouts in 15 wins; the left hand and body kicks are real weapons",
+      "The more proven man by far — a former Fight Nights Global champion who has fought ranked UFC middleweights"],
+    weaknesses: [
+      "Giving up four inches of height and six of reach to a 24-year-old who is still growing into his frame",
+      "Lost three of his last five, all decisions, to Costa, Rodrigues and Imavov-level pressure",
+      "Starts slowly and lets rounds slip away early"],
+    history: "Russian striker, 15-5, who has been the UFC's middleweight measuring stick for a few years: good enough to knock out mid-tier opposition, not quite good enough against the top ten. Beat Marco Tulio by decision in May to stop a two-fight slide. Tonight he is the <b>step-up test for a prospect everyone is talking about</b> — and the man most likely to spoil the coronation if the kid gets wild." },
+  atebagautier: { name: "Ateba Gautier", nick: "The Storm", age: 24, country: "Cameroon", style: "Huge, athletic switch-stance striker — 6-foot-4 with an 81-inch reach and fight-ending power", strengths: [
+      "Finishing: 9 of his 11 wins by knockout, seven in the first round; four KOs in five UFC wins",
+      "Size and reach that nobody at middleweight can match — he fights like a light heavyweight",
+      "Nine straight wins and still improving every time out; he is only 24"],
+    weaknesses: [
+      "Biggest step up of his career against a durable, experienced veteran who has never been knocked out",
+      "Raw: when the first-round blitz doesn't land he has had to go the distance (Pulyaev) and looked human",
+      "Gas tank over three hard rounds is still unproven at this level"],
+    history: "From Yaounde, Cameroon, trains at Manchester Top Team in England. Won his UFC deal on the 2024 Contender Series, then tore through the division: <b>knockouts of Tre'ston Vines and Ozzy Diaz, a decision over Andrey Pulyaev</b>. 11-1, nine straight wins, and the most talked-about young middleweight in the sport. Kopylov is the test that tells us whether the hype is real." }
+});
+
 Object.assign(MATCHUPS, {
+  "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
+    note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
+  "khaoswilliams|robertosoldic": { odds: "Soldic -238, Williams +195",
+    note: "Two of the hardest hitters at 170 with a combined 27 knockouts — and the betting line on the fight ending inside two rounds says the books don't expect judges. Soldic, the two-division European champ, finally debuts after 19 months away; Williams is at his most dangerous in the first 90 seconds. Whoever lands first probably wins." },
+  "atebagautier|romankopylov": { odds: "Gautier -258, Kopylov +210",
+    note: "Prospect vs proven: Gautier, 24, 6-foot-4 and a finishing machine, against Kopylov, 34, who has never been stopped by strikes in 20 fights. Gautier's size and power should overwhelm most middleweights, but Kopylov's chin and counter left hand are exactly the kind of test that exposes a raw talent. Opens the main card." },
+  "brendanallen|christianleroyduncan": { odds: "Duncan -135, Allen +135",
+    note: "Next Saturday's Apex headliner: #4 vs #10 at middleweight. Allen is on a three-fight run (Vettori, de Ridder, Shahbazyan) and takes everyone down eventually; Duncan is a British striker on five straight wins including Dolidze and Cannonier, in his first main event. Grappler vs striker, five rounds, with a top-five spot on the line. Full breakdowns coming this week." },
+  "joaquinbuckley|mikemalott": { odds: "Lines not posted at write-up time",
+    note: "Oct 17 in Edmonton: Canada's Mike Malott, 34 and on a four-fight streak after knocking out Gilbert Burns, against Joaquin Buckley, the #9 welterweight who has lost two straight to Sean Brady and Kamaru Usman and badly needs a win. Hometown crowd vs the more proven name. Breakdowns get written closer to the date." },
+  "erinblanchfield|jasminejasudavicius": { odds: "Lines not posted at write-up time",
+    note: "The Edmonton co-main: Erin Blanchfield, a top-five women's flyweight, against Canadian Jasmine Jasudavicius in front of her home crowd. Blanchfield's grappling against Jasudavicius' size and pressure. Breakdowns closer to the date." },
   "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
     note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
   "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
@@ -1341,9 +1410,9 @@ Object.assign(MATCHUPS, {
     note: "Old guard vs new: Volkanovski, 37 and one of the best featherweights ever, against Movsar Evloev, who is 20-0 and has never really been in trouble. It's the classic striker-vs-wrestler question — Evloev wants to smother him for 25 minutes, Volkanovski wants to make it a fight. Evloev has waited years for this shot." },
   "merabdvalishvili|petryan": { title: "Bantamweight title", odds: "Lines not posted at write-up time",
     note: "The rubber match. Yan won the first, Dvalishvili won the second and took the belt, Yan took it back in December. Dvalishvili's pace and takedown volume against Yan's precision boxing — whoever leaves Abu Dhabi with the belt has Song Yadong waiting, who knocked out Umar Nurmagomedov and demanded the next shot." },
-  "nataliasilva|wangcong": { title: "Flyweight title (vacant)", odds: "Silva expected to be a clear favorite — check live lines",
+  "nataliasilva|wangcong": { title: "Flyweight title (vacant)", odds: "Silva -205, Wang +170",
     note: "For the belt Valentina Shevchenko gave up: she told the UFC she'd be out at least a year, so the title is vacant and these two fight for it. Silva's speed and kicking range against Wang's compact power. Silva has beaten three former champions in a row without ever really being hit; Wang needs to walk her down and land something heavy." },
-  "deivesonfigueiredo|paytontalbott": { odds: "Talbott expected to be favored — check live lines",
+  "deivesonfigueiredo|paytontalbott": { odds: "Talbott -800, Figueiredo +550 — the books think the legend is done",
     note: "Prospect vs former champ, and the classic question that comes with it: does Figueiredo have one more night left at 38, or is Talbott simply faster and fresher? Figueiredo's power and guillotine are live for as long as the fight lasts; Talbott's movement and volume should win the rounds if it goes long." },
   "gablesteveson|seansharaf": { odds: "Steveson -1500 — one of the heaviest favorites on the card",
     note: "Promoted to open the main card when Ortega pulled out. Steveson is the Olympic gold medalist wrestler the UFC has been bringing along slowly — unbeaten, but against carefully picked opposition, and still raw as a striker. Sharaf is the designated test: if he can stay off his back for a round, the questions about Steveson's stand-up get loud." },
@@ -1357,12 +1426,15 @@ EVENT_META.push(
   { match: ["ufc 333", "volkanovski vs. evloev", "volkanovski vs evloev"], titles: "2 title fights",
     note: "Abu Dhabi, and the biggest card of the fall: two belts on the line. Volkanovski defends featherweight against an unbeaten wrestler, and the Yan–Dvalishvili trilogy settles a series that's 1-1. Full fighter breakdowns get written closer to the date.",
     mainCard: ["alexandervolkanovski|movsarevloev", "merabdvalishvili|petryan"] },
-  { match: ["ufc 331", "van vs. pantoja", "van vs pantoja"], titles: "1 title fight",
-    note: "The flyweight title rematch of the 26-second freak-injury title change — plus a five-round lightweight eliminator where the winner is expected to get champion Gaethje next. Late change: Brian Ortega pulled out injured, so his rematch with Renato Moicano is off and Gable Steveson vs Sean Sharaf was promoted to open the main card.",
-    mainCard: ["alexandrepantoja|joshuavan", "armantsarukyan|mauricioruffy", "doohochoi|patriciopitbull", "alonzomenifield|iwobaraniewski", "gablesteveson|seansharaf"] },
   { match: ["ufc 332", "silva vs. wang", "silva vs wang"], titles: "1 title fight",
-    note: "Salt Lake City, four weeks out and still filling in. The flyweight belt is vacant — Valentina Shevchenko told the UFC she'd be out at least a year — so Natalia Silva and Wang Cong fight for it, with former champ Deiveson Figueiredo against prospect Payton Talbott underneath. Breakdowns for the rest of the card get written as it firms up.",
-    mainCard: ["nataliasilva|wangcong", "deivesonfigueiredo|paytontalbott", "johnnywalker|mickparkin", "ismailnaurdiev|marvinvettori"] },
+    note: "Salt Lake City, and the first numbered main card ever on CBS. The flyweight belt is vacant — Valentina Shevchenko told the UFC she'd be out at least a year — so Natalia Silva and Wang Cong fight for it, with former champ Deiveson Figueiredo against prospect Payton Talbott underneath. Then three fights that should not reach the judges: Green–Ribovics (catchweight after Ribovics missed by half a pound), Soldic's UFC debut against Khaos Williams, and prospect Ateba Gautier's step-up against Roman Kopylov. Johnny Walker's heavyweight debut and Vettori–Naurdiev ended up on the prelims.",
+    mainCard: ["nataliasilva|wangcong", "deivesonfigueiredo|paytontalbott", "estebanribovics|kinggreen", "khaoswilliams|robertosoldic", "atebagautier|romankopylov"] },
+  { match: ["allen vs. duncan", "allen vs duncan"], titles: "",
+    note: "Next Saturday at the Meta APEX: a five-round middleweight main event between #4 Brendan Allen and #10 Christian Leroy Duncan, with real top-five stakes. The rest of the card is prospects and veterans — Andre Fili, Loopy Godinez, Gerald Meerschaert. Full breakdowns get written this week.",
+    mainCard: ["brendanallen|christianleroyduncan"] },
+  { match: ["buckley vs. malott", "buckley vs malott"], titles: "",
+    note: "Oct 17 in Edmonton, Canada: hometown favorite Mike Malott against Joaquin Buckley at welterweight, with Erin Blanchfield vs Canada's Jasmine Jasudavicius as the co-main. Breakdowns closer to the date.",
+    mainCard: ["joaquinbuckley|mikemalott", "erinblanchfield|jasminejasudavicius"] },
   { match: ["rosas jr. vs. barcelos", "rosas jr vs barcelos", "rosas"], titles: "",
     note: "Card at the Meta APEX in Las Vegas (the UFC's own small arena — Meta took over the naming rights this year), headlined by the first main event for both men. Final shape of the main card: Rosas–Barcelos, the Dumont–Perez co-main, the viral cop-vs-ex-con fight (Hernandez–Dumas, moved to light heavyweight after Mickey Gall pulled out), and both Ultimate Fighter 34 finals. Jackson–Simon, Bellato–Edwards, Nakamura–Hiestand and Jauregui–Demopoulos are on the prelims — breakdowns are written for those too; tap them. Everyone made weight.",
     mainCard: ["raonibarcelos|raulrosasjr", "ailinperez|normadumont", "luishernandez|sedriquesdumas", "ilimbekakylbekuulu|mehemmedeliosmanli", "melissaamaya|valescamachado"] }
@@ -1372,20 +1444,6 @@ EVENT_META.push(
 (function () {
   const F = (weight, n1, r1, n2, r2) => ({ weight, f1: { name: n1, record: r1, winner: false }, f2: { name: n2, record: r2, winner: false }, done: false, live: false });
   FALLBACK_EVENTS.push(
-    { name: "UFC 331: Van vs. Pantoja 2", date: "2026-09-20T01:00Z", venue: "Crypto.com Arena, Los Angeles", fights: [
-      F("Flyweight", "Joshua Van", "17-2-0", "Alexandre Pantoja", "30-6-0"),
-      F("Lightweight", "Arman Tsarukyan", "23-3-0", "Mauricio Ruffy", "14-2-0"),
-      F("Featherweight", "Patricio Pitbull", "37-9-0", "Dooho Choi", "17-4-1"),
-      F("Light Heavyweight", "Alonzo Menifield", "18-6-1", "Iwo Baraniewski", "9-0-0"),
-      F("Heavyweight", "Gable Steveson", "4-0-0", "Sean Sharaf", "4-2-0"),
-      F("Bantamweight", "Marlon Vera", "23-12-1", "Charles Jourdain", "18-8-1"),
-      F("Heavyweight", "Tai Tuivasa", "15-10-0", "Robelis Despaigne", "6-2-0"),
-      F("Middleweight", "Edmen Shahbazyan", "16-6-0", "Brunno Ferreira", "15-4-0"),
-      F("Featherweight", "Giga Chikadze", "15-6-0", "Joanderson Brito", "19-5-1"),
-      F("W Flyweight", "Casey O'Neill", "11-2-0", "Eduarda Moura", "12-2-0"),
-      F("Middleweight", "Ryan Gandra", "10-1-0", "Ozzy Diaz", "10-4-0"),
-      F("Featherweight", "Michael Aswell", "11-5-0", "JooSang Yoo", "9-1-0")
-    ]},
     { name: "UFC Fight Night: Rosas Jr. vs. Barcelos", date: "2026-09-26T22:00Z", venue: "Meta APEX, Las Vegas", fights: [
       F("Bantamweight", "Raul Rosas Jr.", "12-1-0", "Raoni Barcelos", "22-5-0"),
       F("W Bantamweight", "Norma Dumont", "13-3-0", "Ailin Perez", "13-2-0"),
@@ -1403,10 +1461,26 @@ EVENT_META.push(
     { name: "UFC 332: Silva vs. Wang", date: "2026-10-04T02:00Z", venue: "Delta Center, Salt Lake City", fights: [
       F("W Flyweight", "Natalia Silva", "20-5-1", "Wang Cong", "10-1-0"),
       F("Bantamweight", "Deiveson Figueiredo", "25-7-1", "Payton Talbott", "11-1-0"),
-      F("Heavyweight", "Johnny Walker", "", "Mick Parkin", ""),
-      F("Middleweight", "Marvin Vettori", "", "Ismail Naurdiev", ""),
-      F("Lightweight", "Bobby Green", "", "Esteban Ribovics", ""),
-      F("Middleweight", "Roman Kopylov", "", "Ateba Gautier", "")
+      F("Lightweight", "King Green", "36-17-1", "Esteban Ribovics", "16-3-0"),
+      F("Welterweight", "Roberto Soldic", "21-4-0", "Khaos Williams", "16-5-0"),
+      F("Middleweight", "Roman Kopylov", "15-5-0", "Ateba Gautier", "11-1-0"),
+      F("Heavyweight", "Johnny Walker", "22-9-0", "Mick Parkin", "10-1-0"),
+      F("Middleweight", "Marvin Vettori", "19-9-1", "Ismail Naurdiev", "25-8-0"),
+      F("Lightweight", "Rafael dos Anjos", "32-17-0", "Alexander Hernandez", "16-9-0")
+    ]},
+    { name: "UFC Fight Night: Allen vs. Duncan", date: "2026-10-10T21:00Z", venue: "Meta APEX, Las Vegas", fights: [
+      F("Middleweight", "Brendan Allen", "27-7-0", "Christian Leroy Duncan", "15-2-0"),
+      F("Lightweight", "Jai Herbert", "", "Matheus Camilo", ""),
+      F("W Strawweight", "Loopy Godinez", "", "Ketlen Souza", ""),
+      F("Featherweight", "Andre Fili", "", "Kai Kamaka III", ""),
+      F("Light Heavyweight", "Julius Walker", "", "Gerald Meerschaert", "")
+    ]},
+    { name: "UFC Fight Night: Buckley vs. Malott", date: "2026-10-17T22:00Z", venue: "Rogers Place, Edmonton", fights: [
+      F("Welterweight", "Joaquin Buckley", "21-8-0", "Mike Malott", "12-2-1"),
+      F("W Flyweight", "Erin Blanchfield", "", "Jasmine Jasudavicius", ""),
+      F("Lightweight", "Kyle Nelson", "", "Cristian Perez", ""),
+      F("Middleweight", "Marc-Andre Barriault", "", "Kyle Daukaus", ""),
+      F("Lightweight", "Mandel Nallo", "", "Nate Landwehr", "")
     ]},
     { name: "UFC 333: Volkanovski vs. Evloev", date: "2026-10-24T18:00Z", venue: "Etihad Arena, Abu Dhabi", fights: [
       F("Featherweight", "Alexander Volkanovski", "28-4-0", "Movsar Evloev", "20-0-0"),
@@ -1458,9 +1532,9 @@ STORYLINES.push(
   { em: "🏆", title: "UFC 331: Van proves it, Tsarukyan is next", body: [
     "The rematch answered what the 26-second first fight couldn't: <b>Joshua Van out-struck Alexandre Pantoja for five full rounds</b> and kept the flyweight belt on Sep 19 in Los Angeles. No fluke, no injury — the 24-year-old is the real thing, and he jumped into the top five of most pound-for-pound lists overnight. Manel Kape is now the No. 1 contender.",
     "Underneath, <b>Arman Tsarukyan knocked Mauricio Ruffy out with an elbow in round one</b> of a five-round eliminator and should get champion Justin Gaethje next. Patricio Pitbull turned back the clock with a first-round KO of Dooho Choi. And the shock of the night: Olympic gold medalist <b>Gable Steveson, a -1500 favorite, was knocked out in 12 seconds by Sean Sharaf</b> — the biggest upset in the UFC this year."] },
-  { em: "🇲🇽", title: "Noche UFC: Grasso spoils the eliminator", body: [
-    "The Mexican Independence card delivered on Sep 12. <b>Alexa Grasso beat Manon Fiorot</b> in what was supposed to be Fiorot's route back to a title shot — the former champ's second big win of the year, and it scrambles the flyweight picture. <b>Jean Silva submitted Jose Delgado in round three</b> to keep his main event, and Brandon Moreno edged Joseph Morales on a split decision to snap his skid.",
-    "Elsewhere: Mexico's David Martinez stayed unbeaten in the UFC by out-pointing Dan Ige and ruining his bantamweight debut, Tommy McMillen moved to 12-0, and Curtis Blaydes out-wrestled Waldo Cortes-Acosta in a quiet heavyweight decision. A week earlier in Paris, <b>Salahdine Parnasse knocked Dan Hooker out in round one of his UFC debut</b> — the best debut of the year."] },
+  { em: "🥊", title: "Vegas 121: Rosas arrives, the deputy delivers", body: [
+    "Last Saturday's Apex card had everything. <b>Raul Rosas Jr. knocked Raoni Barcelos out in round five</b> — the 39-year-old went limp mid-takedown in a scary finish — after a war the scorecards had Barcelos winning. At 21, Rosas is now <b>No. 8 at bantamweight</b>. Ailin Perez out-pointed Norma Dumont to move to No. 2 in the women's division.",
+    "The viral fight lived up to it: <b>Luis Hernandez, the Miami-Dade sheriff's deputy, choked Sedriques Dumas out with a guillotine in 57 seconds</b> in his UFC debut. Both Ultimate Fighter finals went to the veterans' side of the bracket — Valesca Machado stopped Melissa Amaya in round two, and Ilimbek Akylbek Uulu won the men's final by disqualification when Mehemmedeli Osmanli landed an illegal knee two minutes in. On the prelims, Brady Hiestand submitted Rinya Nakamura in the upset of the night."] },
   { em: "🐐", title: "Makhachev owns the record books", body: [
     "At UFC 330 Islam Makhachev out-pointed Ian Machado Garry for his first welterweight defense and his <b>17th straight UFC win — breaking Anderson Silva's all-time record</b> (16) that stood for 14 years. He named <b>Carlos Prates</b> as the most deserving next challenger, waved off unbeaten Michael Morales, and hinted he misses lightweight — where a Topuria superfight still lurks."] },
   { em: "🗓️", title: "UFC 333 is loaded (Oct 24, Abu Dhabi)", body: [
@@ -1522,6 +1596,7 @@ EXPLAINERS.push(
     "Josiah Harrell": "5149546", "Elves Brener": "5110006", "Rodolfo Bellato": "5060489", "Christian Edwards": "4799517",
     "Norma Dumont": "4418784", "Ailin Perez": "5075333", "Vanessa Demopoulos": "4683395", "Yazmin Jauregui": "5063403",
     "Melissa Amaya": "5169699", "Valesca Machado": "4836549", "Sedriques Dumas": "5060467", "Luis Hernandez": "5369427",
+    "King Green": "2502364", "Esteban Ribovics": "5074131", "Roberto Soldic": "4274796", "Khaos Williams": "4612580", "Roman Kopylov": "4300149", "Ateba Gautier": "5218421",
     "Islam Makhachev": "3332412", "Ian Machado Garry": "4738092",
     "Tom Aspinall": "4010976", "Ciryl Gane": "4426000", "Carlos Ulberg": "4695736", "Sean Strickland": "3093653",
     "Justin Gaethje": "3022345", "Alexander Volkanovski": "3949584", "Petr Yan": "4293517", "Joshua Van": "5120301",
