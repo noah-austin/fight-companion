@@ -223,6 +223,7 @@
   .corner-head .cnick { color: var(--ink-3); font-size: 12px; font-style: italic; display: block; margin-top: 3px;}
   .corner-facts { color: var(--ink-2); font-size: 12px; margin-bottom: 9px; display: flex; flex-wrap: wrap; gap: 5px;}
   .fact-pill { background: var(--surface-2); border: 1px solid var(--hairline); border-radius: 7px; padding: 2px 8px; font-size: 11px; }
+  .fact-pill.tape { color: var(--ink); font-weight: 600; }
   .swline { display: flex; gap: 8px; margin: 6px 0; font-size: 13px; align-items: flex-start;}
   .swline .ico { flex-shrink: 0; width: 17px; height: 17px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; margin-top: 2px;}
   .swline.plus .ico { background: rgba(47,191,79,0.14); color: var(--green); }
@@ -608,7 +609,9 @@ function findFighter(name) {
   if (FIGHTERS[k]) return FIGHTERS[k];
   const t = lastTok(name);
   if (t.length <= 3) return null;
-  const hits = Object.keys(FIGHTERS).filter(x => x.endsWith(t));
+  // Same last name AND same first initial: catches spelling variants (Loopy/Lupita
+  // Godinez) without handing one Hernandez another Hernandez's breakdown.
+  const hits = Object.keys(FIGHTERS).filter(x => x.endsWith(t) && x[0] === k[0]);
   return hits.length === 1 ? FIGHTERS[hits[0]] : null;
 }
 const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -619,7 +622,7 @@ function espnIdFor(name, liveId) {
   if (ESPN_IDS[k]) return ESPN_IDS[k];
   const t = lastTok(name);
   if (t.length <= 3) return null;
-  const hits = Object.keys(ESPN_IDS).filter(x => x.endsWith(t));
+  const hits = Object.keys(ESPN_IDS).filter(x => x.endsWith(t) && x[0] === k[0]);
   return hits.length === 1 ? ESPN_IDS[hits[0]] : null;
 }
 function avatar(name, size, ring, liveId) {
@@ -1003,6 +1006,19 @@ function renderFight(f, isMain) {
   </div>`;
 }
 
+// Tale of the tape. Height/reach come from FIGHTERS (ht, reach in inches, optional);
+// fighting weight comes from the bout's weight class, so it's always the right number.
+const DIV_LB = [[/light\s*heavy/i, 205], [/heavy/i, 265], [/middle/i, 185], [/welter/i, 170], [/light/i, 155], [/feather/i, 145], [/bantam/i, 135], [/fly/i, 125], [/straw/i, 115]];
+function divPounds(w) { const m = DIV_LB.find(([rx]) => rx.test(w || "")); return m ? m[1] : null; }
+function tapePills(p, f) {
+  const out = [];
+  if (p.ht) out.push(Math.floor(p.ht / 12) + "\u2032" + (p.ht % 12) + "\u2033");
+  const lb = divPounds(f && f.weight);
+  if (lb && !/catch/i.test(f.weight)) out.push(lb + " lb");
+  if (p.reach) out.push(p.reach + "\u2033 reach");
+  return out.map(t => '<span class="fact-pill tape">' + t + "</span>").join("");
+}
+
 function renderBreakdown(mu, p1, p2, f) {
   let h = "";
   if (mu) {
@@ -1012,7 +1028,7 @@ function renderBreakdown(mu, p1, p2, f) {
     if (!p) return;
     h += `<div class="corner">
       <div class="corner-head">${avatar(p.name, 52, i === 0 ? "red" : "blue", ff && ff.id)}<div><span class="cname">${esc(p.name)}</span>${p.nick ? '<span class="cnick">"' + esc(p.nick) + '"</span>' : ""}</div></div>
-      <div class="corner-facts"><span class="fact-pill">${p.age} yrs</span><span class="fact-pill">${esc(p.country)}</span><span class="fact-pill">${esc(p.style)}</span></div>
+      <div class="corner-facts">${tapePills(p, f)}<span class="fact-pill">${p.age} yrs</span><span class="fact-pill">${esc(p.country)}</span><span class="fact-pill">${esc(p.style)}</span></div>
       ${p.strengths.map(s => '<div class="swline plus"><div class="ico">+</div><p>' + s + "</p></div>").join("")}
       ${p.weaknesses.map(s => '<div class="swline minus"><div class="ico">&minus;</div><p>' + s + "</p></div>").join("")}
       <div class="cstory">${p.history}</div>
@@ -1190,22 +1206,22 @@ Object.assign(FIGHTERS, {
 
 /* ============ FIGHTER PROFILES — UFC 332 (Oct 3, Salt Lake City) ============ */
 Object.assign(FIGHTERS, {
-  nataliasilva: { name: "Natalia Silva", nick: "", age: 29, country: "Brazil", style: "Fast, elusive taekwondo-based striker — kicks from everywhere, hard to touch", strengths: [
+  nataliasilva: { name: "Natalia Silva", ht: 64, nick: "", age: 29, country: "Brazil", style: "Fast, elusive taekwondo-based striker — kicks from everywhere, hard to touch", strengths: [
     "Perfect 8-0 in the UFC, with her last three wins over former champions Jessica Andrade, Alexa Grasso and Rose Namajunas",
     "Blistering speed and footwork — she lands from angles opponents never see and rarely takes damage back"],
     weaknesses: ["Her recent wins have been on points rather than finishes, so she has to bank rounds", "Has never fought five rounds or for a belt"],
     history: "Silva has quietly put together one of the best runs in the division, beating three former champions in a row without losing a round to any of them. <b>Valentina Shevchenko's injury handed her the vacant belt to fight for — one win and the division is hers.</b>" },
-  wangcong: { name: "Wang Cong", nick: "The Joker", age: 30, country: "China", style: "Sanda and kickboxing striker — heavy, compact combinations", strengths: [
+  wangcong: { name: "Wang Cong", ht: 66, nick: "The Joker", age: 30, country: "China", style: "Sanda and kickboxing striker — heavy, compact combinations", strengths: [
     "Four-fight win streak, including two wins this year over Eduarda Moura and Tracy Cortez",
     "A decorated kickboxer who owns a win over Valentina Shevchenko under kickboxing rules"],
     weaknesses: ["Far less UFC mileage than Silva and no five-round experience", "Her striking is powerful but flat-footed against the fastest mover in the division"],
     history: "China's best women's flyweight built a four-fight streak that nobody quite noticed until the title picture opened up. <b>She already beat Shevchenko once in kickboxing; now she gets a UFC belt instead.</b>" },
-  deivesonfigueiredo: { name: "Deiveson Figueiredo", nick: "Deus da Guerra", age: 38, country: "Brazil", style: "Explosive power puncher with a black-belt submission game", strengths: [
+  deivesonfigueiredo: { name: "Deiveson Figueiredo", ht: 65, reach: 68, nick: "Deus da Guerra", age: 38, country: "Brazil", style: "Explosive power puncher with a black-belt submission game", strengths: [
     "Former two-division champion — ruled flyweight, then beat Cody Garbrandt and Marlon Vera on his way to the bantamweight title picture",
     "Genuine one-punch power and a dangerous guillotine, even at 38"],
     weaknesses: ["Lost two straight, to Umar Nurmagomedov and Song Yadong — the division's best wrestlers have his number now", "Fades badly in later rounds and the mileage is enormous"],
     history: "One of the great flyweights of all time moved up to bantamweight and briefly looked like he might do it again, before Umar and Song ended the run. <b>At 38 and on a two-fight skid, this is close to a last stand against the division's brightest prospect.</b>" },
-  paytontalbott: { name: "Payton Talbott", nick: "", age: 27, country: "USA (Reno)", style: "Loose, creative striker — unorthodox angles and constant movement", strengths: [
+  paytontalbott: { name: "Payton Talbott", ht: 70, reach: 70, nick: "", age: 27, country: "USA (Reno)", style: "Loose, creative striker — unorthodox angles and constant movement", strengths: [
     "Beat former two-division champion Henry Cejudo on the cards in December — by far the biggest win of his career",
     "11-1 with a fanbase drawn to how strange and fluid his striking looks"],
     weaknesses: ["Barely fought in 2026 — a long layoff for a fighter who was supposed to be surging", "His one loss came when a durable pressure fighter dragged him into deep water"],
@@ -1273,7 +1289,7 @@ Object.assign(FIGHTERS, {
 FIGHTERS.patriciofreire = FIGHTERS.patriciopitbull; // ESPN sometimes lists him by his real surname
 /* ============ MATCHUP NOTES ============ */
 Object.assign(FIGHTERS, {
-  sedriquesdumas: { name: "Sedriques Dumas", nick: "The Reaper", age: 31, country: "USA", style: "Long, rangy kickboxer with a wrestling base — 6-foot-3 with a 79-inch reach", strengths: [
+  sedriquesdumas: { name: "Sedriques Dumas", ht: 75, reach: 79, nick: "The Reaper", age: 31, country: "USA", style: "Long, rangy kickboxer with a wrestling base — 6-foot-3 with a 79-inch reach", strengths: [
       "Size: he is built like a light heavyweight, which is partly why this fight moved up to 205 pounds",
       "Real power when he commits — four of his ten wins are knockouts, and he starts fast",
       "Awkward, unpredictable rhythm that has given better-credentialed opponents trouble early"],
@@ -1282,7 +1298,7 @@ Object.assign(FIGHTERS, {
       "Fades — fights start bright and unravel by round two",
       "Consistency, in and out of the cage; a long, well-publicized arrest record made this booking a tabloid story"],
     history: "Florida product who came through Dana White's Contender Series in 2022 and has been in the UFC since 2023 — but it hasn't gone well: <b>3-5 with a no contest in the UFC, three straight losses, 1-5 in his last six</b>. He was booked against Mickey Gall at middleweight; Gall pulled out, a short-notice debutant stepped in, and the fight moved to light heavyweight. This looks very much like his last chance to keep his job." },
-  luishernandez: { name: "Luis Hernandez", nick: "The Stache", age: 30, country: "USA", style: "Compact, aggressive finisher — jiu-jitsu brown belt, heavy kicks, hunts the back", strengths: [
+  luishernandez: { name: "Luis Hernandez", ht: 69, reach: 73.5, nick: "The Stache", age: 30, country: "USA", style: "Compact, aggressive finisher — jiu-jitsu brown belt, heavy kicks, hunts the back", strengths: [
       "8-0 with eight finishes (five submissions, three knockouts) — nobody has heard a final bell against him",
       "Rear-naked choke specialist: that is how he won his UFC contract two weeks ago",
       "Fearless of size — he is 5-foot-9 and just choked out a 6-foot-4 Frenchman on the Contender Series"],
@@ -1291,7 +1307,7 @@ Object.assign(FIGHTERS, {
       "Giving up six inches of height and reach — Dumas can keep him on the end of punches",
       "His eight opponents were regional-level; the UFC is a different tier"],
     history: "A full-time Miami-Dade sheriff's deputy — <b>the first active-duty police officer to fight in the UFC</b>. Owns one of the fastest knockouts in MMA history (a head kick a few seconds in, on the Florida regional scene) and a regional 185-pound belt. Won his UFC deal on Sep 15 by choking out Hugo Guillon on Dana White's Contender Series, then took this fight on short notice when Mickey Gall pulled out. The cop-vs-ex-con angle went viral, and the UFC leaned into it by putting the fight on the main card." },
-  melissaamaya: { name: "Melissa Amaya", nick: "Mamba", age: 31, country: "USA", style: "Two-way finisher — pressure boxing with a slick submission game underneath", strengths: [
+  melissaamaya: { name: "Melissa Amaya", ht: 64, reach: 64, nick: "Mamba", age: 31, country: "USA", style: "Two-way finisher — pressure boxing with a slick submission game underneath", strengths: [
       "8-0 with five straight finishes: TKO'd Giovanna Canuto and choked out Anna Melisano to reach the final",
       "Beat the tournament's No. 1 seed in the show's very first fight — already the upset story of the season",
       "Composure and cardio: a full-time nurse who trains nights at Sikjitsu in Spokane"],
@@ -1300,7 +1316,7 @@ Object.assign(FIGHTERS, {
       "The market makes her a +190 underdog; it expects veteran savvy to win the rounds",
       "Has not yet faced someone who stays calm when the fight hits the mat"],
     history: "From Chaparral, New Mexico; a University of New Mexico nursing grad (2018) who moved to Spokane, Washington and works at a dental clinic between training sessions. Skipped the amateur ranks entirely, turned pro and has never lost. A Daniel Cormier pick on The Ultimate Fighter 34, she beat the top seed in episode one and finished her way to the final — <b>against her own teammate</b>. The winner gets the UFC contract." },
-  valescamachado: { name: "Valesca Machado", nick: "Tina Black", age: 30, country: "Brazil", style: "Experienced Muay Thai striker — orthodox, walks forward, wins rounds", strengths: [
+  valescamachado: { name: "Valesca Machado", ht: 64, reach: 63, nick: "Tina Black", age: 30, country: "Brazil", style: "Experienced Muay Thai striker — orthodox, walks forward, wins rounds", strengths: [
       "Nineteen pro fights of experience against Amaya's eight — she has seen everything",
       "Former Invicta FC strawweight champion; beat current UFC fighter Julia Polastri back in Brazil",
       "Four-fight win streak, and the market's -230 favorite for a reason"],
@@ -1312,7 +1328,7 @@ Object.assign(FIGHTERS, {
 });
 
 Object.assign(FIGHTERS, {
-  kinggreen: { name: "King Green", nick: "", age: 40, country: "USA", style: "Slick, hands-down counter boxer — the shoulder-roll defense, a stiff jab, and a surprising wrestling option", strengths: [
+  kinggreen: { name: "King Green", ht: 70, reach: 71, nick: "", age: 40, country: "USA", style: "Slick, hands-down counter boxer — the shoulder-roll defense, a stiff jab, and a surprising wrestling option", strengths: [
       "Hard to hit clean: slips and rolls punches better than almost anyone at 155, even at 40",
       "On the best run of his career — four straight wins, three by finish (Zellhuber, Stephens, McKinney)",
       "Underrated wrestling: takedowns beat Ribovics twice, and Green shoots far more often than the Argentine does"],
@@ -1321,7 +1337,7 @@ Object.assign(FIGHTERS, {
       "Low kicks: the hands-down style leaves his lead leg open, and Ribovics kicks hard",
       "Can coast and talk his way into losing close rounds"],
     history: "Formerly Bobby Green — he legally changed his name to King in 2024. A UFC fixture since 2013, forever the entertaining gatekeeper, until this late-career surge: <b>four straight wins at 39 and 40</b> with a knockout of Jeremy Stephens and a stoppage of Terrance McKinney. A win here, in his home-state-adjacent Mountain time zone, would put him on the edge of the top 15 for the first time in years." },
-  estebanribovics: { name: "Esteban Ribovics", nick: "El Gringo", age: 30, country: "Argentina", style: "High-volume kickboxer — hard low kicks set up hooks, and he never stops coming forward", strengths: [
+  estebanribovics: { name: "Esteban Ribovics", ht: 70, reach: 69, nick: "El Gringo", age: 30, country: "Argentina", style: "High-volume kickboxer — hard low kicks set up hooks, and he never stops coming forward", strengths: [
       "Pace and output — three Fight of the Night bonuses in his last seven, and he is coming off a knockout of Edson Barboza in August",
       "Kicks: he chops the lead leg early and it changes the whole fight",
       "Durable and happy in a brawl — he has never been knocked out"],
@@ -1330,7 +1346,7 @@ Object.assign(FIGHTERS, {
       "Missed weight by half a pound — forfeits 20 percent of his purse and can't earn a bonus tonight",
       "Can be out-boxed by a sharper counter-puncher when the brawl doesn't materialize"],
     history: "Argentina's best lightweight and a cult favorite for his all-action fights. 16-3 overall, 5-2 in the UFC, with a Fight of the Year contender against Daniel Zellhuber in 2024 and a stoppage of Barboza at UFC 330 in August. Lost to Mateusz Gamrot by submission in April — the grappling hole is still the question. Came in heavy at Friday's weigh-in, so the fight goes ahead at a catchweight." },
-  robertosoldic: { name: "Roberto Soldic", nick: "Robocop", age: 31, country: "Croatia", style: "Explosive knockout artist — compact power in both hands, hunts the finish from the opening bell", strengths: [
+  robertosoldic: { name: "Roberto Soldic", ht: 71, reach: 73, nick: "Robocop", age: 31, country: "Croatia", style: "Explosive knockout artist — compact power in both hands, hunts the finish from the opening bell", strengths: [
       "Power: 18 of his 21 wins are knockouts, eleven of them in round one",
       "Pedigree — a two-division KSW champion (welterweight twice, middleweight once), the biggest European promotion outside the UFC",
       "Has beaten Dricus du Plessis, the former UFC middleweight champ, in a 2018 rematch"],
@@ -1339,7 +1355,7 @@ Object.assign(FIGHTERS, {
       "UFC debut nerves plus a 7,000-foot elevation drop into Salt Lake City — cardio is the unknown",
       "Wrestlers have bothered him before; he would rather stand and trade"],
     history: "Bosnian-born Croatian, 21-4, and for years the best welterweight not in the UFC. Ruled KSW, then had a frustrating run in ONE Championship (a no contest, cancelled bouts) before <b>finally signing with the UFC in September on short notice</b>. Unbeaten in seven. Debuts against a fellow puncher, so it should not take long either way." },
-  khaoswilliams: { name: "Khaos Williams", nick: "The Oxfighter", age: 32, country: "USA", style: "One-punch right hand — a sprinter's start, with eight first-round finishes", strengths: [
+  khaoswilliams: { name: "Khaos Williams", ht: 72, reach: 77, nick: "The Oxfighter", age: 32, country: "USA", style: "One-punch right hand — a sprinter's start, with eight first-round finishes", strengths: [
       "Early power: nine of his 16 wins are knockouts, eight of them in round one",
       "Six-foot frame with a 77-inch reach — he is the longer man here",
       "Snapped a two-fight skid with a first-round TKO of Nikolay Veretennikov in May"],
@@ -1348,7 +1364,7 @@ Object.assign(FIGHTERS, {
       "Lost two of his last three — a decision to Andreas Gustafsson and a submission to Gabriel Bonfim",
       "Tends to wait for the one big shot and gets out-worked in between"],
     history: "Detroit-area knockout artist who announced himself with 27-second and 30-second KOs in his first two UFC fights back in 2020. Since then: streaky — big wins, then flat decision losses. 16-5 overall, 7-4 in the UFC. Against Soldic the first round is everything: both men are at their most dangerous in the opening minutes." },
-  romankopylov: { name: "Roman Kopylov", nick: "", age: 34, country: "Russia", style: "Southpaw kickboxer — body kicks, counter left hand, and a chin that has never been cracked", strengths: [
+  romankopylov: { name: "Roman Kopylov", ht: 72, reach: 75, nick: "", age: 34, country: "Russia", style: "Southpaw kickboxer — body kicks, counter left hand, and a chin that has never been cracked", strengths: [
       "Durability: 20 pro fights and he has never been stopped by strikes — his five losses are decisions and submissions",
       "Twelve knockouts in 15 wins; the left hand and body kicks are real weapons",
       "The more proven man by far — a former Fight Nights Global champion who has fought ranked UFC middleweights"],
@@ -1357,7 +1373,7 @@ Object.assign(FIGHTERS, {
       "Lost three of his last five, all decisions, to Costa, Rodrigues and Imavov-level pressure",
       "Starts slowly and lets rounds slip away early"],
     history: "Russian striker, 15-5, who has been the UFC's middleweight measuring stick for a few years: good enough to knock out mid-tier opposition, not quite good enough against the top ten. Beat Marco Tulio by decision in May to stop a two-fight slide. Tonight he is the <b>step-up test for a prospect everyone is talking about</b> — and the man most likely to spoil the coronation if the kid gets wild." },
-  atebagautier: { name: "Ateba Gautier", nick: "The Storm", age: 24, country: "Cameroon", style: "Huge, athletic switch-stance striker — 6-foot-4 with an 81-inch reach and fight-ending power", strengths: [
+  atebagautier: { name: "Ateba Gautier", ht: 76, reach: 81, nick: "The Storm", age: 24, country: "Cameroon", style: "Huge, athletic switch-stance striker — 6-foot-4 with an 81-inch reach and fight-ending power", strengths: [
       "Finishing: 9 of his 11 wins by knockout, seven in the first round; four KOs in five UFC wins",
       "Size and reach that nobody at middleweight can match — he fights like a light heavyweight",
       "Nine straight wins and still improving every time out; he is only 24"],
@@ -1369,7 +1385,7 @@ Object.assign(FIGHTERS, {
 });
 
 Object.assign(FIGHTERS, {
-  brendanallen: { name: "Brendan Allen", nick: "All In", age: 30, country: "USA", style: "Submission grappler — chains takedowns until one lands, then hunts the back", strengths: [
+  brendanallen: { name: "Brendan Allen", ht: 74, reach: 75, nick: "All In", age: 30, country: "USA", style: "Submission grappler — chains takedowns until one lands, then hunts the back", strengths: [
       "Finishing on the mat: most of his wins are submissions, usually the rear-naked choke",
       "Relentless takedown chains — he keeps shooting until he gets the fight where he wants it",
       "On a three-fight run over Marvin Vettori, Reinier de Ridder and Edmen Shahbazyan, two of them Fight of the Night"],
@@ -1378,7 +1394,7 @@ Object.assign(FIGHTERS, {
       "Can get dragged into brawls he doesn't need, which is how both Fight of the Night bonuses happened",
       "Has been finished by strikes before when he stayed in the pocket too long"],
     history: "A former LFA middleweight champion who has been in the UFC since 2019 and is now <b>ranked in the top five</b>. Quietly one of the most active contenders in the division, and he has beaten everyone the UFC has put in front of him lately. A win over a rising striker would put him one or two fights from a title shot." },
-  christianleroyduncan: { name: "Christian Leroy Duncan", nick: "CLD", age: 31, country: "England", style: "Long, switch-stance Muay Thai striker — kicks, knees and spinning shots at range", strengths: [
+  christianleroyduncan: { name: "Christian Leroy Duncan", ht: 74, reach: 79, nick: "CLD", age: 31, country: "England", style: "Long, switch-stance Muay Thai striker — kicks, knees and spinning shots at range", strengths: [
       "Five straight wins, including former title challenger Jared Cannonier and Roman Dolidze",
       "Out-struck Cannonier 68 to 15 in July — his range striking is a real problem for anyone who can't close the distance",
       "Four inches of reach on Allen, and ten of his 15 wins are knockouts"],
@@ -1390,7 +1406,7 @@ Object.assign(FIGHTERS, {
 });
 
 Object.assign(FIGHTERS, {
-  loopygodinez: { name: "Loopy Godinez", nick: "Loopy", age: 33, country: "Mexico", style: "High-pace pressure fighter — wrestling, cage work and non-stop volume", strengths: [
+  loopygodinez: { name: "Loopy Godinez", ht: 62, reach: 61, nick: "Loopy", age: 33, country: "Mexico", style: "High-pace pressure fighter — wrestling, cage work and non-stop volume", strengths: [
       "Pace: she pushes a tempo few strawweights can match for three rounds",
       "Wrestling and top control that win close rounds on the cards",
       "Experience — 15 UFC fights since 2021, with wins over Jessica Andrade and Tabatha Ricci"],
@@ -1399,7 +1415,7 @@ Object.assign(FIGHTERS, {
       "Only one knockout in 14 wins, so she has to grind for decisions",
       "Coming off a loss to top wrestler Tatiana Suarez in April"],
     history: "Mexican-born, Canadian-raised, and one of the busiest fighters on the roster. A former LFA champion, she has worked her way into the top 15 by out-hustling people. A clean win here keeps her in the mix after the Suarez setback." },
-  ketlensouza: { name: "Ketlen Souza", nick: "Esquentadinha", age: 31, country: "Brazil", style: "Aggressive Brazilian striker with real finishing power and a submission game", strengths: [
+  ketlensouza: { name: "Ketlen Souza", ht: 63, reach: 63, nick: "Esquentadinha", age: 31, country: "Brazil", style: "Aggressive Brazilian striker with real finishing power and a submission game", strengths: [
       "Can end it with one shot — she knocked out Ariane Carnelossi with a head kick in June",
       "On a two-fight win streak, the longest of her UFC run",
       "Former Invicta FC champion; dangerous in scrambles too"],
@@ -1408,7 +1424,7 @@ Object.assign(FIGHTERS, {
       "4-3 in the UFC, with two split-decision losses where she was out-worked",
       "Can fade if she loads up early and misses"],
     history: "Her nickname means \"hothead\" in Portuguese, which tells you how she fights. Came through Invicta, where she held a title, and has been up and down in the UFC. Two straight wins have her knocking on the top 15; a win over a ranked name like Godinez would get her in." },
-  andrefili: { name: "Andre Fili", nick: "Touchy", age: 36, country: "USA", style: "Rangy kickboxer from Team Alpha Male — long jab, kicks, decent wrestling", strengths: [
+  andrefili: { name: "Andre Fili", ht: 71, reach: 74, nick: "Touchy", age: 36, country: "USA", style: "Rangy kickboxer from Team Alpha Male — long jab, kicks, decent wrestling", strengths: [
       "Huge experience: 27 UFC fights, more than almost anyone at featherweight",
       "Long, 74-inch reach and a sharp jab to keep shorter men at bay",
       "Durable and crafty; he knows how to win a close round"],
@@ -1417,7 +1433,7 @@ Object.assign(FIGHTERS, {
       "Age: 36, with 39 pro fights of wear",
       "Has been finished by strikes when he stays in the pocket"],
     history: "A UFC fixture since 2013, Fili has been the classic featherweight gatekeeper: beats prospects who aren't ready, loses to the ones who are. He is 2-4 since 2024, and at 36 this may be a fight to save his roster spot." },
-  kaikamakaiii: { name: "Kai Kamaka III", nick: "The Fighting Hawaiian", age: 31, country: "USA", style: "Compact pressure boxer-wrestler from Hawaii — busy hands, mixes in takedowns", strengths: [
+  kaikamakaiii: { name: "Kai Kamaka III", ht: 67, reach: 69, nick: "The Fighting Hawaiian", age: 31, country: "USA", style: "Compact pressure boxer-wrestler from Hawaii — busy hands, mixes in takedowns", strengths: [
       "Five inches shorter than Fili but strong and hard to knock off his feet",
       "Mixes boxing and wrestling well, so opponents can't sit on one defense",
       "Big-fight experience from Bellator and PFL"],
@@ -1426,7 +1442,7 @@ Object.assign(FIGHTERS, {
       "Gives up a lot of reach and has to walk through the jab to land",
       "His UFC record is 2-3-1; he has never strung wins together here"],
     history: "A Hawaiian who debuted in the UFC in 2020, left for Bellator and PFL, and came back this year. Split-decision win over Dakota Hope in April, then a knockout loss in July. Like Fili, he needs this badly." },
-  malcolmwellmaker: { name: "Malcolm Wellmaker", nick: "The Machine", age: 32, country: "USA", style: "Switch-stance knockout puncher — the right hook is the whole story", strengths: [
+  malcolmwellmaker: { name: "Malcolm Wellmaker", ht: 70, reach: 71, nick: "The Machine", age: 32, country: "USA", style: "Switch-stance knockout puncher — the right hook is the whole story", strengths: [
       "Real one-punch power: three first-round knockouts, including his UFC debut over Cameron Saaiman",
       "Fast starter who is most dangerous in the first two minutes",
       "Fresh start at American Top Team after leaving his longtime Georgia gym"],
@@ -1435,7 +1451,7 @@ Object.assign(FIGHTERS, {
       "Can get taken down and held when the knockout doesn't come early",
       "Pressure to win: another loss could cost him his spot"],
     history: "From Augusta, Georgia, and a Contender Series graduate who started his UFC run 2-0 with highlight knockouts and looked like a future contender. Two straight losses followed, so he moved to American Top Team to rebuild. This fight is about finding the old spark." },
-  otaritanzilovi: { name: "Otari Tanzilovi", nick: "", age: 28, country: "Georgia", style: "Durable, orthodox all-rounder from the Georgian scene — busy, tough, grinds", strengths: [
+  otaritanzilovi: { name: "Otari Tanzilovi", ht: 69, reach: 70, nick: "", age: 28, country: "Georgia", style: "Durable, orthodox all-rounder from the Georgian scene — busy, tough, grinds", strengths: [
       "10-2 overall and only 28",
       "Tough and durable; he went the distance with Shane Collins in his debut",
       "Good wrestling base, which is exactly what has beaten Wellmaker"],
@@ -1444,7 +1460,7 @@ Object.assign(FIGHTERS, {
       "Not a big puncher, so he has to survive Wellmaker's early storm",
       "Has fought at featherweight; cutting to 135 is a question"],
     history: "From Telavi, Georgia (the country), and trains at Guram Fight Club. Signed on the strength of a ten-fight run on the European scene, then lost his debut on the scorecards in June. He is the +190 underdog, but his grappling is the style that gives Wellmaker problems." },
-  matheuscamilo: { name: "Matheus Camilo", nick: "Jaguar", age: 25, country: "Brazil", style: "Young, aggressive pressure fighter — heavy hands and a strong grappling base", strengths: [
+  matheuscamilo: { name: "Matheus Camilo", ht: 70, reach: 69, nick: "Jaguar", age: 25, country: "Brazil", style: "Young, aggressive pressure fighter — heavy hands and a strong grappling base", strengths: [
       "Momentum: two straight wins, most recently a TKO of Nazim Sadykhov as an underdog",
       "Thirteen years younger than his opponent, and getting better every fight",
       "Trains at Xtreme Couture in Las Vegas, with a solid wrestling-and-pressure game"],
@@ -1453,7 +1469,7 @@ Object.assign(FIGHTERS, {
       "Only three UFC fights; still raw in long fights",
       "Can get careless chasing the finish"],
     history: "A 25-year-old Brazilian who came through the Contender Series and is 3-1 in the UFC, 11-3 overall. The Sadykhov stoppage in June was his breakout. A win over a veteran like Herbert would push him toward ranked opposition." },
-  jaiherbert: { name: "Jai Herbert", nick: "Black Country Banger", age: 38, country: "England", style: "Tall, long-limbed kickboxer — sharp straight punches from distance", strengths: [
+  jaiherbert: { name: "Jai Herbert", ht: 73, reach: 77, nick: "Black Country Banger", age: 38, country: "England", style: "Tall, long-limbed kickboxer — sharp straight punches from distance", strengths: [
       "Height and reach: 6-foot-1 is very big for 155, and he uses the range well",
       "Power — he knocked out Mandel Nallo in round one in April",
       "Ten UFC fights of experience against plenty of tough opposition"],
@@ -1474,7 +1490,7 @@ Object.assign(MATCHUPS, {
   "brendanallen|christianleroyduncan": { odds: "Allen -145, Duncan +120 — the line flipped toward Allen after opening near even",
     note: "Classic grappler-vs-striker over five rounds, with a top-five spot on the line. Duncan wants it at kicking range, where he just made Cannonier look slow. Allen wants it on the mat, where almost nobody at middleweight survives his back-takes. The first two rounds tell you everything: if Allen gets a takedown early, it's his fight; if Duncan stuffs a few and lands his knees and kicks, the underdog is very live." },
   "ketlensouza|loopygodinez": { odds: "Godinez -235, Souza +185",
-    note: "The co-feature at strawweight. Godinez is one of the busiest women in the UFC — 15 fights since 2021, with wins over Jessica Andrade and Tabatha Ricci — bouncing back from a loss to Tatiana Suarez. Souza is on a two-fight win streak and trying to crack the top 15. Godinez's pace and wrestling should be too much, but Souza has finishing power." },
+    note: "Souza missed weight by a pound on Friday, so it's a catchweight and 20 percent of her purse goes to Godinez. The co-feature at strawweight. Godinez is one of the busiest women in the UFC — 15 fights since 2021, with wins over Jessica Andrade and Tabatha Ricci — bouncing back from a loss to Tatiana Suarez. Souza is on a two-fight win streak and trying to crack the top 15. Godinez's pace and wrestling should be too much, but Souza has finishing power." },
   "andrefili|kaikamakaiii": { odds: "Fili -150, Kamaka +120",
     note: "A crossroads fight at featherweight. Fili, 35, has 27 UFC fights but has lost his last two and is 2-4 since 2024. Kamaka is 1-1 since coming back to the UFC and was stopped by Luke Riley last time. Experience against a hungrier man; the loser may be fighting for his job." },
   "malcolmwellmaker|otaritanzilovi": { odds: "Wellmaker -230, Tanzilovi +190",

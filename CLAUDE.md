@@ -45,7 +45,7 @@ On page load the app fetches ESPN's public scoreboard (`https://site.api.espn.co
 All in the inline `<script>`, clearly marked with `/* ============ ... */` comments:
 
 - `ANALYSIS_STAMP` — "Month D, YYYY" string; set to the refresh date. Shown in header/footer.
-- `FIGHTERS` — key: `norm(fullName)` → `{name, nick, age, country, style, strengths[2-3], weaknesses[1-3], history}`. `history` may contain `<b>` tags.
+- `FIGHTERS` — key: `norm(fullName)` → `{name, ht, reach, nick, age, country, style, strengths[2-3], weaknesses[1-3], history}`. `history` may contain `<b>` tags. `ht` and `reach` are **inches as numbers** (6'2" → `ht: 74`; a half-inch reach like `73.5` is fine), cross-checked on ESPN / UFC Stats / Tapology; leave one out rather than guess (the pill just doesn't render). The breakdown shows them as tale-of-the-tape pills (added Oct 10 at Noah's request) next to the fighting weight, which the renderer derives from the bout's weight class, so there is no weight field to maintain.
 - `MATCHUPS` — key: the two fighters' `norm()` names **sorted alphabetically, joined with "|"** → `{note, odds, title?}` (`title` set only for title fights, e.g. "Welterweight title").
 - `EVENT_META` — per analyzed event: `{match: [lowercase substrings of the ESPN event name], titles: "" | "N title fights", note, mainCard: [pair keys in broadcast order, main event first]}`.
 - `FALLBACK_EVENTS` — offline snapshot rendered if the ESPN fetch fails: `{name, date ISO, venue, fights: [{weight, f1:{name,record}, f2:{name,record}}]}` — list main card first (main event at top), then prelims.
