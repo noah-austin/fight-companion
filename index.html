@@ -70,12 +70,13 @@
   }
   .brand h1 {
     font-family: var(--disp);
-    font-size: 34px; font-weight: 800; letter-spacing: 0.5px;
+    font-size: 27px; font-weight: 800; letter-spacing: 0.5px;
     text-transform: uppercase; line-height: 1;
   }
   .brand h1 .red { color: var(--accent); }
-  .tagline { color: var(--ink-3); font-size: 12.5px; margin-top: 6px; }
-  .head-chips { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+  .tagline { display: none; }
+  .head-chips { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+  .head-chips:empty { display: none; }
   .chip {
     display: inline-flex; align-items: center; gap: 6px;
     background: rgba(255,255,255,0.05); border: 1px solid var(--hairline);
@@ -89,6 +90,7 @@
   @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(232,72,77,0); } 100% { box-shadow: 0 0 0 0 rgba(232,72,77,0); } }
   .chip b { color: var(--ink); font-weight: 700; }
   .data-note { color: var(--ink-3); font-size: 11px; margin-top: 10px; }
+  .data-note:empty { display: none; }
   .data-note b { color: var(--ink-2); font-weight: 600; }
 
   /* ---------- bottom nav ---------- */
@@ -180,7 +182,22 @@
   .event.open .chev { transform: rotate(90deg); }
   .event-body { display: none; border-top: 1px solid var(--hairline); }
   .event.open .event-body { display: block; }
-  .event-note { color: var(--ink-2); font-size: 12.5px; padding: 12px 14px 0; }
+  .event-note { color: var(--ink-2); font-size: 12.5px; padding: 12px 14px 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+  .event-note.full { display: block; }
+  .note-more { background: none; border: 0; color: var(--ink-3); font-size: 11.5px; padding: 4px 14px 0; cursor: pointer; text-decoration: underline; }
+  .event-note.full + .note-more { display: none; }
+  /* refresh (Oct 11): live / up next / results sections, results on finished cards */
+  .ev-section { font-family: var(--disp); font-size: 14px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--ink-3); margin: 18px 2px 8px; display: flex; align-items: center; gap: 8px; }
+  .ev-section:first-child { margin-top: 4px; }
+  .ev-section.live { color: var(--accent); }
+  .ev-section::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
+  .event.open .vs-hero, .event.open .evt-actions { display: none; }
+  .event.past { box-shadow: none; }
+  .event.past .event-name { font-size: 18px; }
+  .vs-hero .side.lost { opacity: .45; }
+  .vs-hero .side.won .nm { color: var(--gold-bright); }
+  .won-tag { font-size: 9.5px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--gold-bright); }
+  .badge.final { background: var(--surface-3); color: var(--ink-2); }
   .card-label {
     font-family: var(--disp); font-size: 13px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase;
     color: var(--ink-3); padding: 14px 14px 6px; display: flex; align-items: center; gap: 8px;
@@ -204,6 +221,20 @@
   .vs { color: var(--accent); font-family: var(--disp); font-size: 13px; font-weight: 800; font-style: italic; flex-shrink: 0; padding: 0 4px; }
   .winner-tag { color: var(--green); font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px;}
   .tap-hint { color: var(--ink-3); font-size: 10.5px; margin-top: 7px; display: flex; align-items: center; gap: 4px;}
+  .fav-tag { display: inline-block; margin-top: 3px; font-size: 9px; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; color: var(--gold-bright); }
+  .fighter.won .fname { color: var(--gold-bright); }
+  .fighter.lost { opacity: .45; }
+  /* quick take + tale of the tape */
+  .bk-quick { margin: 10px 0 12px; padding: 10px 12px; border-radius: 12px; background: rgba(227,165,58,0.08); border: 1px solid rgba(227,165,58,0.28); color: var(--ink-2); font-size: 13px; line-height: 1.45; }
+  .bk-quick b { color: var(--gold-bright); }
+  .bk-quick .sub { display: block; color: var(--ink-3); font-size: 11.5px; margin-top: 4px; }
+  .tot { margin: 0 0 14px; border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; }
+  .tot-row { display: grid; grid-template-columns: 1fr 76px 1fr; align-items: center; padding: 7px 12px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 13.5px; }
+  .tot-row:first-child { border-top: 0; background: var(--surface-2); }
+  .tot-row .k { text-align: center; font-size: 9.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-3); }
+  .tot-row .r { text-align: right; }
+  .tot-row .adv { color: var(--gold-bright); font-weight: 700; }
+  .tot-row .nm { font-family: var(--disp); font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: .3px; }
   .tap-hint svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2;}
   .fight.open .tap-hint svg { transform: rotate(180deg); }
 
@@ -272,6 +303,10 @@
   .explain h3 .em { font-size: 18px; }
   .explain p { color: var(--ink-2); font-size: 13.5px; margin-bottom: 7px; }
   .explain p:last-child { margin-bottom: 0; }
+  .explain .more { display: none; }
+  .explain.full .more { display: block; }
+  .explain .more-btn { background: none; border: 0; color: var(--gold-bright); font-size: 12.5px; font-weight: 600; padding: 2px 0 0; cursor: pointer; }
+  .explain.full .more-btn { display: none; }
   .explain b { color: var(--ink); }
   .callout { background: rgba(79,150,232,0.08); border: 1px solid rgba(79,150,232,0.22); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; font-size: 13px; color: var(--ink-2);}
   .callout b { color: #8fbcf0; }
@@ -387,7 +422,7 @@
   .reload-btn.new { border-color: rgba(227,165,58,0.65); color: var(--gold-bright); box-shadow: 0 0 0 3px rgba(227,165,58,0.16); }
   .reload-btn.new::after { content: ""; position: absolute; top: 3px; right: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold-bright); border: 2px solid var(--page); }
   @keyframes reloadSpin { to { transform: rotate(360deg); } }
-  header { padding-top: calc(26px + env(safe-area-inset-top)); }
+  header { padding-top: calc(14px + env(safe-area-inset-top)); padding-bottom: 12px; }
 
   /* ---------- phone hygiene ---------- */
   html, body { overflow-x: clip; max-width: 100%; }
@@ -542,6 +577,7 @@
 </main>
 
 <footer class="wrap">
+  Real UFC cards only — no Contender Series, no noise.<br>
   Schedule &amp; records load live from ESPN's public feed · headshots © ESPN.<br>
   Breakdowns &amp; rankings written <span id="footStamp"></span> · refreshed weekly.
 </footer>
@@ -640,10 +676,11 @@ function fmtEventDate(iso) {
   const mo = d.toLocaleDateString(undefined, { month: "short" });
   const da = d.getDate();
   const days = Math.floor((d - now) / 86400000);
-  let badge = "";
-  if (d.toDateString() === now.toDateString()) badge = '<span class="badge tonight">Tonight</span>';
-  else if (days >= 0 && days < 7) badge = '<span class="badge soon">This week</span>';
-  return { date, time, badge, mo, da, days };
+  // calendar-day difference, so "tomorrow" means tomorrow, not "less than 48 hours"
+  const dayDiff = Math.round((new Date(d.toDateString()) - new Date(now.toDateString())) / 86400000);
+  const rel = dayDiff === 0 ? "Tonight" : dayDiff === 1 ? "Tomorrow" : dayDiff > 1 ? "In " + dayDiff + " days" : "";
+  const badge = rel ? `<span class="badge ${dayDiff === 0 ? "tonight" : "soon"}">${rel}</span>` : "";
+  return { date, time, badge, mo, da, days, rel, dayDiff };
 }
 
 /* ---------- tabs ---------- */
@@ -674,9 +711,7 @@ async function loadEvents() {
       .sort((a, b) => new Date(a.date) - new Date(b.date));
     if (!events.length) throw new Error("empty");
     const t = new Date().toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-    document.getElementById("dataNote").innerHTML =
-      "<b>Live schedule</b> from ESPN &middot; breakdowns &amp; rankings written " + ANALYSIS_STAMP +
-      ' <span class="upd-note">&middot; updated ' + t + "</span>";
+    document.getElementById("dataNote").innerHTML = "";
     const norm2 = events.map(normalizeEspnEvent);
     const box2 = document.getElementById("eventsList");
     const openEvs = new Set([...box2.querySelectorAll(".event.open")].map(e => e.dataset.ev));
@@ -880,16 +915,91 @@ function downloadIcs(evName, evDate, venue) {
   toast("🗓", "Added to your calendar file", "Open it and confirm — your phone will remind you 1 hour before and at start time.");
 }
 
+const wtLabel = w => (w || "").replace(/^W\s+/i, "Women's ").replace(/^Women's\s+/i, "Women's ");
+// Finished = every fight done, or (offline snapshot, no results) the card is more than 12h old.
+const eventState = ev => ev.fights.some(f => f.live) ? "live"
+  : (ev.fights.length && ev.fights.every(f => f.done)) || new Date(ev.date) < Date.now() - 12 * 3600e3 ? "past" : "upcoming";
+const shortEventName = n => /fight night/i.test(n || "") ? n.replace(/^UFC Fight Night:\s*/i, "") : (n || "").split(":")[0];
+let FEATURE_OPENED = false;   // auto-open the live/next card once, then respect the user's taps
+
+// The two moneylines from MATCHUPS odds text ("Allen -145, Duncan +120 — note"), mapped to
+// the bout's fighters by last name. Returns null when it can't be read cleanly.
+function parseLine(mu, f) {
+  if (!mu || !mu.odds) return null;
+  const txt = mu.odds.replace(/\u2212/g, "-");
+  const head = txt.split(/\s[\u2014-]\s/)[0];
+  // try each part of the name, last first (handles "Wang Cong", whose family name comes first)
+  const ml = name => {
+    const toks = (name || "").trim().split(/\s+/).filter(w => w.length > 2 && !/^(jr\.?|sr\.?|ii|iii|iv)$/i.test(w)).reverse();
+    for (const t of toks) {
+      const m = new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[^,;]{0,14}?([-+]\\d{3,5})", "i").exec(head);
+      if (m) return parseInt(m[1], 10);
+    }
+    return null;
+  };
+  const a = ml(f.f1.name), b = ml(f.f2.name);
+  if (a == null || b == null) return null;
+  const rest = txt.includes("\u2014") ? txt.slice(txt.indexOf("\u2014") + 1).trim() : "";
+  return { a, b, rest };
+}
+const lastName = n => (n || "").trim().split(/\s+/).filter(w => !/^(jr\.?|sr\.?|ii|iii|iv)$/i.test(w)).pop();
+function quickTake(mu, f) {
+  const L = parseLine(mu, f);
+  if (!L) return mu && mu.odds ? '<div class="bk-quick">&#128200; ' + mu.odds + "</div>" : "";
+  const inOdds = name => (name || "").trim().split(/\s+/).reverse().find(t => t.length > 2 && new RegExp("\\b" + t + "\\b", "i").test(mu.odds)) || lastName(name);
+  const n1 = inOdds(f.f1.name), n2 = inOdds(f.f2.name);
+  const win = ml => ml > 0 ? ml : Math.round(10000 / -ml);
+  let txt;
+  if (L.a < 0 && L.b < 0) txt = `<b>Basically a coin flip.</b> Both sides are priced as slight favorites (${n1} ${L.a}, ${n2} ${L.b}).`;
+  else {
+    const favFirst = L.a < L.b;
+    const [fav, favMl, dog, dogMl] = favFirst ? [n1, L.a, n2, L.b] : [n2, L.b, n1, L.a];
+    const big = favMl <= -400 ? " — a heavy favorite" : favMl >= -130 ? " — only a slight favorite" : "";
+    txt = `<b>${esc(fav)} is the favorite</b>${big} (${favMl}): $100 on ${esc(fav)} wins $${win(favMl)}. ${esc(dog)} is the underdog (+${Math.abs(dogMl)}): $100 wins $${win(dogMl)}.`;
+  }
+  return `<div class="bk-quick">${txt}${L.rest ? '<span class="sub">' + L.rest + "</span>" : ""}</div>`;
+}
+function taleOfTape(p1, p2, f) {
+  const lb = divPounds(f.weight), catchW = /catch/i.test(f.weight || "");
+  const ft = h => h ? Math.floor(h / 12) + "\u2032" + (h % 12) + "\u2033" : "\u2014";
+  const rows = [
+    ["Record", f.f1.record || "\u2014", f.f2.record || "\u2014", null],
+    ["Age", p1 && p1.age ? p1.age : "\u2014", p2 && p2.age ? p2.age : "\u2014", null],
+    ["Height", ft(p1 && p1.ht), ft(p2 && p2.ht), [p1 && p1.ht, p2 && p2.ht]],
+    ["Reach", p1 && p1.reach ? p1.reach + "\u2033" : "\u2014", p2 && p2.reach ? p2.reach + "\u2033" : "\u2014", [p1 && p1.reach, p2 && p2.reach]],
+  ];
+  if (lb && !catchW) rows.push(["Weight", lb + " lb", lb + " lb", null]);
+  const cell = (v, cmp, i, cls) => {
+    const adv = cmp && cmp[0] && cmp[1] && cmp[i] > cmp[1 - i] ? " adv" : "";
+    return `<div class="${cls}${adv}">${esc(String(v))}</div>`;
+  };
+  return `<div class="tot">
+    <div class="tot-row"><div class="nm">${esc(lastName(f.f1.name))}</div><div class="k">Tale of the tape</div><div class="nm r">${esc(lastName(f.f2.name))}</div></div>
+    ${rows.map(([k, a, b, cmp]) => `<div class="tot-row">${cell(a, cmp, 0, "")}<div class="k">${k}</div>${cell(b, cmp, 1, "r")}</div>`).join("")}
+  </div>`;
+}
+
 function renderEvents(events, box, offline) {
   LAST_EVENTS = events; LAST_OFFLINE = offline;
   settlePicks(events);
   if (!offline) alertOnChanges(events);
   let html = "";
   if (offline) html += '<div class="error-box"><b>Couldn\'t reach the live schedule</b><br>Showing the last saved snapshot instead.<br><button class="refresh-btn" onclick="loadEvents()">Try again</button></div>';
-  html += events.map((ev, i) => renderEvent(ev, i)).join("");
+  // Live first, then what's coming (soonest first), then finished cards (newest first).
+  const live = events.filter(ev => eventState(ev) === "live");
+  const upcoming = events.filter(ev => eventState(ev) === "upcoming");
+  const past = events.filter(ev => eventState(ev) === "past").reverse();
+  const featured = live[0] || upcoming[0];
+  const block = (label, cls, list) => list.length ? `<div class="ev-section ${cls}">${label}</div>` + list.map(ev => renderEvent(ev, ev === featured ? 0 : 1)).join("") : "";
+  html += live.length
+    ? block("Live now", "live", live) + block("Coming up", "", upcoming)
+    : block("Up next", "", upcoming.slice(0, 1)) + block("Coming up", "", upcoming.slice(1));
+  html += block("Recent results", "", past);
   html += '<div style="text-align:center;margin-top:8px"><button class="refresh-btn" onclick="loadEvents()">&#8635; Refresh schedule</button></div>';
   box.innerHTML = html;
+  if (!FEATURE_OPENED) { const fe = box.querySelector(".event.next"); if (fe) fe.classList.add("open"); FEATURE_OPENED = true; }
   box.querySelectorAll(".event-head").forEach(h => h.addEventListener("click", () => h.parentElement.classList.toggle("open")));
+  box.querySelectorAll(".event-note, .note-more").forEach(n => n.addEventListener("click", () => n.parentElement.querySelector(".event-note").classList.add("full")));
   box.querySelectorAll(".fight-row").forEach(r => r.addEventListener("click", () => r.parentElement.classList.toggle("open")));
   box.querySelectorAll(".pick-btn").forEach(b => b.addEventListener("click", e => {
     e.stopPropagation();
@@ -902,13 +1012,16 @@ function renderEvents(events, box, offline) {
   // header chips: live / next card / pick record
   const liveNow = !offline && events.some(ev => ev.fights.some(f => f.live));
   let chips = "";
-  if (liveNow) chips += '<span class="chip live"><span class="pulse"></span><b>LIVE</b>&nbsp;&middot; auto-updating</span>';
-  const next = events.find(ev => new Date(ev.date) > new Date(Date.now() - 10 * 3600000));
+  if (liveNow) {
+    const lv = events.find(ev => ev.fights.some(f => f.live));
+    const lf = lv && lv.fights.find(f => f.live);
+    chips += `<span class="chip live"><span class="pulse"></span><b>LIVE</b>&nbsp;${lf ? "&middot; " + esc(lastName(lf.f1.name)) + " vs " + esc(lastName(lf.f2.name)) : "&middot; auto-updating"}</span>`;
+  }
+  const next = events.find(ev => eventState(ev) === "upcoming");
   if (next && !liveNow) {
-    const { days } = fmtEventDate(next.date);
-    const when = new Date(next.date).toDateString() === new Date().toDateString() ? "tonight"
-      : days <= 0 ? "today" : days === 1 ? "tomorrow" : "in " + (days + 1) + " days";
-    const short = next.name.split(":")[0];
+    const { rel } = fmtEventDate(next.date);
+    const when = (rel || "today").toLowerCase();
+    const short = shortEventName(next.name);
     chips += `<span class="chip"><span class="pulse"></span>Next card: <b>${esc(short)}</b>&nbsp;${when}</span>`;
   }
   document.getElementById("headChips").innerHTML = chips;
@@ -931,14 +1044,17 @@ function renderEvent(ev, idx) {
   const useMains = mainsClean.length ? mainsClean : reversed.slice(0, 1);
   const usePrelims = (mainsClean.length ? [...prelims] : reversed.slice(1));
   if (mainsClean.length) usePrelims.reverse(); // featured prelim first
-  const kind = /fight night/i.test(ev.name) ? "Fight Night" : "Numbered event";
-  const analyzed = meta ? '<span class="badge analyzed">Breakdowns inside</span>' : "";
+  const state = eventState(ev);
+  const kind = "";
+  const analyzed = "";
   const titleBadge = meta && meta.titles ? '<span class="badge title">&#127942; ' + meta.titles + '</span>' : "";
   const me = useMains[0];
+  const meDone = me && me.done && (me.f1.winner || me.f2.winner);
+  const side = (x, ring) => `<div class="side ${meDone ? (x.winner ? "won" : "lost") : ""}">${avatar(x.name, 64, ring, x.id)}<div class="nm">${esc(x.name)}</div><div class="rc">${meDone && x.winner ? '<span class="won-tag">&#10003; Won</span>' : esc(x.record)}</div></div>`;
   const hero = me ? `<div class="vs-hero">
-      <div class="side">${avatar(me.f1.name, 64, "red", me.f1.id)}<div class="nm">${esc(me.f1.name)}</div><div class="rc">${esc(me.f1.record)}</div></div>
-      <div class="mid"><div class="v">VS</div><div class="wt">${esc(me.weight)}<br>Main event</div></div>
-      <div class="side">${avatar(me.f2.name, 64, "blue", me.f2.id)}<div class="nm">${esc(me.f2.name)}</div><div class="rc">${esc(me.f2.record)}</div></div>
+      ${side(me.f1, "red")}
+      <div class="mid"><div class="v">${meDone ? "FINAL" : "VS"}</div><div class="wt">${esc(wtLabel(me.weight))}<br>Main event</div></div>
+      ${side(me.f2, "blue")}
     </div>` : "";
 
   // per-event pick tally
@@ -952,25 +1068,26 @@ function renderEvent(ev, idx) {
   const tally = "";
   const anyLive = ev.fights.some(f => f.live);
 
-  return `<div class="event ${idx === 0 ? "next" : ""}" data-ev="${esc(norm(ev.name))}">
+  const status = state === "live" ? '<span class="badge tonight">&#9679; Live now</span>' : state === "past" ? '<span class="badge final">Final</span>' : badge;
+  return `<div class="event ${idx === 0 ? "next" : ""} ${state === "past" ? "past" : ""}" data-ev="${esc(norm(ev.name))}">
     <div class="event-head">
       <div class="event-top">
         <div class="datebox"><span class="mo">${esc(mo)}</span><span class="da">${da}</span></div>
         <div style="min-width:0">
-          <div class="event-kind">${kind} ${anyLive ? '<span class="badge tonight">&#9679; Live now</span>' : badge} ${titleBadge}</div>
+          <div class="event-kind">${status} ${titleBadge}</div>
           <div class="event-name">${esc(ev.name.replace(/^UFC Fight Night:\s*/i, ""))}</div>
           <div class="event-sub">${date}<span class="dot">·</span>${time} your time${ev.venue ? '<span class="dot">·</span>' + esc(ev.venue) : ""} ${analyzed}</div>
         </div>
       </div>
       ${hero}
-      <div class="evt-actions">
+      ${state === "upcoming" ? `<div class="evt-actions">
         <button class="evt-btn ics-btn" data-n="${esc(ev.name)}" data-d="${esc(ev.date)}" data-v="${esc(ev.venue || "")}">&#128467; Remind me</button>
-      </div>
+      </div>` : ""}
       <div class="chev">&#9656;</div>
     </div>
     <div class="event-body">
       ${tally}
-      ${meta && meta.note ? '<div class="event-note">' + meta.note + "</div>" : ""}
+      ${meta && meta.note ? '<div class="event-note">' + meta.note + '</div><button class="note-more" type="button">Read more</button>' : ""}
       <div class="card-label main">Main card</div>
       ${useMains.map(f => renderFight(f, true)).join("")}
       ${usePrelims.length ? '<div class="card-label">Prelims</div>' + usePrelims.map(f => renderFight(f, false)).join("") : ""}
@@ -984,23 +1101,26 @@ function renderFight(f, isMain) {
   const hasBreakdown = mu || p1 || p2;
   const w = (f.done && (f.f1.winner || f.f2.winner)) ? (f.f1.winner ? f.f1.name : f.f2.name) : null;
   const status = f.live ? '<span class="winner-tag" style="color:var(--gold-bright)">&#9679; Live now</span>'
-    : w ? '<span class="winner-tag">Final &middot; ' + esc(w) + ' won</span>'
+    : w ? '<span class="winner-tag">Final</span>'
     : f.done ? '<span class="winner-tag">Final</span>' : "";
 
   // pick'em retired Sep 20 2026 in favour of the Bets tab (server-side sportsbook)
   const pk = pairKey(f.f1.name, f.f2.name);
   const pickHtml = "";
 
+  const fav = !f.done && !f.live ? favoriteOf(f) : null;
+  const res = x => (w ? (x.winner ? "won" : "lost") : "");
+  const sub = x => (w && x.winner ? '<span class="fav-tag">&#10003; Winner</span>' : fav && norm(x.name) === fav ? '<span class="fav-tag">Favorite</span>' : "");
   return `<div class="fight" data-pk="${esc(pk)}">
     <div class="fight-row">
-      <div class="fight-meta">${esc(f.weight)} ${mu && mu.title ? '<span class="badge title">&#127942; ' + esc(mu.title) + "</span>" : ""} ${status}</div>
+      <div class="fight-meta">${esc(wtLabel(f.weight))} ${mu && mu.title ? '<span class="badge title">&#127942; ' + esc(mu.title) + "</span>" : ""} ${status}</div>
       <div class="matchline">
-        <div class="fighter">${avatar(f.f1.name, 44, "red", f.f1.id)}<div><div class="fname">${esc(f.f1.name)}</div><div class="frec">${esc(f.f1.record)}</div></div></div>
+        <div class="fighter ${res(f.f1)}">${avatar(f.f1.name, 44, "red", f.f1.id)}<div><div class="fname">${esc(f.f1.name)}</div><div class="frec">${esc(f.f1.record)}</div>${sub(f.f1)}</div></div>
         <div class="vs">VS</div>
-        <div class="fighter right">${avatar(f.f2.name, 44, "blue", f.f2.id)}<div><div class="fname">${esc(f.f2.name)}</div><div class="frec">${esc(f.f2.record)}</div></div></div>
+        <div class="fighter right ${res(f.f2)}">${avatar(f.f2.name, 44, "blue", f.f2.id)}<div><div class="fname">${esc(f.f2.name)}</div><div class="frec">${esc(f.f2.record)}</div>${sub(f.f2)}</div></div>
       </div>
       ${pickHtml}
-      ${hasBreakdown ? '<div class="tap-hint"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>Tap for the breakdown</div>' : ""}
+      ${hasBreakdown ? '<div class="tap-hint"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>Breakdown &amp; odds</div>' : ""}
     </div>
     ${hasBreakdown ? '<div class="breakdown">' + renderBreakdown(mu, p1, p2, f) + "</div>" : ""}
   </div>`;
@@ -1010,25 +1130,17 @@ function renderFight(f, isMain) {
 // fighting weight comes from the bout's weight class, so it's always the right number.
 const DIV_LB = [[/light\s*heavy/i, 205], [/heavy/i, 265], [/middle/i, 185], [/welter/i, 170], [/light/i, 155], [/feather/i, 145], [/bantam/i, 135], [/fly/i, 125], [/straw/i, 115]];
 function divPounds(w) { const m = DIV_LB.find(([rx]) => rx.test(w || "")); return m ? m[1] : null; }
-function tapePills(p, f) {
-  const out = [];
-  if (p.ht) out.push(Math.floor(p.ht / 12) + "\u2032" + (p.ht % 12) + "\u2033");
-  const lb = divPounds(f && f.weight);
-  if (lb && !/catch/i.test(f.weight)) out.push(lb + " lb");
-  if (p.reach) out.push(p.reach + "\u2033 reach");
-  return out.map(t => '<span class="fact-pill tape">' + t + "</span>").join("");
-}
 
 function renderBreakdown(mu, p1, p2, f) {
   let h = "";
-  if (mu) {
-    h += `<div class="bk-note"><b>The matchup:</b> ${mu.note}${mu.odds ? '<div class="bk-odds">&#128200; ' + mu.odds + "</div>" : ""}</div>`;
-  }
+  h += quickTake(mu, f);
+  if (p1 || p2) h += taleOfTape(p1, p2, f);
+  if (mu) h += `<div class="bk-note"><b>The matchup:</b> ${mu.note}</div>`;
   [[p1, f.f1], [p2, f.f2]].forEach(([p, ff], i) => {
     if (!p) return;
     h += `<div class="corner">
       <div class="corner-head">${avatar(p.name, 52, i === 0 ? "red" : "blue", ff && ff.id)}<div><span class="cname">${esc(p.name)}</span>${p.nick ? '<span class="cnick">"' + esc(p.nick) + '"</span>' : ""}</div></div>
-      <div class="corner-facts">${tapePills(p, f)}<span class="fact-pill">${p.age} yrs</span><span class="fact-pill">${esc(p.country)}</span><span class="fact-pill">${esc(p.style)}</span></div>
+      <div class="corner-facts"><span class="fact-pill">${esc(p.country)}</span><span class="fact-pill">${esc(p.style)}</span></div>
       ${p.strengths.map(s => '<div class="swline plus"><div class="ico">+</div><p>' + s + "</p></div>").join("")}
       ${p.weaknesses.map(s => '<div class="swline minus"><div class="ico">&minus;</div><p>' + s + "</p></div>").join("")}
       <div class="cstory">${p.history}</div>
@@ -1064,7 +1176,7 @@ function renderDivision(d) {
 
 function renderBelts() {
   document.getElementById("beltsIntro").innerHTML =
-    "<b>How to read this:</b> every division has one champ (sometimes an interim champ too — a \"backup champ\" created when the real one is hurt or stuck). The numbered fighters are the official contenders line. Snapshot written " + ANALYSIS_STAMP + ". Tap a division to expand.";
+    "<b>Tap a division</b> to see the top contenders and what's happening. An <b>interim</b> champ is a backup belt holder while the real champ is out.";
   document.getElementById("mensDivs").innerHTML = DIVISIONS.men.map(renderDivision).join("");
   document.getElementById("p4pExplain").innerHTML = "<p>" + P4P.explain + "</p>";
   document.getElementById("p4pGrid").innerHTML =
@@ -1073,8 +1185,10 @@ function renderBelts() {
 }
 
 function renderLearn() {
+  // first paragraph up front, the rest behind "Read more"
   document.getElementById("storylines").innerHTML = STORYLINES.map(s =>
-    `<div class="explain"><h3><span class="em">${s.em}</span>${esc(s.title)}</h3>${s.body.map(p => "<p>" + p + "</p>").join("")}</div>`).join("");
+    `<div class="explain"><h3><span class="em">${s.em}</span>${esc(s.title)}</h3><p>${s.body[0]}</p>${s.body.length > 1 ? '<div class="more">' + s.body.slice(1).map(p => "<p>" + p + "</p>").join("") + '</div><button class="more-btn" type="button">Read more</button>' : ""}</div>`).join("");
+  document.querySelectorAll("#storylines .more-btn").forEach(b => b.addEventListener("click", () => b.parentElement.classList.add("full")));
   document.getElementById("explainers").innerHTML = EXPLAINERS.map(s =>
     `<div class="explain"><h3><span class="em">${s.em}</span>${esc(s.title)}</h3>${s.body.map(p => "<p>" + p + "</p>").join("")}</div>`).join("");
 }
