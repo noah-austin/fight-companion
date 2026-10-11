@@ -739,7 +739,7 @@ function normalizeEspnEvent(ev) {
         name: (cs[i].athlete && (cs[i].athlete.displayName || cs[i].athlete.fullName)) || "TBA",
         record: (cs[i].records && cs[i].records[0] && cs[i].records[0].summary) || "",
         winner: cs[i].winner === true,
-        id: (cs[i].athlete && cs[i].athlete.id) || null
+        id: cs[i].id || (cs[i].athlete && cs[i].athlete.id) || null   // ESPN puts the athlete id on the competitor
       } : { name: "TBA", record: "", winner: false, id: null };
       const status = c.status && c.status.type ? c.status.type.name : "";
       return {
@@ -1861,7 +1861,9 @@ EXPLAINERS.push(
     "Melissa Amaya": "5169699", "Valesca Machado": "4836549", "Sedriques Dumas": "5060467", "Luis Hernandez": "5369427",
     "King Green": "2502364", "Esteban Ribovics": "5074131", "Roberto Soldic": "4274796", "Khaos Williams": "4612580", "Roman Kopylov": "4300149", "Ateba Gautier": "5218421", "Brendan Allen": "4025699", "Christian Leroy Duncan": "4848674",
     "Loopy Godinez": "4700617", "Lupita Godinez": "4700617", "Ketlen Souza": "4566308", "Andre Fili": "3074464", "Kai Kamaka III": "4688447", "Malcolm Wellmaker": "5212854", "Otari Tanzilovi": "5212853", "Matheus Camilo": "5170144", "Jai Herbert": "4078246",
-    "Joaquin Buckley": "4024714", "Mike Malott": "3165120", "Erin Blanchfield": "4350796", "Jasmine Jasudavicius": "4835135",
+    "Joaquin Buckley": "4024714",
+    // Belts & Ranks names (Oct 11), from each fighter's espn.com/mma/fighter/_/id profile URL
+    "Dricus du Plessis": "3166126", "Nassourdine Imavov": "4690539", "Caio Borralho": "4835137", "Magomed Ankalaev": "4273399", "Jiří Procházka": "3156612", "Khalil Rountree Jr.": "4028627", "Navajo Stirling": "5216713", "Alexander Volkov": "2993650", "Sergei Pavlovich": "4217395", "Josh Hokit": "4049391", "Jack Della Maddalena": "4828707", "Carlos Prates": "4294832", "Gabriel Bonfim": "4921516", "Michael Morales": "4869426", "Charles Oliveira": "2504169", "Max Holloway": "2614933", "Paddy Pimblett": "4008549", "Movsar Evloev": "4029275", "Diego Lopes": "4881999", "Lerone Murphy": "4576101", "Yair Rodriguez": "3155420", "Sean O'Malley": "4205093", "Mario Bautista": "4410868", "Aljamain Sterling": "3031559", "Manel Kape": "4236504", "Brandon Royval": "4239928", "Tatsuro Taira": "4917772", "Kyoji Horiguchi": "2613374", "Payton Talbott": "5144008", "Deiveson Figueiredo": "4189320", "Natalia Silva": "4054605", "Wang Cong": "4215200", "Mike Malott": "3165120", "Erin Blanchfield": "4350796", "Jasmine Jasudavicius": "4835135",
     "Islam Makhachev": "3332412", "Ian Machado Garry": "4738092",
     "Tom Aspinall": "4010976", "Ciryl Gane": "4426000", "Carlos Ulberg": "4695736", "Sean Strickland": "3093653",
     "Justin Gaethje": "3022345", "Alexander Volkanovski": "3949584", "Petr Yan": "4293517", "Joshua Van": "5120301",
