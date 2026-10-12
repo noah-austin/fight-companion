@@ -177,7 +177,6 @@
   .badge.tonight { background: var(--accent-deep); color: #fff; }
   .badge.soon { background: var(--surface-3); color: var(--ink-2); }
   .badge.title { background: rgba(227,165,58,0.14); color: var(--gold-bright); border: 1px solid rgba(227,165,58,0.4); }
-  .badge.analyzed { background: rgba(79,150,232,0.13); color: #8fbcf0; border: 1px solid rgba(79,150,232,0.35); }
   .chev { position: absolute; right: 14px; top: 18px; color: var(--ink-3); transition: transform .2s; font-size: 13px;}
   .event.open .chev { transform: rotate(90deg); }
   .event-body { display: none; border-top: 1px solid var(--hairline); }
@@ -323,23 +322,36 @@
   }
   footer { margin-top: 28px; color: var(--ink-3); font-size: 11px; text-align: center; padding: 0 20px; line-height: 1.6;}
 
-  /* ---------- pick'em ---------- */
-  .pick-row { display: flex; gap: 8px; margin-top: 9px; }
-  .pick-btn {
-    flex: 1; background: var(--surface-2); border: 1px solid var(--hairline); color: var(--ink-2);
-    border-radius: 9px; padding: 7px 6px; font-size: 11.5px; font-weight: 700; cursor: pointer;
-    text-transform: uppercase; letter-spacing: .4px; font-family: var(--disp); transition: all .12s;
-  }
-  .pick-btn.sel { background: rgba(232,72,77,0.16); border-color: var(--accent); color: var(--ink); }
-  .pick-btn:active { transform: scale(0.97); }
-  .pick-result { display: inline-flex; align-items: center; gap: 5px; margin-top: 9px; font-size: 11.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
-  .pick-result.win { background: rgba(47,191,79,0.13); color: var(--green); border: 1px solid rgba(47,191,79,0.35); }
-  .pick-result.loss { background: rgba(232,72,77,0.10); color: var(--accent); border: 1px solid rgba(232,72,77,0.3); }
-  .pick-tally { font-size: 11.5px; color: var(--ink-3); padding: 10px 14px 0; }
-  .pick-tally b { color: var(--ink-2); }
   .chip.live { border-color: rgba(232,72,77,0.55); background: rgba(232,72,77,0.10); color: var(--ink); }
-  .chip.picks { border-color: rgba(227,165,58,0.4); }
   .upd-note { color: var(--ink-3); font-size: 10.5px; }
+  /* ---------- results, live status, start times ---------- */
+  .ev-times { color: var(--ink-2); font-size: 12px; margin-top: 3px; }
+  .ev-times b { color: var(--ink); font-weight: 650; }
+  .card-label .t { margin-left: auto; color: var(--ink-3); font-family: system-ui, sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+  .live-now { margin: 12px 14px 0; padding: 10px 12px; border-radius: 11px; background: rgba(232,72,77,0.08); border: 1px solid rgba(232,72,77,0.35); font-size: 13px; line-height: 1.45; }
+  .live-now .lbl { font-size: 9.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-right: 6px; }
+  .live-now .nx { display: block; color: var(--ink-3); font-size: 12px; margin-top: 2px; }
+  .res-line { color: var(--ink-3); font-size: 9.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; }
+  .vs-hero .mid .how { font-size: 10px; color: var(--gold-bright); font-weight: 800; letter-spacing: .6px; text-transform: uppercase; text-align: center; margin-top: 3px; }
+  /* ---------- fighter pages ---------- */
+  [data-fighter] { cursor: pointer; }
+  .contender[data-fighter]:active, .p4p-row[data-fighter]:active { background: rgba(255,255,255,0.04); }
+  .fp-link { display: inline-block; margin-top: 5px; color: var(--gold-bright); font-size: 12px; font-weight: 600; }
+  .fp-top { display: flex; gap: 14px; align-items: center; margin: 4px 0 12px; }
+  .fp-top .avatar { width: 84px; height: 84px; }
+  .fp-top .av-init { font-size: 26px; }
+  .fp-name { font-family: var(--disp); font-size: 25px; font-weight: 700; text-transform: uppercase; line-height: 1; letter-spacing: .3px; }
+  .fp-nick { color: var(--ink-3); font-size: 13px; font-style: italic; margin-top: 3px; }
+  .fp-rank { display: block; margin-top: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; color: var(--gold-bright); }
+  .fp-rec { font-size: 13px; color: var(--ink-2); margin-top: 3px; }
+  .fp-sec { font-family: var(--disp); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); margin: 16px 0 6px; }
+  .fp-bout { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); font-size: 13.5px; }
+  .fp-bout:first-of-type { border-top: 0; }
+  .fp-bout .ev { color: var(--ink-3); font-size: 11.5px; margin-top: 2px; }
+  .fp-bout .r { text-align: right; flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--ink-2); }
+  .fp-bout .r.w { color: var(--green); } .fp-bout .r.l { color: var(--accent); }
+  .fp-espn { display: block; text-align: center; margin: 16px 0 4px; padding: 11px; border-radius: 11px; border: 1px solid var(--hairline); background: var(--surface-2); color: var(--ink); font-weight: 650; font-size: 14px; text-decoration: none; }
+  .fp-none { color: var(--ink-3); font-size: 13px; padding: 4px 0; }
 
   /* ---------- notifications & calendar ---------- */
   .evt-actions { display: flex; gap: 8px; margin-top: 11px; }
@@ -548,6 +560,13 @@
   </div>
 </div>
 
+<div class="sheet-back" id="fighterBack">
+  <div class="sheet" role="dialog" aria-label="Fighter">
+    <div class="sheet-head"><div class="sheet-title">Fighter</div><button class="sheet-x" id="fighterClose" type="button" aria-label="Close">&times;</button></div>
+    <div id="fighterBody"></div>
+  </div>
+</div>
+
 <main class="wrap">
 
   <section class="page active" id="page-events">
@@ -661,12 +680,14 @@ function espnIdFor(name, liveId) {
   const hits = Object.keys(ESPN_IDS).filter(x => x.endsWith(t) && x[0] === k[0]);
   return hits.length === 1 ? ESPN_IDS[hits[0]] : null;
 }
-function avatar(name, size, ring, liveId) {
+// link = true makes the photo open the fighter page
+function avatar(name, size, ring, liveId, link) {
   const id = espnIdFor(name, liveId);
   const initials = (name || "?").trim().split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
   const img = id ? `<img loading="lazy" src="https://a.espncdn.com/i/headshots/mma/players/full/${id}.png" alt="" onerror="this.remove()">` : "";
-  return `<span class="avatar av-${size} ${ring || ""}"><span class="av-init">${esc(initials)}</span>${img}</span>`;
+  return `<span class="avatar av-${size} ${ring || ""}"${link ? fighterAttrs(name, liveId) : ""}><span class="av-init">${esc(initials)}</span>${img}</span>`;
 }
+const fighterAttrs = (name, id) => ` data-fighter="${esc(name)}"${id ? ` data-fid="${esc(String(id))}"` : ""}`;
 
 function fmtEventDate(iso) {
   const d = new Date(iso);
@@ -741,15 +762,70 @@ function normalizeEspnEvent(ev) {
         winner: cs[i].winner === true,
         id: cs[i].id || (cs[i].athlete && cs[i].athlete.id) || null   // ESPN puts the athlete id on the competitor
       } : { name: "TBA", record: "", winner: false, id: null };
-      const status = c.status && c.status.type ? c.status.type.name : "";
-      return {
+      const st = c.status || {};
+      const status = st.type ? st.type.name : "";
+      const fight = {
         weight: (c.type && (c.type.text || c.type.abbreviation)) || "",
         f1: f(0), f2: f(1),
+        date: c.date || c.startDate || null,
+        rounds: (c.format && c.format.regulation && c.format.regulation.periods) || 3,
+        period: Number(st.period) || 0,
         done: status === "STATUS_FINAL",
-        live: status === "STATUS_IN_PROGRESS"
+        live: LIVE_STATUSES.includes(status),
+        between: status === "STATUS_END_PERIOD" || status === "STATUS_HALFTIME",
+        cancelled: status === "STATUS_CANCELED" || status === "STATUS_POSTPONED"
       };
+      if (fight.done) fight.result = resultOf(c, fight);
+      return fight;
     })
   };
+}
+
+const LIVE_STATUSES = ["STATUS_IN_PROGRESS", "STATUS_END_PERIOD", "STATUS_HALFTIME"];
+// How a finished fight ended. Same rules as the server's settlement (server/src/espn.js):
+// only the "Unofficial Winner Kotko|Decision|Submission" entry in `details` names the method;
+// the rest of `details` is play-by-play. 5:00 of the last round with no entry = decision.
+function resultOf(c, fight) {
+  let method = null, kind = (fight.f1.winner || fight.f2.winner) ? "win" : null;
+  (Array.isArray(c.details) ? c.details : []).forEach(d => {
+    const m = /^(?:unofficial\s+)?winner\s+(.+)$/i.exec(String((d.type && d.type.text) || d.text || "").trim());
+    if (!m || method) return;
+    const k = m[1].toUpperCase();
+    if (/DECISION|\bDEC\b|UNANIMOUS|SPLIT|MAJORITY/.test(k)) method = "DEC";
+    else if (/KOTKO|\bKO\b|TKO|KNOCKOUT/.test(k)) method = "KO";
+    else if (/SUBMISSION|\bSUB\b/.test(k)) method = "SUB";
+    else if (/DISQUALIF|\bDQ\b/.test(k)) method = "DQ";
+    else if (/NO CONTEST|\bNC\b/.test(k)) kind = "nc";
+    else if (/DRAW/.test(k)) kind = "draw";
+  });
+  const clock = (c.status && c.status.displayClock) || "";
+  if (kind === "win" && !method && fight.period === fight.rounds && /^5:00$/.test(clock)) method = "DEC";
+  return { kind, method, round: method === "DEC" ? null : fight.period || null, clock: method === "DEC" ? "" : clock };
+}
+const METHOD_TXT = { KO: "KO/TKO", SUB: "Submission", DEC: "Decision", DQ: "DQ" };
+// "KO/TKO · R1, 2:09" / "Decision" / "Draw" — "" when ESPN didn't say
+function howItEnded(f, short) {
+  const r = f.result;
+  if (!r) return "";
+  if (r.kind === "draw") return "Draw";
+  if (r.kind === "nc") return "No contest";
+  if (!r.method) return "";
+  const m = short ? (r.method === "SUB" ? "Sub" : r.method === "KO" ? "KO" : METHOD_TXT[r.method]) : METHOD_TXT[r.method];
+  if (!r.round) return m;
+  return m + " \u00b7 R" + r.round + (!short && r.clock && r.clock !== "0:00" ? ", " + r.clock : "");
+}
+// "Round 2 of 3" / "Between rounds 1 & 2"
+function liveText(f) {
+  if (f.between) return f.period ? "Between rounds " + f.period + " & " + (f.period + 1) : "Between rounds";
+  return f.period ? "Round " + f.period + " of " + f.rounds : "Live";
+}
+// Chronological (ESPN) order: the fight in the cage now, and the next one up.
+function liveSnapshot(ev) {
+  const chron = ev.fights.filter(f => !f.cancelled);
+  const now = chron.find(f => f.live) || null;
+  const from = now ? chron.indexOf(now) + 1 : 0;
+  const next = chron.slice(from).find(f => !f.done && !f.live) || null;
+  return { now, next };
 }
 
 function eventMetaFor(name) {
@@ -757,12 +833,7 @@ function eventMetaFor(name) {
   return EVENT_META.find(m => m.match.some(x => n.includes(x))) || null;
 }
 
-/* ---------- Beat the Books pick'em ---------- */
-const lsGet = k => { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch (e) { return {}; } };
-const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-let PICKS = lsGet("fc-picks");        // pairKey -> norm(picked fighter name)
-let PICK_HIST = lsGet("fc-pick-hist"); // pairKey -> {p: pickedName, w: correct, u: upsetCall, ev, d}
-
+/* ---------- favorite from the odds text ---------- */
 // best-effort favorite detection from the odds text ("Makhachev around -350, Garry +255")
 function favoriteOf(f) {
   const mu = findMatchup(f.f1.name, f.f2.name);
@@ -779,34 +850,6 @@ function favoriteOf(f) {
   if (f1fav && !f2fav) return norm(f.f1.name);
   if (f2fav && !f1fav) return norm(f.f2.name);
   return null;
-}
-
-// record outcomes for settled picked fights (runs on every render; writes once per fight)
-function settlePicks(events) {
-  let changed = false;
-  events.forEach(ev => ev.fights.forEach(f => {
-    const pk = pairKey(f.f1.name, f.f2.name);
-    const pick = PICKS[pk];
-    if (!pick || PICK_HIST[pk] || !f.done || !(f.f1.winner || f.f2.winner)) return;
-    const winner = norm(f.f1.winner ? f.f1.name : f.f2.name);
-    const fav = favoriteOf(f);
-    PICK_HIST[pk] = { p: pick, w: winner === pick, u: !!(fav && fav !== pick && winner === pick), ev: ev.name, d: ev.date };
-    changed = true;
-  }));
-  if (changed) lsSet("fc-pick-hist", PICK_HIST);
-}
-
-function pickRecord() {
-  let w = 0, l = 0, u = 0;
-  Object.values(PICK_HIST).forEach(h => { h.w ? w++ : l++; if (h.u) u++; });
-  return { w, l, u };
-}
-
-function togglePick(pk, name) {
-  if (PICK_HIST[pk]) return; // already settled
-  if (PICKS[pk] === name) delete PICKS[pk]; else PICKS[pk] = name;
-  lsSet("fc-picks", PICKS);
-  rerenderPreservingState();
 }
 
 /* ---------- re-render without losing open cards ---------- */
@@ -883,9 +926,8 @@ function alertOnChanges(events) {
       if (now.live && !was.live && !was.done) fireAlert("🔴", names + " — starting now", now.ev);
       if (now.done && !was.done) {
         const w = now.f.f1.winner ? now.f.f1.name : now.f.f2.winner ? now.f.f2.name : null;
-        const picked = PICKS[pk];
-        if (picked && w) fireAlert(norm(w) === picked ? "🎯" : "❌", w + " wins", norm(w) === picked ? "You called it!" : "Your pick came up short.");
-        else if (w) fireAlert("🏁", w + " wins", names);
+        const how = howItEnded(now.f);
+        if (w) fireAlert("🏁", w + " wins" + (how ? " \u00b7 " + how : ""), names);
       }
     });
   }
@@ -917,8 +959,14 @@ function downloadIcs(evName, evDate, venue) {
 
 const wtLabel = w => (w || "").replace(/^W\s+/i, "Women's ").replace(/^Women's\s+/i, "Women's ");
 // Finished = every fight done, or (offline snapshot, no results) the card is more than 12h old.
-const eventState = ev => ev.fights.some(f => f.live) ? "live"
-  : (ev.fights.length && ev.fights.every(f => f.done)) || new Date(ev.date) < Date.now() - 12 * 3600e3 ? "past" : "upcoming";
+// Live = a fight is on, or the card has started (some results in, more to come) within 12h.
+const eventState = ev => {
+  if (ev.fights.some(f => f.live)) return "live";
+  const settled = ev.fights.filter(f => f.done || f.cancelled).length;
+  const stale = new Date(ev.date) < Date.now() - 12 * 3600e3;
+  if ((ev.fights.length && settled === ev.fights.length) || stale) return "past";
+  return settled > 0 ? "live" : "upcoming";
+};
 const shortEventName = n => /fight night/i.test(n || "") ? n.replace(/^UFC Fight Night:\s*/i, "") : (n || "").split(":")[0];
 let FEATURE_OPENED = false;   // auto-open the live/next card once, then respect the user's taps
 
@@ -981,7 +1029,6 @@ function taleOfTape(p1, p2, f) {
 
 function renderEvents(events, box, offline) {
   LAST_EVENTS = events; LAST_OFFLINE = offline;
-  settlePicks(events);
   if (!offline) alertOnChanges(events);
   let html = "";
   if (offline) html += '<div class="error-box"><b>Couldn\'t reach the live schedule</b><br>Showing the last saved snapshot instead.<br><button class="refresh-btn" onclick="loadEvents()">Try again</button></div>';
@@ -1001,21 +1048,18 @@ function renderEvents(events, box, offline) {
   box.querySelectorAll(".event-head").forEach(h => h.addEventListener("click", () => h.parentElement.classList.toggle("open")));
   box.querySelectorAll(".event-note, .note-more").forEach(n => n.addEventListener("click", () => n.parentElement.querySelector(".event-note").classList.add("full")));
   box.querySelectorAll(".fight-row").forEach(r => r.addEventListener("click", () => r.parentElement.classList.toggle("open")));
-  box.querySelectorAll(".pick-btn").forEach(b => b.addEventListener("click", e => {
-    e.stopPropagation();
-    togglePick(b.dataset.pk, b.dataset.name);
-  }));
   box.querySelectorAll(".ics-btn").forEach(b => b.addEventListener("click", e => {
     e.stopPropagation();
     downloadIcs(b.dataset.n, b.dataset.d, b.dataset.v);
   }));
-  // header chips: live / next card / pick record
-  const liveNow = !offline && events.some(ev => ev.fights.some(f => f.live));
+  // header chips: live (who's fighting, or who's up next between fights) / next card
+  const lv = !offline && events.find(ev => eventState(ev) === "live");
+  const liveNow = !!lv;
   let chips = "";
   if (liveNow) {
-    const lv = events.find(ev => ev.fights.some(f => f.live));
-    const lf = lv && lv.fights.find(f => f.live);
-    chips += `<span class="chip live"><span class="pulse"></span><b>LIVE</b>&nbsp;${lf ? "&middot; " + esc(lastName(lf.f1.name)) + " vs " + esc(lastName(lf.f2.name)) : "&middot; auto-updating"}</span>`;
+    const { now: lf, next: nf } = liveSnapshot(lv);
+    const vs = x => esc(lastName(x.f1.name)) + " vs " + esc(lastName(x.f2.name));
+    chips += `<span class="chip live"><span class="pulse"></span><b>LIVE</b>&nbsp;${lf ? "&middot; " + vs(lf) + " &middot; " + (lf.between ? "between rds" : "R" + (lf.period || 1)) : nf ? "&middot; up next: " + vs(nf) : "&middot; auto-updating"}</span>`;
   }
   const next = events.find(ev => eventState(ev) === "upcoming");
   if (next && !liveNow) {
@@ -1045,28 +1089,24 @@ function renderEvent(ev, idx) {
   const usePrelims = (mainsClean.length ? [...prelims] : reversed.slice(1));
   if (mainsClean.length) usePrelims.reverse(); // featured prelim first
   const state = eventState(ev);
-  const kind = "";
-  const analyzed = "";
+  const T = cardTimes(ev, mainsClean);
   const titleBadge = meta && meta.titles ? '<span class="badge title">&#127942; ' + meta.titles + '</span>' : "";
   const me = useMains[0];
   const meDone = me && me.done && (me.f1.winner || me.f2.winner);
-  const side = (x, ring) => `<div class="side ${meDone ? (x.winner ? "won" : "lost") : ""}">${avatar(x.name, 64, ring, x.id)}<div class="nm">${esc(x.name)}</div><div class="rc">${meDone && x.winner ? '<span class="won-tag">&#10003; Won</span>' : esc(x.record)}</div></div>`;
+  const meHow = meDone ? howItEnded(me, true) : "";
+  const side = (x, ring) => `<div class="side ${meDone ? (x.winner ? "won" : "lost") : ""}">${avatar(x.name, 64, ring, x.id, true)}<div class="nm">${esc(x.name)}</div><div class="rc">${meDone && x.winner ? '<span class="won-tag">&#10003; Won</span>' : esc(x.record)}</div></div>`;
   const hero = me ? `<div class="vs-hero">
       ${side(me.f1, "red")}
-      <div class="mid"><div class="v">${meDone ? "FINAL" : "VS"}</div><div class="wt">${esc(wtLabel(me.weight))}<br>Main event</div></div>
+      <div class="mid"><div class="v">${meDone ? "FINAL" : me.live ? "LIVE" : "VS"}</div>${meHow ? '<div class="how">' + esc(meHow) + "</div>" : ""}<div class="wt">${esc(wtLabel(me.weight))}<br>Main event</div></div>
       ${side(me.f2, "blue")}
     </div>` : "";
 
-  // per-event pick tally
-  let pw = 0, pl = 0, pending = 0;
-  ev.fights.forEach(f => {
-    const pk = pairKey(f.f1.name, f.f2.name);
-    if (!PICKS[pk]) return;
-    const h = PICK_HIST[pk];
-    if (h) { h.w ? pw++ : pl++; } else pending++;
-  });
-  const tally = "";
-  const anyLive = ev.fights.some(f => f.live);
+  let liveStrip = "";
+  if (state === "live") {
+    const { now: lf, next: nf } = liveSnapshot(ev);
+    const vs = x => esc(x.f1.name) + " vs " + esc(x.f2.name);
+    liveStrip = `<div class="live-now">${lf ? '<span class="lbl">&#9679; Now</span><b>' + vs(lf) + "</b> &middot; " + liveText(lf) : '<span class="lbl">Between fights</span>'}${nf ? '<span class="nx">Up next: ' + vs(nf) + "</span>" : ""}</div>`;
+  }
 
   const status = state === "live" ? '<span class="badge tonight">&#9679; Live now</span>' : state === "past" ? '<span class="badge final">Final</span>' : badge;
   return `<div class="event ${idx === 0 ? "next" : ""} ${state === "past" ? "past" : ""}" data-ev="${esc(norm(ev.name))}">
@@ -1076,7 +1116,8 @@ function renderEvent(ev, idx) {
         <div style="min-width:0">
           <div class="event-kind">${status} ${titleBadge}</div>
           <div class="event-name">${esc(ev.name.replace(/^UFC Fight Night:\s*/i, ""))}</div>
-          <div class="event-sub">${date}<span class="dot">·</span>${time} your time${ev.venue ? '<span class="dot">·</span>' + esc(ev.venue) : ""} ${analyzed}</div>
+          <div class="event-sub">${date}${ev.venue ? '<span class="dot">·</span>' + esc(ev.venue) : ""}</div>
+          <div class="ev-times">${T.line || "<b>" + time + "</b> your time"}</div>
         </div>
       </div>
       ${hero}
@@ -1086,13 +1127,35 @@ function renderEvent(ev, idx) {
       <div class="chev">&#9656;</div>
     </div>
     <div class="event-body">
-      ${tally}
+      ${liveStrip}
       ${meta && meta.note ? '<div class="event-note">' + meta.note + '</div><button class="note-more" type="button">Read more</button>' : ""}
-      <div class="card-label main">Main card</div>
+      <div class="card-label main">Main card${T.main ? '<span class="t">' + T.main + "</span>" : ""}</div>
       ${useMains.map(f => renderFight(f, true)).join("")}
-      ${usePrelims.length ? '<div class="card-label">Prelims</div>' + usePrelims.map(f => renderFight(f, false)).join("") : ""}
+      ${usePrelims.length ? '<div class="card-label">Prelims' + (T.prelims ? '<span class="t">' + T.prelims + (T.early ? " (early " + T.early + ")" : "") + "</span>" : "") + "</div>" + usePrelims.map(f => renderFight(f, false)).join("") : ""}
     </div>
   </div>`;
+}
+
+// Start times from ESPN's per-fight dates: the main card starts at its earliest fight; the
+// prelims (and early prelims, on numbered cards) are the earlier time groups. Returns {} when
+// ESPN gives one time for everything — the event time is shown instead.
+function cardTimes(ev, mainsClean) {
+  const t = d => new Date(d).getTime();
+  const fmt = ms => new Date(ms).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  const dated = ev.fights.filter(f => f.date && !isNaN(t(f.date)));
+  const groups = [...new Set(dated.map(f => t(f.date)))].sort((a, b) => a - b);
+  if (groups.length < 2 || groups.length > 6) return {};
+  let main = mainsClean.length ? Math.min(...mainsClean.filter(f => f.date).map(f => t(f.date))) : NaN;
+  if (!isFinite(main)) { if (groups.length > 3) return {}; main = groups[groups.length - 1]; }
+  // ESPN stamps each bout with its block's start, so earlier blocks are the prelim groups
+  const earlier = groups.filter(g => g < main);
+  if (!earlier.length) return {};
+  const prelims = earlier.length >= 2 ? earlier[earlier.length - 1] : earlier[0];
+  const early = earlier.length >= 2 ? earlier[0] : null;
+  const out = { main: fmt(main), prelims: fmt(prelims), early: early ? fmt(early) : null };
+  out.line = (early ? "Early prelims <b>" + out.early + "</b><span class=\"dot\">·</span>" : "") +
+    "Prelims <b>" + out.prelims + "</b><span class=\"dot\">·</span>Main card <b>" + out.main + "</b> <span style=\"color:var(--ink-3)\">your time</span>";
+  return out;
 }
 
 function renderFight(f, isMain) {
@@ -1100,13 +1163,11 @@ function renderFight(f, isMain) {
   const p1 = findFighter(f.f1.name), p2 = findFighter(f.f2.name);
   const hasBreakdown = mu || p1 || p2;
   const w = (f.done && (f.f1.winner || f.f2.winner)) ? (f.f1.winner ? f.f1.name : f.f2.name) : null;
-  const status = f.live ? '<span class="winner-tag" style="color:var(--gold-bright)">&#9679; Live now</span>'
-    : w ? '<span class="winner-tag">Final</span>'
-    : f.done ? '<span class="winner-tag">Final</span>' : "";
-
-  // pick'em retired Sep 20 2026 in favour of the Bets tab (server-side sportsbook)
+  const how = f.done ? howItEnded(f) : "";
+  const status = f.live ? '<span class="winner-tag" style="color:var(--gold-bright)">&#9679; ' + esc(liveText(f)) + "</span>"
+    : f.done ? '<span class="winner-tag">Final</span>' + (how ? '<span class="res-line">' + esc(how) + "</span>" : "")
+    : f.cancelled ? '<span class="res-line">Cancelled</span>' : "";
   const pk = pairKey(f.f1.name, f.f2.name);
-  const pickHtml = "";
 
   const fav = !f.done && !f.live ? favoriteOf(f) : null;
   const res = x => (w ? (x.winner ? "won" : "lost") : "");
@@ -1115,11 +1176,10 @@ function renderFight(f, isMain) {
     <div class="fight-row">
       <div class="fight-meta">${esc(wtLabel(f.weight))} ${mu && mu.title ? '<span class="badge title">&#127942; ' + esc(mu.title) + "</span>" : ""} ${status}</div>
       <div class="matchline">
-        <div class="fighter ${res(f.f1)}">${avatar(f.f1.name, 44, "red", f.f1.id)}<div><div class="fname">${esc(f.f1.name)}</div><div class="frec">${esc(f.f1.record)}</div>${sub(f.f1)}</div></div>
+        <div class="fighter ${res(f.f1)}">${avatar(f.f1.name, 44, "red", f.f1.id, true)}<div><div class="fname">${esc(f.f1.name)}</div><div class="frec">${esc(f.f1.record)}</div>${sub(f.f1)}</div></div>
         <div class="vs">VS</div>
-        <div class="fighter right ${res(f.f2)}">${avatar(f.f2.name, 44, "blue", f.f2.id)}<div><div class="fname">${esc(f.f2.name)}</div><div class="frec">${esc(f.f2.record)}</div>${sub(f.f2)}</div></div>
+        <div class="fighter right ${res(f.f2)}">${avatar(f.f2.name, 44, "blue", f.f2.id, true)}<div><div class="fname">${esc(f.f2.name)}</div><div class="frec">${esc(f.f2.record)}</div>${sub(f.f2)}</div></div>
       </div>
-      ${pickHtml}
       ${hasBreakdown ? '<div class="tap-hint"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>Breakdown &amp; odds</div>' : ""}
     </div>
     ${hasBreakdown ? '<div class="breakdown">' + renderBreakdown(mu, p1, p2, f) + "</div>" : ""}
@@ -1139,7 +1199,7 @@ function renderBreakdown(mu, p1, p2, f) {
   [[p1, f.f1], [p2, f.f2]].forEach(([p, ff], i) => {
     if (!p) return;
     h += `<div class="corner">
-      <div class="corner-head">${avatar(p.name, 52, i === 0 ? "red" : "blue", ff && ff.id)}<div><span class="cname">${esc(p.name)}</span>${p.nick ? '<span class="cnick">"' + esc(p.nick) + '"</span>' : ""}</div></div>
+      <div class="corner-head">${avatar(p.name, 52, i === 0 ? "red" : "blue", ff && ff.id, true)}<div><span class="cname">${esc(p.name)}</span>${p.nick ? '<span class="cnick">"' + esc(p.nick) + '"</span>' : ""}<span class="fp-link"${fighterAttrs(ff ? ff.name : p.name, ff && ff.id)}>Fighter page &rsaquo;</span></div></div>
       <div class="corner-facts"><span class="fact-pill">${esc(p.country)}</span><span class="fact-pill">${esc(p.style)}</span></div>
       ${p.strengths.map(s => '<div class="swline plus"><div class="ico">+</div><p>' + s + "</p></div>").join("")}
       ${p.weaknesses.map(s => '<div class="swline minus"><div class="ico">&minus;</div><p>' + s + "</p></div>").join("")}
@@ -1153,12 +1213,12 @@ function renderBreakdown(mu, p1, p2, f) {
 
 /* ---------- belts & rankings ---------- */
 function renderDivision(d) {
-  const interim = d.interim ? `<div class="champ-line">${avatar(d.interim.name, 44, "")}<div><span class="champ-tag" style="color:var(--ink-3)">Interim champ</span><span class="who">${esc(d.interim.name)}</span><div class="meta">${esc(d.interim.record)} · ${esc(d.interim.country || "")}</div></div></div>` : "";
+  const interim = d.interim ? `<div class="champ-line">${avatar(d.interim.name, 44, "", null, true)}<div><span class="champ-tag" style="color:var(--ink-3)">Interim champ</span><span class="who">${esc(d.interim.name)}</span><div class="meta">${esc(d.interim.record)} · ${esc(d.interim.country || "")}</div></div></div>` : "";
   return `<div class="div-card">
     <div class="div-head">
       <div class="div-weight">${esc(d.weight)}</div>
       <div class="div-name">${esc(d.name)}</div>
-      <div class="champ-line">${avatar(d.champ.name, 44, "gold")}<div><span class="champ-tag">&#127942; Champion</span><span class="who">${esc(d.champ.name)}</span><div class="meta">${esc(d.champ.record)} · ${esc(d.champ.country)}</div></div></div>
+      <div class="champ-line">${avatar(d.champ.name, 44, "gold", null, !/^vacant/i.test(d.champ.name))}<div><span class="champ-tag">&#127942; Champion</span><span class="who">${esc(d.champ.name)}</span><div class="meta">${esc(d.champ.record)} · ${esc(d.champ.country)}</div></div></div>
       ${interim}
       <div class="chev">&#9656;</div>
     </div>
@@ -1166,7 +1226,7 @@ function renderDivision(d) {
       <div class="belt-facts">${d.beltFacts}</div>
       <div class="mini-label">Top contenders</div>
       <div class="contenders">
-        ${d.top5.map(c => `<div class="contender"><div class="rk">${c.rank}</div>${avatar(c.name, 30, "")}<div class="nm">${esc(c.name)}</div><div class="rc">${esc(c.record)}</div></div>`).join("")}
+        ${d.top5.map(c => `<div class="contender"${fighterAttrs(c.name)}><div class="rk">${c.rank}</div>${avatar(c.name, 30, "")}<div class="nm">${esc(c.name)}</div><div class="rc">${esc(c.record)}</div></div>`).join("")}
       </div>
       <div class="mini-label">What's happening</div>
       <div class="story">${d.story}</div>
@@ -1180,7 +1240,7 @@ function renderBelts() {
   document.getElementById("mensDivs").innerHTML = DIVISIONS.men.map(renderDivision).join("");
   document.getElementById("p4pExplain").innerHTML = "<p>" + P4P.explain + "</p>";
   document.getElementById("p4pGrid").innerHTML =
-    `<div class="p4p-col">${P4P.men.map((x, i) => `<div class="p4p-row"><div class="rk">${i + 1}</div>${avatar(x.name, 30, i === 0 ? "gold" : "")}<div class="nm">${esc(x.name)}</div><div class="rc">${esc(x.record)}</div></div>`).join("")}</div>`;
+    `<div class="p4p-col">${P4P.men.map((x, i) => `<div class="p4p-row"${fighterAttrs(x.name)}><div class="rk">${i + 1}</div>${avatar(x.name, 30, i === 0 ? "gold" : "")}<div class="nm">${esc(x.name)}</div><div class="rc">${esc(x.record)}</div></div>`).join("")}</div>`;
   document.querySelectorAll(".div-head").forEach(h => h.addEventListener("click", () => h.parentElement.classList.toggle("open")));
 }
 
@@ -1192,6 +1252,89 @@ function renderLearn() {
   document.getElementById("explainers").innerHTML = EXPLAINERS.map(s =>
     `<div class="explain"><h3><span class="em">${s.em}</span>${esc(s.title)}</h3>${s.body.map(p => "<p>" + p + "</p>").join("")}</div>`).join("");
 }
+
+/* ---------- fighter pages ---------- */
+// Same person? Exact normalized name, or same last name + first initial (ESPN spelling drift).
+function sameFighter(a, b) {
+  const x = norm(a), y = norm(b);
+  if (!x || !y) return false;
+  if (x === y) return true;
+  const t = lastTok(a);
+  return t.length > 3 && t === lastTok(b) && x[0] === y[0];
+}
+function fighterRank(name) {
+  const out = [];
+  DIVISIONS.men.forEach(d => {
+    if (sameFighter(d.champ.name, name)) out.push({ txt: "\u{1F3C6} " + d.name + " champion", rec: d.champ.record, country: d.champ.country });
+    else if (d.interim && sameFighter(d.interim.name, name)) out.push({ txt: "Interim " + d.name + " champion", rec: d.interim.record, country: d.interim.country });
+    d.top5.forEach(c => { if (/^\d+$/.test(String(c.rank)) && sameFighter(c.name, name)) out.push({ txt: "#" + c.rank + " " + d.name, rec: c.record }); });
+  });
+  P4P.men.forEach((x, i) => { if (sameFighter(x.name, name)) out.push({ txt: "#" + (i + 1) + " pound-for-pound", rec: x.record }); });
+  return out;
+}
+function fighterBouts(name) {
+  const evs = LAST_EVENTS || FALLBACK_EVENTS;
+  const out = [];
+  evs.forEach(ev => ev.fights.forEach(f => {
+    const me = sameFighter(f.f1.name, name) ? f.f1 : sameFighter(f.f2.name, name) ? f.f2 : null;
+    if (me) out.push({ ev, f, me, opp: me === f.f1 ? f.f2 : f.f1 });
+  }));
+  return out;
+}
+function openFighter(name, fid) {
+  const p = findFighter(name);
+  const ranks = fighterRank(name);
+  const bouts = fighterBouts(name);
+  const id = espnIdFor(name, fid) || (bouts.find(b => b.me.id) || {}).me && bouts.find(b => b.me.id).me.id;
+  const liveRec = (bouts.find(b => b.me.record) || {}).me;
+  const record = (liveRec && liveRec.record) || (ranks.find(r => r.rec) || {}).rec || "";
+  const country = (p && p.country) || (ranks.find(r => r.country) || {}).country || "";
+  const ft = h => Math.floor(h / 12) + "′" + (h % 12) + "″";
+  const pills = [p && p.age ? "Age " + p.age : "", p && p.ht ? ft(p.ht) + " tall" : "", p && p.reach ? p.reach + "″ reach" : "", country, p && p.style].filter(Boolean);
+  const bout = b => {
+    const when = new Date(b.ev.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+    let r = "", cls = "";
+    if (b.f.done && (b.f.f1.winner || b.f.f2.winner)) {
+      const how = howItEnded(b.f, true);
+      r = (b.me.winner ? "Won" : "Lost") + (how ? " · " + how : ""); cls = b.me.winner ? "w" : "l";
+    } else if (b.f.done) r = howItEnded(b.f) || "Final";
+    else if (b.f.live) r = "Live now";
+    else if (b.f.cancelled) r = "Cancelled";
+    else r = eventState(b.ev) === "past" ? "" : "Upcoming";
+    return `<div class="fp-bout"><div><div>vs <b>${esc(b.opp.name)}</b></div><div class="ev">${esc(shortEventName(b.ev.name))} &middot; ${esc(when)}</div></div><div class="r ${cls}">${esc(r)}</div></div>`;
+  };
+  let h = `<div class="fp-top">${avatar(name, 64, ranks.some(r => /champion/.test(r.txt)) ? "gold" : "", id)}<div style="min-width:0">
+      <div class="fp-name">${esc((p && p.name) || name)}</div>
+      ${p && p.nick ? '<div class="fp-nick">"' + esc(p.nick) + '"</div>' : ""}
+      ${record ? '<div class="fp-rec">Record <b>' + esc(record) + "</b> <span style=\"color:var(--ink-3)\">(wins-losses-draws)</span></div>" : ""}
+      ${ranks.map(r => '<span class="fp-rank">' + r.txt + "</span>").join("")}
+    </div></div>`;
+  if (pills.length) h += `<div class="corner-facts">${pills.map(x => '<span class="fact-pill">' + esc(String(x)) + "</span>").join("")}</div>`;
+  h += `<div class="fp-sec">Fights in the app</div>`;
+  h += bouts.length ? bouts.map(bout).join("") : '<div class="fp-none">Not on any card in the app right now.</div>';
+  if (p) {
+    h += `<div class="fp-sec">Their game</div>`;
+    h += p.strengths.map(s => '<div class="swline plus"><div class="ico">+</div><p>' + s + "</p></div>").join("");
+    h += p.weaknesses.map(s => '<div class="swline minus"><div class="ico">&minus;</div><p>' + s + "</p></div>").join("");
+    h += `<div class="fp-sec">Story so far</div><div class="cstory">${p.history}</div>`;
+  }
+  if (!p) h += '<div class="fp-none" style="margin-top:8px">No full write-up for this fighter yet — fighters get one when they are on an upcoming main card.</div>';
+  if (id) h += `<a class="fp-espn" href="https://www.espn.com/mma/fighter/_/id/${encodeURIComponent(id)}" target="_blank" rel="noopener">Full fight record on ESPN &rsaquo;</a>`;
+  document.getElementById("fighterBody").innerHTML = h;
+  const back = document.getElementById("fighterBack");
+  back.classList.add("open");
+  back.querySelector(".sheet").scrollTop = 0;
+}
+function closeFighter() { document.getElementById("fighterBack").classList.remove("open"); }
+// Capture phase, so a photo inside a tappable card row opens the fighter instead of toggling the row.
+document.addEventListener("click", e => {
+  const el = e.target.closest && e.target.closest("[data-fighter]");
+  if (!el || el.closest("#fighterBack")) return;
+  e.stopPropagation(); e.preventDefault();
+  openFighter(el.dataset.fighter, el.dataset.fid || null);
+}, true);
+document.getElementById("fighterClose").addEventListener("click", closeFighter);
+document.getElementById("fighterBack").addEventListener("click", e => { if (e.target.id === "fighterBack") closeFighter(); });
 
 /* ---------- add-to-home-screen banner ---------- */
 (function () {
