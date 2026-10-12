@@ -61,6 +61,10 @@ export async function syncOnce() {
       segmentSeen.set("logged:" + ev.id, true);
       const labelled = ev.fights.filter((f) => f.card_segment).length;
       console.log(`[card] ${ev.name}: ${labelled}/${ev.fights.length} fights labelled [${[...new Set(ev.fights.map((f) => f.card_segment).filter(Boolean))].join(",") || "none"}]`);
+      // per-segment start times: the page's "Prelims 5:00 PM · Main card 8:00 PM" line needs these to differ
+      const starts = {};
+      for (const f of ev.fights) (starts[f.card_segment || "?"] ||= new Set()).add(f.start_at);
+      console.log(`[card] ${ev.name} start times: ${Object.entries(starts).map(([k, v]) => `${k}=${[...v].join("/")}`).join("; ")}`);
     }
     logShape(ev);
     await q(
