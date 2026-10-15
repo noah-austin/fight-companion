@@ -449,6 +449,70 @@ Object.assign(FIGHTERS, {
     history: "An 18-8 veteran nicknamed \"The Train\" for the way he walks forward. After three straight losses at featherweight, he's moving up to 155 pounds to save his UFC career. Expect a firefight either way." }
 });
 
+/* ============ FIGHTER PROFILES — UFC 333 main card (Oct 24, Abu Dhabi) ============ */
+Object.assign(FIGHTERS, {
+  alexandervolkanovski: { name: "Alexander Volkanovski", ht: 66, reach: 71.5, nick: "The Great", age: 38, country: "Australia", style: "Complete fighter — smart pressure, fast hands, and wrestling defense", strengths: [
+      "One of the best featherweights ever: two title reigns and a long list of defenses",
+      "Fight IQ — he adjusts mid-fight better than almost anyone",
+      "Beat Diego Lopes twice in the last 18 months, the second time in January"],
+    weaknesses: ["38 years old — the oldest he's ever been for a title fight", "Has been knocked out before (Topuria, Makhachev)"],
+    history: "The former rugby player from Australia who ruled featherweight from 2019 to 2024, lost the belt to Ilia Topuria, then won it back by beating Diego Lopes in April 2025. He defended it against Lopes again in Sydney in January. A win here would tie José Aldo's record for featherweight title defenses." },
+  movsarevloev: { name: "Movsar Evloev", ht: 67, reach: 72.5, nick: "", age: 32, country: "Russia", style: "Suffocating wrestler — takedowns, top control, and steady pressure", strengths: [
+      "Unbeaten: 20-0 as a pro, and nobody has really solved him",
+      "Elite wrestling and top control — he can win every round on the mat",
+      "Beat Lerone Murphy in March to lock up this title shot"],
+    weaknesses: ["Rarely finishes — he wins on the scorecards, which leaves room for mistakes", "Faces the best striker he has ever met"],
+    history: "From Ingushetia in southern Russia, and the most patient climber in the division. He has quietly gone 20-0, beating everyone the UFC put in front of him, often by close decisions. He finally gets his shot after years of waiting." },
+  petryan: { name: "Petr Yan", ht: 67, reach: 67, nick: "No Mercy", age: 33, country: "Russia", style: "Precision boxer — switches stances, sits down on punches, strong takedown defense", strengths: [
+      "Some of the best boxing at 135 pounds",
+      "Solved Dvalishvili's wrestling in December to take the belt back",
+      "Two-time champion with tons of big-fight experience"],
+    weaknesses: ["Lost the first fight to Dvalishvili in 2023, swamped by takedowns", "Tends to start slow and give away early rounds"],
+    history: "A Russian two-time bantamweight champion. He lost a lopsided decision to Merab Dvalishvili in 2023, rebuilt, then beat him clearly in December 2025 to win the belt back and snap Dvalishvili's 14-fight winning streak. Now he has to do it again." },
+  merabdvalishvili: { name: "Merab Dvalishvili", ht: 66, reach: 68, nick: "The Machine", age: 35, country: "Georgia", style: "Non-stop pressure wrestler — endless takedown attempts and cardio", strengths: [
+      "Legendary cardio: he never slows down over five rounds",
+      "Holds the UFC record for takedown attempts in a fight — against Yan, in 2023",
+      "Won 14 straight before December, including a dominant title reign"],
+    weaknesses: ["Yan's takedown defense held up in December", "Not a big knockout threat — he wins by grinding"],
+    history: "From the country of Georgia, and one of the most dominant champions of recent years — a 14-fight win streak and a long run with the belt before Yan took it in December. He says he'll show Yan new tools this time. This trilogy decides who owns the rivalry." },
+  loneerkavanagh: { name: "Lone'er Kavanagh", reach: 67, nick: "", age: 27, country: "England", style: "Fast, sharp striker with good wrestling to go with it", strengths: [
+      "Young, fast and technical on the feet",
+      "Was ranked in the flyweight top 10 before his last fight",
+      "Trains with Great Britain Top Team, one of the best gyms in the UK"],
+    weaknesses: ["Coming off his first UFC loss — submitted by Brandon Royval in July", "Gives up power to Temirov"],
+    history: "A London-born flyweight with a 10-2 record who came up fast, getting a ranked fight against a former title challenger. Brandon Royval caught him with a submission in July. A win here gets him right back into the top-10 mix." },
+  ramazantemirov: { name: "Ramazan Temirov", ht: 64, reach: 63, nick: "", age: 29, country: "Uzbekistan", style: "Explosive power puncher — finishes fights early", strengths: [
+      "Huge power for 125 pounds: 11 knockout wins",
+      "Fast starter — 10 of his wins came in the first round",
+      "Only three losses in over 20 pro fights"],
+    weaknesses: ["Short reach (63 inches), so he has to get close", "Less proven over three full rounds"],
+    history: "From Karshi, Uzbekistan, a fast-rising flyweight who has been knocking people out since his UFC debut in 2024. He's one of the hardest hitters in the division. The books see this as an even fight." },
+  alexandervolkov: { name: "Alexander Volkov", ht: 79, reach: 80, nick: "Drago", age: 37, country: "Russia", style: "Tall, technical kickboxer — keeps opponents on the end of long strikes", strengths: [
+      "Huge size: 6-foot-7 with an 80-inch reach",
+      "Experience: 51 pro fights and a top-five heavyweight for years",
+      "Beat Waldo Cortes Acosta by decision in May"],
+    weaknesses: ["Can be taken down and held by strong wrestlers", "37, facing a younger, rising contender"],
+    history: "A Russian veteran with a 40-11 record and one of the most consistent heavyweights of the last decade. He's never won the belt but always seems to be near the top. Beat Waldo Cortes Acosta in May and is the favorite here." },
+  rizvankuniev: { name: "Rizvan Kuniev", ht: 76, reach: 76, nick: "", age: 34, country: "Russia", style: "Dagestani wrestler with heavy ground-and-pound", strengths: [
+      "Strong wrestling — he can drag big men to the mat",
+      "Coming off a TKO win over Tyrell Fortune in July",
+      "Ranked in the heavyweight top 10"],
+    weaknesses: ["Gives up three inches of height and four of reach", "Less proven against the division's elite"],
+    history: "A Dagestani heavyweight who joined the UFC in 2025 and has climbed into the rankings. He stopped Tyrell Fortune in July. Against Volkov, he needs to close the distance and wrestle — standing at range is Volkov's world." },
+  aaronpico: { name: "Aaron Pico", ht: 68, reach: 70.5, nick: "", age: 30, country: "USA", style: "Elite wrestler with big knockout power", strengths: [
+      "World-class wrestling background — he was an Olympic-level prospect",
+      "Real power: 9 knockout wins",
+      "Beat Patricio Pitbull, a former Bellator champion, in April"],
+    weaknesses: ["Knocked out by Lerone Murphy in his UFC debut", "Late opponent change — he prepared for Arnold Allen"],
+    history: "Once the most-hyped prospect in MMA, a wrestling star who turned pro young and became a Bellator star. His UFC debut in 2025 went badly, a knockout loss to Lerone Murphy. He bounced back by out-pointing Patricio Pitbull in April." },
+  losenekeita: { name: "Losene Keita", reach: 72, nick: "Black Panther", age: 28, country: "Belgium", style: "Rangy striker with finishing power", strengths: [
+      "Coming off a first-round knockout of Muhammad Naimov in Paris",
+      "Long 72-inch reach",
+      "Only two losses in 19 pro fights"],
+    weaknesses: ["Took this fight on short notice", "Lost a split decision to Nathaniel Wood in March"],
+    history: "A Belgian featherweight with a 17-2 record. He knocked out Muhammad Naimov in the first round at UFC Paris on September 5. When Arnold Allen pulled out injured, he grabbed this short-notice chance — and the books actually make him the slight favorite." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -468,12 +532,12 @@ Object.assign(MATCHUPS, {
     note: "Momentum vs experience at lightweight. Camilo has won two straight, most recently a TKO of Nazim Sadykhov as an underdog. Herbert is a British veteran with ten UFC fights who has never strung together a winning streak. Camilo's pressure should carry it if he respects Herbert's power early." },
   "renatomoicano|tomnolan": { odds: "Lines not posted at write-up time",
     note: "Moicano is a veteran with sharp boxing and a strong back-take game, ranked in the lightweight top 15. Nolan is a tall Australian on a five-fight streak getting his first real step up. Experience against momentum; full breakdown closer to the date." },
-  "loneerkavanagh|ramazantemirov": { odds: "Lines not posted at write-up time",
-    note: "UFC 333 main card, flyweight: England's Lone'er Kavanagh against Uzbekistan's Ramazan Temirov, two of the more dangerous young names at 125. Breakdowns get written closer to the date." },
-  "alexandervolkov|rizvankuniev": { odds: "Lines not posted at write-up time",
-    note: "UFC 333 main card, heavyweight: veteran contender Alexander Volkov against the unbeaten-style Dagestani prospect Rizvan Kuniev. Breakdowns closer to the date." },
-  "aaronpico|losenekeita": { odds: "Lines not posted at write-up time",
-    note: "UFC 333 main card, featherweight: Aaron Pico, the former Olympic-level wrestler and Bellator star, against Losene Keita. Breakdowns closer to the date." },
+  "loneerkavanagh|ramazantemirov": { odds: "Temirov -115, Kavanagh -105",
+    note: "Speed vs power at flyweight. Kavanagh is the faster, more technical striker with wrestling to fall back on; Temirov is a short, explosive puncher who wants to get close and end it early. Both are fighting for a top-10 spot. If Kavanagh keeps it at range and stays busy, he wins rounds; if Temirov lands first, it may not last long." },
+  "alexandervolkov|rizvankuniev": { odds: "Volkov -130, Kuniev +110",
+    note: "The tall kickboxer against the wrestler. Volkov wants to keep Kuniev on the end of long punches and kicks. Kuniev wants to close the distance, clinch and drag him down for ground-and-pound. Volkov has seen every style in 51 fights, but a heavyweight wrestler is always dangerous." },
+  "aaronpico|losenekeita": { odds: "Keita -125, Pico +105",
+    note: "A late change: Arnold Allen pulled out injured and Keita jumped in after his knockout in Paris. Pico is the better wrestler and hits hard; Keita is longer and comes in hot. The books lean slightly to the short-notice replacement. Watch whether Pico can take him down early." },
   "joaquinbuckley|mikemalott": { odds: "Malott -135, Buckley +114 — Buckley opened as a big favorite; the money flipped it",
     note: "Hometown hero vs the more proven name. Malott, on a four-fight streak and fighting in front of a Canadian crowd, wants to box, pressure and look for his guillotine. Buckley has the bigger knockout power and the bigger wins, but he's lost two straight to wrestlers who smothered him, and Malott can do that too. If Buckley lands clean early, the underdog is live; over five rounds, Malott's pace and pressure should tell." },
   "erinblanchfield|jasminejasudavicius": { odds: "Blanchfield -323, Jasudavicius +260",
@@ -511,10 +575,10 @@ Object.assign(MATCHUPS, {
     note: "Grappler-vs-killer with a shot at champion Gaethje on the line. Tsarukyan should chain-wrestle Ruffy exactly the way Saint Denis did before submitting him — but he has to survive the opening exchanges against a man who just vaporized Fiziev and Chandler, after 10 months on the shelf. Five rounds favor Tsarukyan's engine." },
   "doohochoi|patriciopitbull": { odds: "Lines not posted at write-up time — expect Choi a modest favorite",
     note: "A pure striker's crossroads fight: Choi's fast southpaw counters and body work against Pitbull's compact one-shot counters. Choi has momentum and (relative) youth; Pitbull's low output has already lost him two UFC decisions, so unless he lands the bomb, Choi's volume likely takes it — with a legend's career on the line." },
-  "alexandervolkanovski|movsarevloev": { title: "Featherweight title", odds: "Volkanovski -115, Evloev -105 — a true coin flip",
-    note: "Old guard vs new: Volkanovski, 37 and one of the best featherweights ever, against Movsar Evloev, who is 20-0 and has never really been in trouble. It's the classic striker-vs-wrestler question — Evloev wants to smother him for 25 minutes, Volkanovski wants to make it a fight. Evloev has waited years for this shot." },
-  "merabdvalishvili|petryan": { title: "Bantamweight title", odds: "Yan -170, Dvalishvili +150",
-    note: "The rubber match. Yan won the first, Dvalishvili won the second and took the belt, Yan took it back in December. Dvalishvili's pace and takedown volume against Yan's precision boxing — whoever leaves Abu Dhabi with the belt has Song Yadong waiting, who knocked out Umar Nurmagomedov and demanded the next shot." },
+  "alexandervolkanovski|movsarevloev": { title: "Featherweight title", odds: "Volkanovski -110, Evloev -110 — a true coin flip",
+    note: "Old guard vs new: Volkanovski, 38 and one of the best featherweights ever, against Movsar Evloev, who is 20-0 and has never really been in trouble. It's the classic striker-vs-wrestler question — Evloev wants to smother him for 25 minutes, Volkanovski wants to make it a fight. Evloev has waited years for this shot." },
+  "merabdvalishvili|petryan": { title: "Bantamweight title", odds: "Yan -180, Dvalishvili +155",
+    note: "The rubber match, and it's 1-1. Dvalishvili won the first in 2023 by swarming Yan with takedowns; Yan won the rematch in December and took his belt. Dvalishvili's pace and takedown volume against Yan's precision boxing — whoever leaves Abu Dhabi with the belt has Song Yadong waiting, who knocked out Umar Nurmagomedov and demanded the next shot." },
   "nataliasilva|wangcong": { title: "Flyweight title (vacant)", odds: "Silva -205, Wang +170",
     note: "For the belt Valentina Shevchenko gave up: she told the UFC she'd be out at least a year, so the title is vacant and these two fight for it. Silva's speed and kicking range against Wang's compact power. Silva has beaten three former champions in a row without ever really being hit; Wang needs to walk her down and land something heavy." },
   "deivesonfigueiredo|paytontalbott": { odds: "Talbott -800, Figueiredo +550 — the books think the legend is done",
@@ -530,7 +594,7 @@ MATCHUPS["ketlensouza|lupitagodinez"] = MATCHUPS["ketlensouza|loopygodinez"]; //
 /* ============ EVENT META — which fights are the main card ============ */
 EVENT_META.push(
   { match: ["ufc 333", "volkanovski vs. evloev", "volkanovski vs evloev"], titles: "2 title fights",
-    note: "Abu Dhabi, and the biggest card of the fall: two belts on the line. Volkanovski defends featherweight against an unbeaten wrestler, and the Yan–Dvalishvili trilogy settles a series that's 1-1. Full fighter breakdowns get written closer to the date.",
+    note: "Abu Dhabi, and the biggest card of the fall: two belts on the line. Volkanovski, 38, defends featherweight against the unbeaten wrestler Movsar Evloev in a true coin flip, and Petr Yan and Merab Dvalishvili settle a rivalry that's 1-1. Early start for US fans: the main card is a Saturday-afternoon show.",
     mainCard: ["alexandervolkanovski|movsarevloev", "merabdvalishvili|petryan", "loneerkavanagh|ramazantemirov", "alexandervolkov|rizvankuniev", "aaronpico|losenekeita"] },
   { match: ["allen vs. duncan", "allen vs duncan"], titles: "",
     note: "RESULTS: <b>Brendan Allen submitted Christian Leroy Duncan with a rear-naked choke 2:46 into the fifth round</b>, then called out Dricus du Plessis. Jai Herbert out-pointed Matheus Camilo as an underdog, Loopy Godinez beat Ketlen Souza on the cards, Andre Fili knocked out Kai Kamaka III with a head kick, and <b>Otari Tanzilovi upset Malcolm Wellmaker</b> with a head kick and punches. Pre-fight notes below. A five-round middleweight main event between top-five grappler Brendan Allen and rising striker Christian Leroy Duncan, with a top-five spot on the line. Underneath, Loopy Godinez vs Ketlen Souza at strawweight, a must-win for Andre Fili, Malcolm Wellmaker trying to get his knockout touch back, and Matheus Camilo vs Jai Herbert. Main card 8 ET, prelims 5 ET.",
@@ -562,9 +626,9 @@ EVENT_META.push(
     { name: "UFC 333: Volkanovski vs. Evloev", date: "2026-10-24T18:00Z", venue: "Etihad Arena, Abu Dhabi", fights: [
       F("Featherweight", "Alexander Volkanovski", "28-4-0", "Movsar Evloev", "20-0-0"),
       F("Bantamweight", "Petr Yan", "20-5-0", "Merab Dvalishvili", "21-5-0"),
-      F("Flyweight", "Lone'er Kavanagh", "", "Ramazan Temirov", ""),
-      F("Heavyweight", "Alexander Volkov", "", "Rizvan Kuniev", ""),
-      F("Featherweight", "Aaron Pico", "", "Losene Keita", "")
+      F("Flyweight", "Lone'er Kavanagh", "10-2-0", "Ramazan Temirov", ""),
+      F("Heavyweight", "Alexander Volkov", "40-11-0", "Rizvan Kuniev", ""),
+      F("Featherweight", "Aaron Pico", "14-5-0", "Losene Keita", "17-2-0")
     ]},
     { name: "UFC Fight Night: Moicano vs. Nolan", date: "2026-10-31T21:00Z", venue: "Meta APEX, Las Vegas", fights: [
       F("Lightweight", "Renato Moicano", "21-7-1", "Tom Nolan", "11-1-0")
