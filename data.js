@@ -142,12 +142,12 @@ Object.assign(FIGHTERS, {
     "Looks physically rejuvenated after Korean military service"],
     weaknesses: ["Was stopped in the losses of his old skid (Stephens, Volkanovski) — durability against power is a question", "35 with long inactivity gaps in his prime"],
     history: "Choi became a cult hero after his 2016 Fight of the Year war with Cub Swanson, then lost three straight and disappeared into military service. His comeback since 2024 has been a feel-good story — three straight violent wins. <b>Beating a legend like Pitbull completes the redemption arc.</b>" },
-  renatomoicano: { name: "Renato Moicano", nick: "Money", age: 37, country: "Brazil", style: "Rangy jab-heavy kickboxer with elite ground grappling", strengths: [
+  renatomoicano: { name: "Renato Moicano", ht: 71, reach: 72, nick: "Money", age: 37, country: "Brazil", style: "Rangy jab-heavy kickboxer with elite ground grappling", strengths: [
     "Rebounded from his skid with a submission of Chris Duncan in an April main event",
     "Big-fight experience — stepped up on one day's notice to fight Makhachev for the title",
     "Great jab and strong submission defense"],
-    weaknesses: ["Historically folds against elite pressure and finishers (Ortega already submitted him once)", "37 years old"],
-    history: "A longtime contender as famous for his mic work ('I love money!') as his jab. Ortega guillotined him back in 2017 in a fight Moicano was winning — <b>a loss he's wanted back for nearly a decade. Now he gets the rematch with both men aging out of second chances.</b>" },
+    weaknesses: ["Has struggled against elite pressure and big finishers", "37, against a 26-year-old on a five-fight run"],
+    history: "A longtime contender from Brazil, as famous for his mic work ('I love money!') as his jab. He submitted Chris Duncan in an April main event; a September rematch with Brian Ortega fell through when Ortega withdrew. Now he headlines Halloween against a rising Australian." },
   brianortega: { name: "Brian Ortega", nick: "T-City", age: 35, country: "USA (Los Angeles — hometown fight)", style: "Iron-chinned pressure fighter with elite, inventive jiu-jitsu", strengths: [
     "One of the best submission artists in UFC history — finished Moicano and the Korean Zombie, nearly tapped Volkanovski",
     "Legendary toughness; moving up to 155 ends the brutal weight cuts that visibly drained him"],
@@ -513,6 +513,28 @@ Object.assign(FIGHTERS, {
     history: "A Belgian featherweight with a 17-2 record. He knocked out Muhammad Naimov in the first round at UFC Paris on September 5. When Arnold Allen pulled out injured, he grabbed this short-notice chance — and the books actually make him the slight favorite." }
 });
 
+/* ============ FIGHTER PROFILES — Moicano vs Nolan (Oct 31) and Bonfim vs Brady (Nov 7) ============ */
+Object.assign(FIGHTERS, {
+  tomnolan: { name: "Tom Nolan", reach: 73, nick: "Big Train", age: 26, country: "Australia", style: "Tall, aggressive striker — long punches and a fast finishing instinct", strengths: [
+      "On a five-fight win streak, most recently a decision over Fares Ziam in June",
+      "Very tall for a lightweight, with a 73-inch reach",
+      "Finisher: five of his wins came in the first round"],
+    weaknesses: ["Biggest step up of his career — first main event, first ranked veteran of this level", "Has never gone five rounds"],
+    history: "From Brisbane, Queensland. He earned his UFC contract on the Contender Series in 2023 with a first-round TKO and has kept winning since: 11-1, with five straight. Now the UFC is testing him against a veteran who's fought for the title." },
+  gabrielbonfim: { name: "Gabriel Bonfim", ht: 73, reach: 72, nick: "Marretinha", age: 29, country: "Brazil", style: "Explosive all-rounder — dangerous submissions and heavy hands", strengths: [
+      "20-1, and just beat former champion Belal Muhammad over five rounds in June",
+      "Submission threat from every position",
+      "Young and still improving — now ranked in the top five"],
+    weaknesses: ["His only loss was a knockout (to Nicolas Dalby in 2023)", "Faces one of the best grapplers in the division"],
+    history: "A Brazilian welterweight with a 20-1 record. His only loss came against Nicolas Dalby in 2023. He announced himself as a contender by beating ex-champ Belal Muhammad 50-45 on all three cards in June. A win over Brady would put him in the title picture." },
+  seanbrady: { name: "Sean Brady", reach: 72, nick: "", age: 33, country: "USA", style: "Grinding wrestler-grappler — takedowns, top control, chokes", strengths: [
+      "Elite grappling: six submission wins and suffocating top control",
+      "Beat Joaquin Buckley by decision in May",
+      "Experience against the division's best"],
+    weaknesses: ["Was knocked out in the first round by Michael Morales last November", "Not a big striker if he can't get the takedown"],
+    history: "A Philadelphia grappler with a 19-2 record and a long run near the top of the welterweight rankings. He got stopped by Michael Morales last fall, then bounced back by out-wrestling Joaquin Buckley in May. This is a ranked crossroads fight." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -531,7 +553,9 @@ Object.assign(MATCHUPS, {
   "jaiherbert|matheuscamilo": { odds: "Camilo -195, Herbert +160",
     note: "Momentum vs experience at lightweight. Camilo has won two straight, most recently a TKO of Nazim Sadykhov as an underdog. Herbert is a British veteran with ten UFC fights who has never strung together a winning streak. Camilo's pressure should carry it if he respects Herbert's power early." },
   "renatomoicano|tomnolan": { odds: "Lines not posted at write-up time",
-    note: "Moicano is a veteran with sharp boxing and a strong back-take game, ranked in the lightweight top 15. Nolan is a tall Australian on a five-fight streak getting his first real step up. Experience against momentum; full breakdown closer to the date." },
+    note: "Experience against momentum, over five rounds. Moicano has the jab, the grappling and years against the division's best. Nolan is a tall, aggressive 26-year-old on a five-fight streak, getting the biggest test of his career. If Nolan's length keeps Moicano at the end of punches, the young man is live; if Moicano gets to his back, it's a long night for the Australian." },
+  "gabrielbonfim|seanbrady": { odds: "Lines not posted at write-up time",
+    note: "A ranked welterweight crossroads. Bonfim is younger, more explosive and coming off the best win of his career over Belal Muhammad. Brady is the better pure wrestler and just out-grappled Joaquin Buckley. The winner moves right into the title conversation." },
   "loneerkavanagh|ramazantemirov": { odds: "Temirov -115, Kavanagh -105",
     note: "Speed vs power at flyweight. Kavanagh is the faster, more technical striker with wrestling to fall back on; Temirov is a short, explosive puncher who wants to get close and end it early. Both are fighting for a top-10 spot. If Kavanagh keeps it at range and stays busy, he wins rounds; if Temirov lands first, it may not last long." },
   "alexandervolkov|rizvankuniev": { odds: "Volkov -130, Kuniev +110",
@@ -604,7 +628,10 @@ EVENT_META.push(
     mainCard: ["joaquinbuckley|mikemalott", "erinblanchfield|jasminejasudavicius", "cristianperez|kylenelson", "kyledaukaus|marcandrebarriault", "louisjourdain|timmycuamba", "mandelnallo|natelandwehr"] },
   { match: ["moicano vs. nolan", "moicano vs nolan"], titles: "",
     note: "Halloween at the Meta APEX: veteran lightweight Renato Moicano against Australia's Tom Nolan, who is 11-1 and on a five-fight win streak. A ranked name against a rising one. The rest of the card is still filling in; breakdowns closer to the date.",
-    mainCard: ["renatomoicano|tomnolan"] }
+    mainCard: ["renatomoicano|tomnolan"] },
+  { match: ["bonfim vs. brady", "bonfim vs brady"], titles: "",
+    note: "Nov 7 at the Meta APEX: rising Brazilian Gabriel Bonfim, fresh off beating ex-champ Belal Muhammad, against Philadelphia grappler Sean Brady in a five-round welterweight main event. Tatiana Suarez vs Virna Jandiroba is also on the card. The rest of the lineup is still filling in.",
+    mainCard: ["gabrielbonfim|seanbrady"] }
 );
 
 /* ============ FALLBACK SNAPSHOT (if live feed unreachable) ============ */
@@ -631,7 +658,18 @@ EVENT_META.push(
       F("Featherweight", "Aaron Pico", "14-5-0", "Losene Keita", "17-2-0")
     ]},
     { name: "UFC Fight Night: Moicano vs. Nolan", date: "2026-10-31T21:00Z", venue: "Meta APEX, Las Vegas", fights: [
-      F("Lightweight", "Renato Moicano", "21-7-1", "Tom Nolan", "11-1-0")
+      F("Lightweight", "Renato Moicano", "21-7-1", "Tom Nolan", "11-1-0"),
+      F("Featherweight", "Julian Erosa", "", "Lee Jeong-yeong", ""),
+      F("Middleweight", "Azamat Bekoev", "", "Andre Petroski", ""),
+      F("Middleweight", "Nick Klein", "", "Joseph Kropschot", ""),
+      F("W Bantamweight", "Yana Santos", "", "Luana Santos", ""),
+      F("Welterweight", "Rodrigo Sezinando", "", "Theodor Berggren", "")
+    ]},
+    { name: "UFC Fight Night: Bonfim vs. Brady", date: "2026-11-08T01:00Z", venue: "Meta APEX, Las Vegas", fights: [
+      F("Welterweight", "Gabriel Bonfim", "20-1-0", "Sean Brady", "19-2-0"),
+      F("W Strawweight", "Tatiana Suarez", "", "Virna Jandiroba", ""),
+      F("Middleweight", "Mantas Kondratavicius", "", "Wesley Schultz", ""),
+      F("Light Heavyweight", "Billy Elekana", "", "Lucas Fernando", "")
     ]}
   );
 })();
@@ -676,21 +714,22 @@ P4P.men = [{ name: "Islam Makhachev", record: "29-1" }, { name: "Alexander Volka
 
 /* ============ STORYLINES & UFC 101 ============ */
 STORYLINES.push(
-  { em: "💥", title: "UFC 332: a record night of knockouts", body: [
-    "Salt Lake City set a UFC record with <b>11 knockouts on one card</b>, nine in the first round. The breakout star: <b>Payton Talbott dropped former two-division champ Deiveson Figueiredo 30 seconds in and finished him at 2:09</b>, his second straight win over a former champion, then called out Sean O'Malley. Natalia Silva won the vacant women's flyweight belt by decision in the main event.",
-    "The upset came from the oldest-looking script in MMA: <b>Roman Kopylov, a +210 underdog, knocked out hyped prospect Ateba Gautier</b> with a straight left in round one. Esteban Ribovics dropped King Green three times for a stoppage, and Roberto Soldic got knocked down twice in his UFC debut before battering Khaos Williams for a decision. On the prelims, Johnny Walker knocked out Mick Parkin with a knee in his heavyweight debut, and Marvin Vettori lost his fifth straight."] },
+  { em: "🍁", title: "Saturday: the line flipped in Edmonton", body: [
+    "<b>Joaquin Buckley opened as a big favorite over hometown hero Mike Malott — then the money poured in on Malott</b>, and by fight week the Canadian is the one favored (-135). Buckley has lost two straight to wrestlers; Malott can wrestle. The co-main, <b>Erin Blanchfield vs Canada's Jasmine Jasudavicius</b>, could decide the next women's flyweight title shot.",
+    "Two Quebec fighters are on the main card too: Louis Jourdain, younger brother of UFC veteran Charles, makes his UFC debut, and crowd favorite Marc-Andre Barriault brawls with grappler Kyle Daukaus."] },
   { em: "🔒", title: "Vegas 122: Allen finds the choke late", body: [
     "<b>Brendan Allen submitted Christian Leroy Duncan in the fifth round</b> — the striker had won the fourth and was gaining momentum before Allen took his back and finished it at 2:46. That's four straight wins for Allen, and he immediately called out former champion Dricus du Plessis, accusing him of ducking the fight.",
     "Underneath: veteran Jai Herbert out-pointed Matheus Camilo as an underdog, Andre Fili kept his job with a head-kick knockout of Kai Kamaka III, and Georgia's Otari Tanzilovi knocked out Malcolm Wellmaker in the upset of the night."] },
   { em: "🐐", title: "Makhachev owns the record books", body: [
     "At UFC 330 Islam Makhachev out-pointed Ian Machado Garry for his first welterweight defense and his <b>17th straight UFC win — breaking Anderson Silva's all-time record</b> (16) that stood for 14 years. He named <b>Carlos Prates</b> as the most deserving next challenger, waved off unbeaten Michael Morales, and hinted he misses lightweight — where a Topuria superfight still lurks."] },
   { em: "🗓️", title: "UFC 333 is loaded (Oct 24, Abu Dhabi)", body: [
-    "Two title fights, both announced this month: <b>Volkanovski vs unbeaten Movsar Evloev</b> for the featherweight belt, and the <b>Petr Yan vs Merab Dvalishvili trilogy</b> (1-1 apiece) for the bantamweight belt. The fall's biggest card by a mile."] },
+    "Two title fights: <b>Volkanovski vs unbeaten Movsar Evloev</b> for the featherweight belt — the books can't split them (-110 each) — and the <b>Petr Yan vs Merab Dvalishvili trilogy</b> (1-1 apiece) for the bantamweight belt, with Yan favored. Volkanovski is 38 and one more defense would tie José Aldo's featherweight record.",
+    "One late change: Arnold Allen pulled out injured, so <b>Aaron Pico now faces Belgium's Losene Keita</b>, who knocked someone out in Paris last month and took the fight on short notice. US fans, note the early start — the main card is a Saturday-afternoon show."] },
   { em: "👑", title: "Heavyweight still needs one king", body: [
     "<b>Tom Aspinall vacated the heavyweight title on Sep 14</b>. The eye injury from his October 2025 fight with Ciryl Gane (an accidental eye poke, ruled a no-contest) never fully healed, despite multiple surgeries. He says he isn't retiring and hopes to return in early 2027.",
     "Gane holds the interim belt, but Dana White ruled he still has to win the real one. So <b>Gane vs Josh Hokit for the vacant title headlines UFC 334 on Nov 14 at Madison Square Garden</b>, with Kayla Harrison vs Amanda Nunes as the co-main."] },
   { em: "🧊", title: "Light heavyweight is frozen", body: [
-    "Champion Carlos Ulberg <b>tore his ACL winning the belt</b> and now says he's targeting an early-2027 return. An interim title while he heals is reportedly in early negotiations — Jiří Procházka vs Paulo Costa, possibly at UFC 332 — though Procházka himself is coy and #1 contender Ankalaev is stuck waiting either way."] },
+    "Champion Carlos Ulberg <b>tore his ACL winning the belt</b> and now says he's targeting an early-2027 return. There has been talk of an interim title while he heals, but nothing is booked, and #1 contender Ankalaev is stuck waiting either way."] },
   { em: "🌋", title: "Legends: one out, two in limbo", body: [
     "<b>Edson Barboza retired</b> at UFC 330, leaving his gloves in the cage after 16 years. <b>Conor McGregor</b> was knocked out by Max Holloway in 69 seconds in July (his knee buckled — surgery, then he vows one final fight on his contract). <b>Jon Jones</b> re-retired in April after the White House snub, un-retired a day later, and still has nothing booked."] }
 );
