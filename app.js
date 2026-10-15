@@ -9,7 +9,7 @@
 
 const SPINOFF_RX = /contender series|dana white|ultimate fighter|road to ufc|tuf\b/i;
 const ALERTS_API = "https://api-production-34f6c.up.railway.app";
-const SW_URL = "../sw.js";
+const SW_URL = "sw.js";
 
 /* ---------- baked data containers (filled by data.js) ---------- */
 const FIGHTERS = {};
