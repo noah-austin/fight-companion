@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "October 11, 2026";
+const ANALYSIS_STAMP = "October 15, 2026";
 
 /* ============ FIGHTER PROFILES — UFC Vegas 121 (Sep 26, APEX) ============ */
 Object.assign(FIGHTERS, {
@@ -397,6 +397,58 @@ Object.assign(FIGHTERS, {
     history: "A former college soccer player from St. Catharines, Ontario, who took up MMA late and climbed into the flyweight top 10 anyway. 15-4 overall. This is the biggest fight of her career, and a win would make her a real title contender." }
 });
 
+/* ============ FIGHTER PROFILES — UFC Edmonton main card (Oct 17, Rogers Place) ============ */
+Object.assign(FIGHTERS, {
+  kylenelson: { name: "Kyle Nelson", ht: 71, reach: 71, nick: "The Monster", age: 35, country: "Canada", style: "Stand-up veteran — patient kickboxing, likes a long, technical fight", strengths: [
+      "Experience: 25 pro fights and years in the UFC against all kinds of styles",
+      "Wins rounds on the feet when the fight stays at kicking range",
+      "Beat Matt Frevola last October, so the skills are still there"],
+    weaknesses: ["Coming off a first-round knockout loss to Terrance McKinney in March", "35, facing a hungry 27-year-old in his debut"],
+    history: "A Canadian veteran who has been in and around the UFC for years, with a 17-7-1 record. He looked good beating Matt Frevola last fall, then got caught early by Terrance McKinney in March. A home-country card is a good place to bounce back, but the oddsmakers think the new guy is the real deal." },
+  cristianperez: { name: "Cristian Perez", ht: 69, reach: 72, nick: "Puas", age: 27, country: "", style: "Aggressive finisher — long for his size, hunts the stoppage", strengths: [
+      "Finishing instinct: stopped Logan Paxton in the second round to earn his contract",
+      "Long 72-inch reach for a 5-foot-9 lightweight",
+      "Only two losses in 16 pro fights"],
+    weaknesses: ["UFC debut — the bright lights are new", "Was stopped in the third round on his first Contender Series try in 2025"],
+    history: "A second-chance story. He lost by third-round stoppage on Dana White's Contender Series in 2025, went back to work, and returned this August to stop Logan Paxton in round two and win a UFC contract. Now he debuts as a big favorite." },
+  marcandrebarriault: { name: "Marc-Andre Barriault", ht: 73, reach: 74, nick: "Power Bar", age: 36, country: "Canada", style: "Pressure brawler — walks forward, throws heavy hands in volume", strengths: [
+      "Real power: 11 of his 17 wins are knockouts",
+      "Tough and durable — he's very hard to put away",
+      "Huge home-crowd energy as a French-Canadian fan favorite"],
+    weaknesses: ["Lost his last fight, a decision to Michal Oleksiejczuk in February", "Can get taken down and held by good grapplers"],
+    history: "A longtime UFC middleweight from Quebec and a crowd favorite in Canada, with a 17-11 record built on knockouts and wars. He has had a long run of ups and downs in the UFC. At 36 he's fighting for his spot against a younger grappler." },
+  kyledaukaus: { name: "Kyle Daukaus", ht: 75, reach: 76, nick: "The D'Arce Knight", age: 33, country: "USA", style: "Long, slick grappler — chokes from everywhere, especially the D'Arce", strengths: [
+      "Submission threat: his nickname comes from the D'Arce choke he loves",
+      "Tall and rangy at 6-foot-3 with a 76-inch reach",
+      "Comfortable on the mat in scrambles where brawlers get lost"],
+    weaknesses: ["Coming off a first-round TKO loss to Bo Nickal in June", "Can be dragged into slugfests he doesn't need"],
+    history: "A Philadelphia grappler with a 17-5 record (plus one no contest). He took a tough first-round loss to rising star Bo Nickal in June. Against a brawler, the plan is simple: survive the early heat and find a choke." },
+  louisjourdain: { name: "Louis Jourdain", ht: 69, reach: 69, nick: "The Mad Prince", age: 29, country: "Canada", style: "Well-rounded finisher with a sneaky submission game", strengths: [
+      "On a four-fight win streak",
+      "Earned his UFC contract with a third-round rear-naked choke on the Contender Series",
+      "Trains with his older brother Charles, a UFC veteran, at BTT Canada"],
+    weaknesses: ["UFC debut", "Three losses already at 9-3 — not unbeatable"],
+    history: "From Beloeil, Quebec, and the younger brother of UFC featherweight Charles Jourdain — together, the first Canadian brothers to fight in the UFC. He won his contract on the Contender Series with a late choke. Debuting at home, he's the favorite." },
+  timmycuamba: { name: "Timmy Cuamba", ht: 69, reach: 71, nick: "Twilight Timmy", age: 27, country: "USA", style: "Busy striker — half his wins are knockouts, the other half decisions", strengths: [
+      "Five knockout wins, and he can go 15 minutes",
+      "Longer reach than Jourdain (71 inches)",
+      "Has UFC experience; Jourdain doesn't"],
+    weaknesses: ["Lost his last fight to Benardo Sopaj by submission in May", "2-3 in the UFC so far"],
+    history: "A 27-year-old with a 10-4 record and a 2-3 run in the UFC. His last fight ended in a second-round submission loss. Now he's the road underdog against a debuting hometown prospect — a good spot to play spoiler." },
+  mandelnallo: { name: "Mandel Nallo", nick: "", age: 37, country: "Canada", style: "Long, rangy striker who likes a firefight", strengths: [
+      "Power and length on the feet",
+      "Fighting at home, in Canada",
+      "Faces an opponent on a three-fight skid"],
+    weaknesses: ["Coming off a first-round TKO loss to Jai Herbert in April", "37 years old"],
+    history: "A Vancouver-born lightweight with a 14-4 record (plus one no contest). He was stopped in the first round by Jai Herbert in Winnipeg in April. The oddsmakers still like him big here, against a veteran who's lost three straight." },
+  natelandwehr: { name: "Nate Landwehr", ht: 69, reach: 72, nick: "The Train", age: 38, country: "USA", style: "All-action brawler — forward pressure, never stops swinging", strengths: [
+      "Pure toughness: his fights are almost always entertaining wars",
+      "Pace — he keeps coming for all 15 minutes",
+      "Years of experience at featherweight"],
+    weaknesses: ["Lost three in a row", "Moving up a weight class to lightweight, against a bigger man"],
+    history: "An 18-8 veteran nicknamed \"The Train\" for the way he walks forward. After three straight losses at featherweight, he's moving up to 155 pounds to save his UFC career. Expect a firefight either way." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -422,10 +474,18 @@ Object.assign(MATCHUPS, {
     note: "UFC 333 main card, heavyweight: veteran contender Alexander Volkov against the unbeaten-style Dagestani prospect Rizvan Kuniev. Breakdowns closer to the date." },
   "aaronpico|losenekeita": { odds: "Lines not posted at write-up time",
     note: "UFC 333 main card, featherweight: Aaron Pico, the former Olympic-level wrestler and Bellator star, against Losene Keita. Breakdowns closer to the date." },
-  "joaquinbuckley|mikemalott": { odds: "Malott -150, Buckley +125",
+  "joaquinbuckley|mikemalott": { odds: "Malott -135, Buckley +114 — Buckley opened as a big favorite; the money flipped it",
     note: "Hometown hero vs the more proven name. Malott, on a four-fight streak and fighting in front of a Canadian crowd, wants to box, pressure and look for his guillotine. Buckley has the bigger knockout power and the bigger wins, but he's lost two straight to wrestlers who smothered him, and Malott can do that too. If Buckley lands clean early, the underdog is live; over five rounds, Malott's pace and pressure should tell." },
-  "erinblanchfield|jasminejasudavicius": { odds: "Lines not posted at write-up time",
+  "erinblanchfield|jasminejasudavicius": { odds: "Blanchfield -323, Jasudavicius +260",
     note: "A title eliminator in all but name. Blanchfield is the better grappler and wants this on the mat; Jasudavicius is bigger, stronger in the clinch, and has the home crowd. The first takedown attempt tells you a lot: if Jasudavicius can stuff it and keep this standing, she has a real shot at the upset." },
+  "cristianperez|kylenelson": { odds: "Perez -305, Nelson +245",
+    note: "Debut vs veteran. Perez is the hungry Contender Series finisher with a long reach; Nelson has been around forever and wants a patient kickboxing match he can win on points. Nelson is coming off a knockout loss, and the books expect the new guy to make it two in a row." },
+  "kyledaukaus|marcandrebarriault": { odds: "Daukaus -204, Barriault +180",
+    note: "Classic brawler vs grappler. Barriault, in front of a Canadian crowd, wants to walk forward and swing heavy. Daukaus wants to tie him up and hunt a choke. Both lost their last fight. If Barriault keeps it standing he has a real shot at the upset; if it hits the mat early, it's Daukaus's night." },
+  "louisjourdain|timmycuamba": { odds: "Jourdain -210, Cuamba +165",
+    note: "A Quebec prospect's UFC debut at home against a spoiler. Jourdain is on a four-fight win streak and likes to finish with chokes. Cuamba has the longer reach, UFC experience and real power, but he's 2-3 in the promotion. Watch the first takedown: if Jourdain gets it, he's comfortable." },
+  "mandelnallo|natelandwehr": { odds: "Nallo -278, Landwehr +230",
+    note: "Pure entertainment. Both men lost their last fight, and Landwehr has lost three straight and is moving up to lightweight to turn things around. Nallo is bigger and fighting at home. Neither man backs up, so don't expect this to see the judges." },
   "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
     note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
   "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
@@ -476,8 +536,8 @@ EVENT_META.push(
     note: "RESULTS: <b>Brendan Allen submitted Christian Leroy Duncan with a rear-naked choke 2:46 into the fifth round</b>, then called out Dricus du Plessis. Jai Herbert out-pointed Matheus Camilo as an underdog, Loopy Godinez beat Ketlen Souza on the cards, Andre Fili knocked out Kai Kamaka III with a head kick, and <b>Otari Tanzilovi upset Malcolm Wellmaker</b> with a head kick and punches. Pre-fight notes below. A five-round middleweight main event between top-five grappler Brendan Allen and rising striker Christian Leroy Duncan, with a top-five spot on the line. Underneath, Loopy Godinez vs Ketlen Souza at strawweight, a must-win for Andre Fili, Malcolm Wellmaker trying to get his knockout touch back, and Matheus Camilo vs Jai Herbert. Main card 8 ET, prelims 5 ET.",
     mainCard: ["brendanallen|christianleroyduncan", "ketlensouza|loopygodinez", "andrefili|kaikamakaiii", "malcolmwellmaker|otaritanzilovi", "jaiherbert|matheuscamilo"] },
   { match: ["buckley vs. malott", "buckley vs malott"], titles: "",
-    note: "Oct 17 in Edmonton, Canada: hometown favorite Mike Malott against #10 welterweight Joaquin Buckley, who has lost two straight. Erin Blanchfield vs Canada's Jasmine Jasudavicius is the co-main. The rest of the main card is still shifting; breakdowns get written fight week.",
-    mainCard: ["joaquinbuckley|mikemalott", "erinblanchfield|jasminejasudavicius"] },
+    note: "Saturday in Edmonton: hometown favorite Mike Malott against Joaquin Buckley, who has lost two straight. Buckley opened as a big favorite, but the money poured in on Malott and flipped the line. Erin Blanchfield vs Canada's Jasmine Jasudavicius is the co-main and a likely title eliminator. Two Quebec fighters are on the main card too: Louis Jourdain makes his UFC debut, and Marc-Andre Barriault brawls with Kyle Daukaus.",
+    mainCard: ["joaquinbuckley|mikemalott", "erinblanchfield|jasminejasudavicius", "cristianperez|kylenelson", "kyledaukaus|marcandrebarriault", "louisjourdain|timmycuamba", "mandelnallo|natelandwehr"] },
   { match: ["moicano vs. nolan", "moicano vs nolan"], titles: "",
     note: "Halloween at the Meta APEX: veteran lightweight Renato Moicano against Australia's Tom Nolan, who is 11-1 and on a five-fight win streak. A ranked name against a rising one. The rest of the card is still filling in; breakdowns closer to the date.",
     mainCard: ["renatomoicano|tomnolan"] }
@@ -487,20 +547,17 @@ EVENT_META.push(
 (function () {
   const F = (weight, n1, r1, n2, r2) => ({ weight, f1: { name: n1, record: r1, winner: false }, f2: { name: n2, record: r2, winner: false }, done: false, live: false });
   FALLBACK_EVENTS.push(
-    { name: "UFC Fight Night: Allen vs. Duncan", date: "2026-10-10T21:00Z", venue: "Meta APEX, Las Vegas", fights: [
-      F("Middleweight", "Brendan Allen", "27-7-0", "Christian Leroy Duncan", "15-2-0"),
-      F("W Strawweight", "Loopy Godinez", "14-6-0", "Ketlen Souza", "17-6-0"),
-      F("Featherweight", "Andre Fili", "25-14-0", "Kai Kamaka III", "18-8-1"),
-      F("Bantamweight", "Malcolm Wellmaker", "10-2-0", "Otari Tanzilovi", "10-2-0"),
-      F("Lightweight", "Matheus Camilo", "11-3-0", "Jai Herbert", "14-6-1"),
-      F("Light Heavyweight", "Julius Walker", "", "Gerald Meerschaert", "")
-    ]},
-    { name: "UFC Fight Night: Buckley vs. Malott", date: "2026-10-17T22:00Z", venue: "Rogers Place, Edmonton", fights: [
+    { name: "UFC Fight Night: Buckley vs. Malott", date: "2026-10-17T21:00Z", venue: "Rogers Place, Edmonton", fights: [
       F("Welterweight", "Joaquin Buckley", "21-8-0", "Mike Malott", "14-2-1"),
       F("W Flyweight", "Erin Blanchfield", "14-2-0", "Jasmine Jasudavicius", "15-4-0"),
-      F("Lightweight", "Kyle Nelson", "", "Cristian Perez", ""),
-      F("Middleweight", "Marc-Andre Barriault", "", "Kyle Daukaus", ""),
-      F("Lightweight", "Mandel Nallo", "", "Nate Landwehr", "")
+      F("Lightweight", "Kyle Nelson", "17-7-1", "Cristian Perez", "14-2-0"),
+      F("Middleweight", "Marc-Andre Barriault", "17-11-0", "Kyle Daukaus", "17-5-0"),
+      F("Bantamweight", "Louis Jourdain", "9-3-0", "Timmy Cuamba", "10-4-0"),
+      F("Lightweight", "Mandel Nallo", "14-4-0", "Nate Landwehr", "18-8-0"),
+      F("Heavyweight", "Tanner Boser", "", "Jhonata Diniz", ""),
+      F("Middleweight", "Julien Leblanc", "", "Nick Galanti", ""),
+      F("Heavyweight", "Javad Mahjoub", "", "Joel Faglier", ""),
+      F("W Flyweight", "Mackenzie Stiller", "", "Katlyn Cerminara", "")
     ]},
     { name: "UFC 333: Volkanovski vs. Evloev", date: "2026-10-24T18:00Z", venue: "Etihad Arena, Abu Dhabi", fights: [
       F("Featherweight", "Alexander Volkanovski", "28-4-0", "Movsar Evloev", "20-0-0"),
