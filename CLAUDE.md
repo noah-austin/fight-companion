@@ -12,6 +12,12 @@ Built with Claude (Cowork) Aug 15–16, 2026; refreshed twice weekly since. The 
 3. Belts/rankings are confusing — plain-English division cards, storylines, and a "UFC 101" tab.
 4. **Men's divisions only** in rankings/P4P (his explicit request). Women's fights still appear on event cards (they're part of the card), but no women's division/ranking content anywhere.
 
+> **Redesign in progress (Oct 15 2026, at Noah's request).** `preview/` holds the redesigned site
+> (split into `index.html`, `app.css`, `app.js`, `data.js`; Bets archived to `archive/bets/`),
+> served at https://noah-austin.github.io/fight-companion/preview/ for Noah to try. Until he says
+> go, **refreshes keep editing the root `index.html` exactly as below and never touch `preview/`
+> or `archive/`.** At cutover the preview replaces the root files and this guide is rewritten.
+
 ## Architecture — one file, design is FROZEN
 
 Everything lives in `index.html` (~260KB): CSS, JS, base64-embedded Barlow Condensed font, add-to-home-screen banner, four bottom tabs (Fight Cards / Belts & Ranks / Catch Up / Bets). Since Sep 20 the PWA manifest and icons are real files (`manifest.webmanifest`, `icon-192.png`, `icon-512.png`) and `sw.js` is the push service worker — required for Web Push on iOS. A refresh never touches those.
