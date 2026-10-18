@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "October 15, 2026";
+const ANALYSIS_STAMP = "October 18, 2026";
 
 /* ============ FIGHTER PROFILES — UFC Vegas 121 (Sep 26, APEX) ============ */
 Object.assign(FIGHTERS, {
@@ -535,6 +535,34 @@ Object.assign(FIGHTERS, {
     history: "A Philadelphia grappler with a 19-2 record and a long run near the top of the welterweight rankings. He got stopped by Michael Morales last fall, then bounced back by out-wrestling Joaquin Buckley in May. This is a ranked crossroads fight." }
 });
 
+/* ============ FIGHTER PROFILES — UFC 334 title fights (Nov 14, Madison Square Garden) ============ */
+Object.assign(FIGHTERS, {
+  cirylgane: { name: "Ciryl Gane", ht: 76, reach: 81, nick: "Bon Gamin", age: 36, country: "France", style: "Light-footed kickboxer — moves like a middleweight, picks big men apart", strengths: [
+      "Best footwork and striking variety in the division",
+      "Huge 81-inch reach that he uses to keep fights at range",
+      "Stopped Alex Pereira in round two in June to win the interim belt"],
+    weaknesses: ["Has lost to elite wrestlers before (Francis Ngannou took him down repeatedly)", "Has never successfully defended an undisputed title"],
+    history: "A former Muay Thai fighter from France who rose to the top of heavyweight fast. He lost title fights to Ngannou and Jon Jones, then his 2025 title fight with Tom Aspinall ended in a no contest after an accidental eye poke. He beat Pereira at the White House in June, and when Aspinall vacated, the UFC made him the undisputed champion." },
+  joshhokit: { name: "Josh Hokit", ht: 73, reach: 73, nick: "", age: 28, country: "USA", style: "Powerful wrestler with heavy hands — finishes almost everyone", strengths: [
+      "Unbeaten: 10-0, with nine finishes",
+      "All-American wrestler at Fresno State — he can take big men down",
+      "Went 4-0 in his first year in the UFC, including a knockout of Derrick Lewis"],
+    weaknesses: ["Gives up three inches of height and eight of reach", "Has never faced a striker anywhere near Gane's level"],
+    history: "From Fresno, California: a state-champion high school wrestler who became an All-American at Fresno State. He has run through the UFC since arriving, 4-0 in under a year, including a stoppage of Derrick Lewis at the White House event. He called for this shot the day the belt came open." },
+  kaylaharrison: { name: "Kayla Harrison", ht: 68, reach: 66, nick: "", age: 36, country: "USA", style: "Olympic judo champion — throws, top control and crushing submissions", strengths: [
+      "Two-time Olympic gold medalist in judo",
+      "19-1, and nobody has been able to stop her takedowns and throws",
+      "Submitted Julianna Peña with a kimura to win the belt in June 2025"],
+    weaknesses: ["Coming back from neck surgery — her first fight in 17 months", "Less dangerous if the fight stays standing at range"],
+    history: "An American judo legend who became a dominant MMA fighter, first in the PFL and then the UFC. She won the bantamweight belt in June 2025. Her first defense, against Nunes in January, was postponed when she needed surgery for herniated discs in her neck. Now it's finally happening." },
+  amandanunes: { name: "Amanda Nunes", ht: 68, reach: 69, nick: "The Lioness", age: 38, country: "Brazil", style: "Power striker with black-belt jiu-jitsu — the most complete woman ever to fight", strengths: [
+      "Widely seen as the greatest women's fighter of all time — beat Cyborg, Rousey and Shevchenko twice",
+      "13 knockout wins: real one-punch power",
+      "Former two-division champion who has been in every kind of big fight"],
+    weaknesses: ["Hasn't fought since June 2023 — three years of ring rust", "Turning 39 next spring, against a younger, bigger grappler"],
+    history: "From Bahia, Brazil. She held two UFC belts at once and beat nearly every big name in women's MMA before retiring in 2023 with a win over Irene Aldana. She has said retirement didn't suit her, and she came back for one reason: to take Harrison's belt." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -574,6 +602,10 @@ Object.assign(MATCHUPS, {
     note: "A Quebec prospect's UFC debut at home against a spoiler. Jourdain is on a four-fight win streak and likes to finish with chokes. Cuamba has the longer reach, UFC experience and real power, but he's 2-3 in the promotion. Watch the first takedown: if Jourdain gets it, he's comfortable." },
   "mandelnallo|natelandwehr": { odds: "Nallo -278, Landwehr +230",
     note: "Pure entertainment. Both men lost their last fight, and Landwehr has lost three straight and is moving up to lightweight to turn things around. Nallo is bigger and fighting at home. Neither man backs up, so don't expect this to see the judges." },
+  "cirylgane|joshhokit": { title: "Heavyweight title", odds: "Gane -235, Hokit +195",
+    note: "Striker vs wrestler, five rounds. Gane will try to stay at range with his reach and footwork and pick Hokit apart. Hokit needs to close the distance, get his hands on Gane and drag him down — he's never been beaten and finishes almost everyone he fights. If Gane's takedown defense holds, the champ should win comfortably; if Hokit gets him down early, this gets very interesting." },
+  "amandanunes|kaylaharrison": { title: "Women's bantamweight title", odds: "Harrison -210, Nunes +175",
+    note: "The biggest women's fight in years. Harrison is younger and bigger, with Olympic judo that has made her almost impossible to fight on the inside. Nunes is the greatest ever and the better striker, but she hasn't fought in three years. Nunes needs to keep it standing and land early; once Harrison gets a grip, it's her fight." },
   "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
     note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
   "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
@@ -620,36 +652,24 @@ EVENT_META.push(
   { match: ["ufc 333", "volkanovski vs. evloev", "volkanovski vs evloev"], titles: "2 title fights",
     note: "Abu Dhabi, and the biggest card of the fall: two belts on the line. Volkanovski, 38, defends featherweight against the unbeaten wrestler Movsar Evloev in a true coin flip, and Petr Yan and Merab Dvalishvili settle a rivalry that's 1-1. Early start for US fans: the main card is a Saturday-afternoon show.",
     mainCard: ["alexandervolkanovski|movsarevloev", "merabdvalishvili|petryan", "loneerkavanagh|ramazantemirov", "alexandervolkov|rizvankuniev", "aaronpico|losenekeita"] },
-  { match: ["allen vs. duncan", "allen vs duncan"], titles: "",
-    note: "RESULTS: <b>Brendan Allen submitted Christian Leroy Duncan with a rear-naked choke 2:46 into the fifth round</b>, then called out Dricus du Plessis. Jai Herbert out-pointed Matheus Camilo as an underdog, Loopy Godinez beat Ketlen Souza on the cards, Andre Fili knocked out Kai Kamaka III with a head kick, and <b>Otari Tanzilovi upset Malcolm Wellmaker</b> with a head kick and punches. Pre-fight notes below. A five-round middleweight main event between top-five grappler Brendan Allen and rising striker Christian Leroy Duncan, with a top-five spot on the line. Underneath, Loopy Godinez vs Ketlen Souza at strawweight, a must-win for Andre Fili, Malcolm Wellmaker trying to get his knockout touch back, and Matheus Camilo vs Jai Herbert. Main card 8 ET, prelims 5 ET.",
-    mainCard: ["brendanallen|christianleroyduncan", "ketlensouza|loopygodinez", "andrefili|kaikamakaiii", "malcolmwellmaker|otaritanzilovi", "jaiherbert|matheuscamilo"] },
   { match: ["buckley vs. malott", "buckley vs malott"], titles: "",
-    note: "Saturday in Edmonton: hometown favorite Mike Malott against Joaquin Buckley, who has lost two straight. Buckley opened as a big favorite, but the money poured in on Malott and flipped the line. Erin Blanchfield vs Canada's Jasmine Jasudavicius is the co-main and a likely title eliminator. Two Quebec fighters are on the main card too: Louis Jourdain makes his UFC debut, and Marc-Andre Barriault brawls with Kyle Daukaus.",
+    note: "RESULTS: <b>Mike Malott knocked out Joaquin Buckley with a knee at 2:32 of round two</b> — his fifth straight win, in front of his home country. The upset of the night: <b>Jasmine Jasudavicius out-pointed Erin Blanchfield</b> (29-28 on all three cards) as a +260 underdog, and may now be next in line for the flyweight title. Debutant Cristian Perez knocked out Kyle Nelson in 27 seconds, Marc-Andre Barriault stopped Kyle Daukaus in round one as the underdog, Timmy Cuamba spoiled Louis Jourdain's debut with a neck crank, and Mandel Nallo stopped Nate Landwehr.",
     mainCard: ["joaquinbuckley|mikemalott", "erinblanchfield|jasminejasudavicius", "cristianperez|kylenelson", "kyledaukaus|marcandrebarriault", "louisjourdain|timmycuamba", "mandelnallo|natelandwehr"] },
   { match: ["moicano vs. nolan", "moicano vs nolan"], titles: "",
     note: "Halloween at the Meta APEX: veteran lightweight Renato Moicano against Australia's Tom Nolan, who is 11-1 and on a five-fight win streak. A ranked name against a rising one. The rest of the card is still filling in; breakdowns closer to the date.",
     mainCard: ["renatomoicano|tomnolan"] },
   { match: ["bonfim vs. brady", "bonfim vs brady"], titles: "",
     note: "Nov 7 at the Meta APEX: rising Brazilian Gabriel Bonfim, fresh off beating ex-champ Belal Muhammad, against Philadelphia grappler Sean Brady in a five-round welterweight main event. Tatiana Suarez vs Virna Jandiroba is also on the card. The rest of the lineup is still filling in.",
-    mainCard: ["gabrielbonfim|seanbrady"] }
+    mainCard: ["gabrielbonfim|seanbrady"] },
+  { match: ["ufc 334", "gane vs. hokit", "gane vs hokit"], titles: "2 title fights",
+    note: "Madison Square Garden: new heavyweight champion Ciryl Gane's first defense against unbeaten wrestler Josh Hokit, and Kayla Harrison vs Amanda Nunes for the women's bantamweight belt — Nunes coming out of retirement. Also on the main card: Caio Borralho vs Yousri Belgaroui, Kevin Holland vs Uros Medic, and Bilal Hasan vs Luis Gurule. Stephen \"Wonderboy\" Thompson has his final fight on the prelims.",
+    mainCard: ["cirylgane|joshhokit", "amandanunes|kaylaharrison", "caioborralho|yousribelgaroui", "kevinholland|urosmedic", "bilalhasan|luisgurule"] }
 );
 
 /* ============ FALLBACK SNAPSHOT (if live feed unreachable) ============ */
 (function () {
   const F = (weight, n1, r1, n2, r2) => ({ weight, f1: { name: n1, record: r1, winner: false }, f2: { name: n2, record: r2, winner: false }, done: false, live: false });
   FALLBACK_EVENTS.push(
-    { name: "UFC Fight Night: Buckley vs. Malott", date: "2026-10-17T21:00Z", venue: "Rogers Place, Edmonton", fights: [
-      F("Welterweight", "Joaquin Buckley", "21-8-0", "Mike Malott", "14-2-1"),
-      F("W Flyweight", "Erin Blanchfield", "14-2-0", "Jasmine Jasudavicius", "15-4-0"),
-      F("Lightweight", "Kyle Nelson", "17-7-1", "Cristian Perez", "14-2-0"),
-      F("Middleweight", "Marc-Andre Barriault", "17-11-0", "Kyle Daukaus", "17-5-0"),
-      F("Bantamweight", "Louis Jourdain", "9-3-0", "Timmy Cuamba", "10-4-0"),
-      F("Lightweight", "Mandel Nallo", "14-4-0", "Nate Landwehr", "18-8-0"),
-      F("Heavyweight", "Tanner Boser", "", "Jhonata Diniz", ""),
-      F("Middleweight", "Julien Leblanc", "", "Nick Galanti", ""),
-      F("Heavyweight", "Javad Mahjoub", "", "Joel Faglier", ""),
-      F("W Flyweight", "Mackenzie Stiller", "", "Katlyn Cerminara", "")
-    ]},
     { name: "UFC 333: Volkanovski vs. Evloev", date: "2026-10-24T18:00Z", venue: "Etihad Arena, Abu Dhabi", fights: [
       F("Featherweight", "Alexander Volkanovski", "28-4-0", "Movsar Evloev", "20-0-0"),
       F("Bantamweight", "Petr Yan", "20-5-0", "Merab Dvalishvili", "21-5-0"),
@@ -670,16 +690,25 @@ EVENT_META.push(
       F("W Strawweight", "Tatiana Suarez", "", "Virna Jandiroba", ""),
       F("Middleweight", "Mantas Kondratavicius", "", "Wesley Schultz", ""),
       F("Light Heavyweight", "Billy Elekana", "", "Lucas Fernando", "")
+    ]},
+    { name: "UFC 334: Gane vs. Hokit", date: "2026-11-15T02:00Z", venue: "Madison Square Garden, New York", fights: [
+      F("Heavyweight", "Ciryl Gane", "14-2-0", "Josh Hokit", "10-0-0"),
+      F("W Bantamweight", "Kayla Harrison", "19-1-0", "Amanda Nunes", "23-5-0"),
+      F("Middleweight", "Caio Borralho", "", "Yousri Belgaroui", ""),
+      F("Welterweight", "Kevin Holland", "", "Uros Medic", ""),
+      F("Flyweight", "Bilal Hasan", "", "Luis Gurule", ""),
+      F("Welterweight", "Stephen Thompson", "", "Charles Radtke", ""),
+      F("Lightweight", "Drew Dober", "", "Chris Duncan", ""),
+      F("Lightweight", "Jim Miller", "", "Terrance McKinney", "")
     ]}
   );
 })();
 /* ============ BELTS & RANKINGS (snapshot: Sep 13, 2026, post-Noche UFC) ============ */
 DIVISIONS.men = [
-  { name: "Heavyweight", weight: "265 lb", champ: { name: "Vacant", record: "Undisputed belt", country: "Gane vs Hokit, Nov 14" },
-    interim: { name: "Ciryl Gane", record: "14-2", country: "France" },
-    beltFacts: "<b>Vacant.</b> Tom Aspinall gave up the belt on Sep 14 — complications from the eye injury he suffered against Gane last October still haven't healed after multiple surgeries. He says he is not retiring and hopes to be back in early 2027. Gane holds the <b>interim</b> belt, but Dana White says that doesn't make him undisputed: he has to win it.",
-    top5: [{ rank: "IC", name: "Ciryl Gane", record: "14-2" }, { rank: 2, name: "Alexander Volkov", record: "40-11" }, { rank: 3, name: "Sergei Pavlovich", record: "21-3" }, { rank: 4, name: "Josh Hokit", record: "10-0" }],
-    story: "The heavyweight belt is cursed: Jon Jones retired, and now Aspinall has had to vacate without ever defending it. <b>Ciryl Gane fights unbeaten Josh Hokit for the vacant title at UFC 334, Nov 14 at Madison Square Garden</b>, with Gane the clear favorite (around -270). Hokit, a former college wrestler and football player, is 10-0. Below them: Alexander Volkov fights Rizvan Kuniev on the UFC 333 main card (Oct 24), and Curtis Blaydes is climbing back after out-wrestling Waldo Cortes-Acosta in September." },
+  { name: "Heavyweight", weight: "265 lb", champ: { name: "Ciryl Gane", record: "14-2", country: "France" },
+    beltFacts: "<b>Ciryl Gane, promoted to undisputed champion</b> in September after Tom Aspinall gave up the belt — the eye injury from their October 2025 fight (an accidental eye poke, ruled a no contest) never healed after multiple surgeries. Gane had won the interim belt by stopping Alex Pereira at the White House in June. <b>First defense: Josh Hokit at UFC 334, Nov 14, Madison Square Garden.</b>",
+    top5: [{ rank: 1, name: "Tom Aspinall", record: "15-3" }, { rank: 2, name: "Sergei Pavlovich", record: "21-3" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Alexander Volkov", record: "40-11" }, { rank: 5, name: "Rizvan Kuniev", record: "14-3-1" }],
+    story: "Dana White first said Gane would have to win the vacant belt in a fight, then the UFC reversed course and simply named him champion. His first defense is against <b>unbeaten Josh Hokit</b> (10-0, ranked just outside the top five), a former Fresno State wrestler who's 4-0 in the UFC — including a knockout of Derrick Lewis. Gane is a clear favorite (around -235). Aspinall says he isn't retiring and hopes to return in 2027. Below them: <b>Alexander Volkov vs Rizvan Kuniev</b> on the UFC 333 main card (Oct 24) is a top-five fight." },
   { name: "Light Heavyweight", weight: "205 lb", champ: { name: "Carlos Ulberg", record: "15-1", country: "New Zealand" },
     beltFacts: "Won the <b>vacant</b> belt in April 2026 with a first-round KO of Jiří Procházka — but <b>tore his ACL in that fight and is out until 2027</b>. <b>0 defenses.</b>",
     top5: [{ rank: 1, name: "Magomed Ankalaev", record: "20-2-1" }, { rank: 2, name: "Jiří Procházka", record: "32-6-1" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Khalil Rountree Jr.", record: "15-7" }, { rank: 5, name: "Navajo Stirling", record: "11-0" }],
@@ -714,20 +743,17 @@ P4P.men = [{ name: "Islam Makhachev", record: "29-1" }, { name: "Alexander Volka
 
 /* ============ STORYLINES & UFC 101 ============ */
 STORYLINES.push(
-  { em: "🍁", title: "Saturday: the line flipped in Edmonton", body: [
-    "<b>Joaquin Buckley opened as a big favorite over hometown hero Mike Malott — then the money poured in on Malott</b>, and by fight week the Canadian is the one favored (-135). Buckley has lost two straight to wrestlers; Malott can wrestle. The co-main, <b>Erin Blanchfield vs Canada's Jasmine Jasudavicius</b>, could decide the next women's flyweight title shot.",
-    "Two Quebec fighters are on the main card too: Louis Jourdain, younger brother of UFC veteran Charles, makes his UFC debut, and crowd favorite Marc-Andre Barriault brawls with grappler Kyle Daukaus."] },
-  { em: "🔒", title: "Vegas 122: Allen finds the choke late", body: [
-    "<b>Brendan Allen submitted Christian Leroy Duncan in the fifth round</b> — the striker had won the fourth and was gaining momentum before Allen took his back and finished it at 2:46. That's four straight wins for Allen, and he immediately called out former champion Dricus du Plessis, accusing him of ducking the fight.",
-    "Underneath: veteran Jai Herbert out-pointed Matheus Camilo as an underdog, Andre Fili kept his job with a head-kick knockout of Kai Kamaka III, and Georgia's Otari Tanzilovi knocked out Malcolm Wellmaker in the upset of the night."] },
+  { em: "🍁", title: "Edmonton: Malott's knee, Jasudavicius's upset", body: [
+    "<b>Mike Malott knocked out Joaquin Buckley with a knee in round two</b>, his fifth straight win and one of the best knockouts of the year, in front of a Canadian crowd. Buckley has now lost three in a row.",
+    "The bigger shake-up came in the co-main: <b>Jasmine Jasudavicius beat Erin Blanchfield</b> on all three cards as a +260 underdog, which could put the 37-year-old Canadian in line for a flyweight title shot."] },
   { em: "🐐", title: "Makhachev owns the record books", body: [
     "At UFC 330 Islam Makhachev out-pointed Ian Machado Garry for his first welterweight defense and his <b>17th straight UFC win — breaking Anderson Silva's all-time record</b> (16) that stood for 14 years. He named <b>Carlos Prates</b> as the most deserving next challenger, waved off unbeaten Michael Morales, and hinted he misses lightweight — where a Topuria superfight still lurks."] },
   { em: "🗓️", title: "UFC 333 is loaded (Oct 24, Abu Dhabi)", body: [
     "Two title fights: <b>Volkanovski vs unbeaten Movsar Evloev</b> for the featherweight belt — the books can't split them (-110 each) — and the <b>Petr Yan vs Merab Dvalishvili trilogy</b> (1-1 apiece) for the bantamweight belt, with Yan favored. Volkanovski is 38 and one more defense would tie José Aldo's featherweight record.",
     "One late change: Arnold Allen pulled out injured, so <b>Aaron Pico now faces Belgium's Losene Keita</b>, who knocked someone out in Paris last month and took the fight on short notice. US fans, note the early start — the main card is a Saturday-afternoon show."] },
-  { em: "👑", title: "Heavyweight still needs one king", body: [
-    "<b>Tom Aspinall vacated the heavyweight title on Sep 14</b>. The eye injury from his October 2025 fight with Ciryl Gane (an accidental eye poke, ruled a no-contest) never fully healed, despite multiple surgeries. He says he isn't retiring and hopes to return in early 2027.",
-    "Gane holds the interim belt, but Dana White ruled he still has to win the real one. So <b>Gane vs Josh Hokit for the vacant title headlines UFC 334 on Nov 14 at Madison Square Garden</b>, with Kayla Harrison vs Amanda Nunes as the co-main."] },
+  { em: "👑", title: "Heavyweight has a new king: Ciryl Gane", body: [
+    "Tom Aspinall gave up the heavyweight belt in September — the eye injury from his October 2025 fight with Gane never fully healed. After first saying Gane would have to fight for the vacant title, the UFC simply <b>promoted Gane to undisputed champion</b>.",
+    "His first defense: <b>unbeaten wrestler Josh Hokit at UFC 334, Nov 14 at Madison Square Garden</b>, with Kayla Harrison vs a returning Amanda Nunes for the women's bantamweight belt as the co-main."] },
   { em: "🧊", title: "Light heavyweight is frozen", body: [
     "Champion Carlos Ulberg <b>tore his ACL winning the belt</b> and now says he's targeting an early-2027 return. There has been talk of an interim title while he heals, but nothing is booked, and #1 contender Ankalaev is stuck waiting either way."] },
   { em: "🌋", title: "Legends: one out, two in limbo", body: [
@@ -753,6 +779,7 @@ EXPLAINERS.push(
 /* ============ ESPN ATHLETE IDS (for headshots) ============ */
 (function () {
   const RAW = {
+    "Rizvan Kuniev": "4001837", // Oct 18, from his espn.com/mma/fighter/_/id profile URL
     "Umar Nurmagomedov": "4569549", "Song Yadong": "3151289", "Yan Xiaonan": "4275487", "Denise Gomes": "4963343",
     "Aoriqileng": "4389085", "Kai Asakura": "4336757", "Alex Perez": "3155425", "Sumudaerji": "4405109",
     "Junior Tafa": "5122234", "Ce Liu": "5292011", "Liu Ce": "5292011", "Namsrai Batbayar": "5145018", "Andre Lima": "5157669",
