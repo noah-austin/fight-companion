@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "October 18, 2026";
+const ANALYSIS_STAMP = "October 22, 2026";
 
 /* ============ FIGHTER PROFILES — UFC Vegas 121 (Sep 26, APEX) ============ */
 Object.assign(FIGHTERS, {
@@ -563,6 +563,46 @@ Object.assign(FIGHTERS, {
     history: "From Bahia, Brazil. She held two UFC belts at once and beat nearly every big name in women's MMA before retiring in 2023 with a win over Irene Aldana. She has said retirement didn't suit her, and she came back for one reason: to take Harrison's belt." }
 });
 
+/* ============ FIGHTER PROFILES — UFC 334 main card (Nov 14, Madison Square Garden) ============ */
+Object.assign(FIGHTERS, {
+  caioborralho: { name: "Caio Borralho", reach: 75, nick: "The Natural", age: 33, country: "Brazil", style: "Patient, well-rounded counter-fighter — smart striking, strong grappling", strengths: [
+      "Ranked in the middleweight top five, with only two losses in 21 fights",
+      "Beat Reinier de Ridder by decision in March",
+      "Rarely makes mistakes — hard to beat cleanly"],
+    weaknesses: ["Gives up four inches of reach to a much bigger man", "Methodical style can let a striker set the pace"],
+    history: "A Brazilian middleweight with an 18-2 record (plus one no contest) who climbed into the title picture by beating good fighters steadily rather than flashily. His March win over Reinier de Ridder kept him near the top. A win at the Garden keeps him in line for a title shot." },
+  yousribelgaroui: { name: "Yousri Belgaroui", ht: 78, reach: 79, nick: "", age: 34, country: "Tunisia", style: "Towering kickboxer — long kicks, knees and straight punches", strengths: [
+      "Elite kickboxing pedigree: three-time Glory middleweight title challenger",
+      "Enormous for middleweight: 6-foot-6 with a 79-inch reach",
+      "Dangerous at range, where most middleweights can't touch him"],
+    weaknesses: ["Newer to MMA wrestling and grappling", "Faces the best all-rounder of his career"],
+    history: "A Tunisian kickboxer who fought for the Glory middleweight title three times before switching to MMA and joining the UFC. His size and kickboxing make him a nightmare at range. Borralho is the toughest test he's faced, and a big step up in the rankings." },
+  kevinholland: { name: "Kevin Holland", ht: 75, reach: 81, nick: "Trailblazer", age: 33, country: "USA", style: "Creative, unorthodox striker with a long reach and a big personality", strengths: [
+      "Huge 81-inch reach and a real knack for finishing",
+      "Experience: 44 pro fights against all kinds of opponents",
+      "Beat Randy Brown by unanimous decision in April"],
+    weaknesses: ["Has been up and down in recent years", "Can be out-wrestled and out-worked by grinders"],
+    history: "One of the UFC's most entertaining fighters, with a 29-15 record split between welterweight and middleweight. He's famous for his trash talk and wild finishes. He beat Randy Brown in April and now faces a ranked, dangerous striker." },
+  urosmedic: { name: "Uros Medic", ht: 73, reach: 71, nick: "The Doctor", age: 33, country: "USA", style: "Southpaw power striker who looks for the knockout", strengths: [
+      "Heavy left hand and plenty of knockout wins",
+      "Ranked in the welterweight top 15",
+      "Beat veteran Muslim Salikhov last November"],
+    weaknesses: ["Gives up ten inches of reach to Holland", "Facing a far more experienced opponent"],
+    history: "A ranked welterweight with a reputation as a knockout artist and a dangerous southpaw left. Beating a big name like Holland at the Garden would be his best win yet." },
+  bilalhasan: { name: "Bilal Hasan", ht: 67, reach: 70, nick: "The IndoNinja", age: 25, country: "Indonesia", style: "Explosive young finisher — knockouts from anywhere", strengths: [
+      "Unbeaten: 10-0, with eight knockouts",
+      "Won his contract with a 45-second TKO on the Contender Series in August",
+      "Long 70-inch reach for a flyweight"],
+    weaknesses: ["UFC debut — and at Madison Square Garden", "Hasn't been tested by anyone this experienced"],
+    history: "A 25-year-old flyweight with Indonesian roots who has finished nearly everyone he's fought. He earned his UFC contract on the Contender Series in August with a 45-second TKO. The UFC put him straight onto a stacked Garden main card." },
+  luisgurule: { name: "Luis Gurule", ht: 65, reach: 64, nick: "Grim", age: 32, country: "USA", style: "Busy, tough flyweight who wins scrappy fights", strengths: [
+      "Experience: about 15 pro fights and several UFC appearances",
+      "Beat Daniel Barez by decision in May",
+      "Tough and durable"],
+    weaknesses: ["Lost to Rei Tsuruya by first-round submission in May", "Gives up six inches of reach to Hasan"],
+    history: "A US flyweight with a record around 11-4 who has been in and out of the UFC win column. He beat Daniel Barez in May, then got submitted by Rei Tsuruya two weeks later. Here he's the veteran test for a hyped debutant." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -606,6 +646,12 @@ Object.assign(MATCHUPS, {
     note: "Striker vs wrestler, five rounds. Gane will try to stay at range with his reach and footwork and pick Hokit apart. Hokit needs to close the distance, get his hands on Gane and drag him down — he's never been beaten and finishes almost everyone he fights. If Gane's takedown defense holds, the champ should win comfortably; if Hokit gets him down early, this gets very interesting." },
   "amandanunes|kaylaharrison": { title: "Women's bantamweight title", odds: "Harrison -210, Nunes +175",
     note: "The biggest women's fight in years. Harrison is younger and bigger, with Olympic judo that has made her almost impossible to fight on the inside. Nunes is the greatest ever and the better striker, but she hasn't fought in three years. Nunes needs to keep it standing and land early; once Harrison gets a grip, it's her fight." },
+  "caioborralho|yousribelgaroui": { odds: "Lines not posted at write-up time",
+    note: "The all-rounder against the giant kickboxer. Belgaroui is 6-foot-6 with a 79-inch reach and three Glory title fights behind him; at range he's very dangerous. Borralho wants to close the distance, wrestle and make him work on the mat. If Borralho gets him down, it's his fight; if it stays at kicking range, the upset is on." },
+  "kevinholland|urosmedic": { odds: "Lines not posted at write-up time",
+    note: "A fun striking matchup at welterweight. Holland has a ten-inch reach advantage and a creative, unpredictable style. Medic is a ranked southpaw puncher with a heavy left hand. Holland needs to keep him on the end of his long shots; Medic needs to walk him down. Somebody is probably getting knocked down." },
+  "bilalhasan|luisgurule": { odds: "Lines not posted at write-up time",
+    note: "A big debut. Hasan is 10-0 with eight knockouts and won his contract in 45 seconds. Gurule is the experienced, scrappy veteran, coming off a quick submission loss. Fans and models both lean heavily toward the newcomer, but UFC debuts at the Garden are a different kind of pressure." },
   "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
     note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
   "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
@@ -657,7 +703,7 @@ EVENT_META.push(
     mainCard: ["joaquinbuckley|mikemalott", "erinblanchfield|jasminejasudavicius", "cristianperez|kylenelson", "kyledaukaus|marcandrebarriault", "louisjourdain|timmycuamba", "mandelnallo|natelandwehr"] },
   { match: ["moicano vs. nolan", "moicano vs nolan"], titles: "",
     note: "Halloween at the Meta APEX: veteran lightweight Renato Moicano against Australia's Tom Nolan, who is 11-1 and on a five-fight win streak. A ranked name against a rising one. The rest of the card is still filling in; breakdowns closer to the date.",
-    mainCard: ["renatomoicano|tomnolan"] },
+    mainCard: ["renatomoicano|tomnolan", "carlosleal|randybrown"] },
   { match: ["bonfim vs. brady", "bonfim vs brady"], titles: "",
     note: "Nov 7 at the Meta APEX: rising Brazilian Gabriel Bonfim, fresh off beating ex-champ Belal Muhammad, against Philadelphia grappler Sean Brady in a five-round welterweight main event. Tatiana Suarez vs Virna Jandiroba is also on the card. The rest of the lineup is still filling in.",
     mainCard: ["gabrielbonfim|seanbrady"] },
@@ -679,6 +725,7 @@ EVENT_META.push(
     ]},
     { name: "UFC Fight Night: Moicano vs. Nolan", date: "2026-10-31T21:00Z", venue: "Meta APEX, Las Vegas", fights: [
       F("Lightweight", "Renato Moicano", "21-7-1", "Tom Nolan", "11-1-0"),
+      F("Welterweight", "Randy Brown", "", "Carlos Leal", ""),
       F("Featherweight", "Julian Erosa", "", "Lee Jeong-yeong", ""),
       F("Middleweight", "Azamat Bekoev", "", "Andre Petroski", ""),
       F("Middleweight", "Nick Klein", "", "Joseph Kropschot", ""),
