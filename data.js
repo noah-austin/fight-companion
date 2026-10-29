@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "October 25, 2026";
+const ANALYSIS_STAMP = "October 29, 2026";
 
 /* ============ FIGHTER PROFILES — UFC Vegas 121 (Sep 26, APEX) ============ */
 Object.assign(FIGHTERS, {
@@ -619,6 +619,62 @@ Object.assign(FIGHTERS, {
     history: "A veteran welterweight with a 20-8 record and a long UFC run. He's dangerous at range but has lost two straight to top names. This is a must-win to stop the slide." }
 });
 
+/* ============ FIGHTER PROFILES — Moicano vs Nolan main card (Oct 31) ============ */
+Object.assign(FIGHTERS, {
+  odeosbourne: { name: "Ode Osbourne", ht: 67, reach: 73, nick: "", age: 34, country: "", style: "Long, explosive striker — fast hands and a big reach for 125", strengths: [
+      "Six-inch reach advantage (73 inches) over Durden",
+      "Fast-twitch athlete with knockout power",
+      "Years of UFC experience"],
+    weaknesses: ["Inconsistent: 13-9 with two no contests", "Pulled out of this same fight in July with an injury"],
+    history: "A veteran flyweight with a 13-9 record (plus two no contests) who has spent years trading wins and losses in the UFC. This fight was first booked for July, until an injury forced him out. Now it's back on, and the books can't split them." },
+  codydurden: { name: "Cody Durden", ht: 67, reach: 67, nick: "Custom Made", age: 35, country: "USA", style: "Grinding wrestler — takedowns, pressure and cardio", strengths: [
+      "Strong wrestling and top pressure",
+      "Experience: 30 pro fights",
+      "Tough to finish"],
+    weaknesses: ["Lost his last fight to Alessandro Costa by submission in July", "Gives up six inches of reach"],
+    history: "A 35-year-old flyweight with an 18-11-1 record who wins by wrestling and wearing opponents down. He was submitted by Alessandro Costa in July. Against a long striker, he has to close the distance and drag the fight to the mat." },
+  yanasantos: { name: "Yana Santos", ht: 66, reach: 68, nick: "Foxy", age: 36, country: "Russia", style: "Volume kickboxer — busy hands, sharp counters", strengths: [
+      "Ranked in the women's bantamweight top 10",
+      "Seven knockout wins",
+      "Experience: 26 pro fights against the division's best"],
+    weaknesses: ["Ten years older than her opponent", "Can be out-worked by younger, faster strikers"],
+    history: "A Russian bantamweight with a 17-8 record (plus one no contest) and a long run near the top of the division. She's been in with almost every big name at 135. Now she faces a rising Brazilian who's ten years younger, and the books favor youth." },
+  luanasantos: { name: "Luana Santos", reach: 67, nick: "", age: 26, country: "", style: "Young, aggressive all-rounder — pressure and power", strengths: [
+      "11-2 and still improving",
+      "Ten years younger than Yana Santos",
+      "Big favorite with the oddsmakers"],
+    weaknesses: ["Has never faced someone this experienced", "Slightly shorter reach"],
+    history: "A young bantamweight with an 11-2 record who is getting her biggest test yet against a ranked veteran. The oddsmakers make her a clear favorite. A win would likely put her into the rankings." },
+  jeanpaullebosnoyani: { name: "Jean-Paul Lebosnoyani", ht: 71, reach: 72, nick: "Mufasa", age: 27, country: "USA", style: "Switch-stance striker with quick, varied attacks", strengths: [
+      "Only two losses in 13 pro fights",
+      "Switches stances to keep opponents guessing",
+      "Young and improving fast"],
+    weaknesses: ["Still building UFC experience", "Faces an unbeaten opponent"],
+    history: "A 27-year-old welterweight with a record around 11-2 who has been climbing steadily. He's a big favorite here against an unbeaten newcomer. Another win starts pushing him toward ranked opposition." },
+  farmanhasanov: { name: "Farman Hasanov", reach: 74, nick: "The Lion", age: 31, country: "", style: "Unbeaten pressure fighter", strengths: [
+      "Perfect 6-0 record",
+      "Longer reach than Lebosnoyani (74 inches)",
+      "Nothing to lose as a big underdog"],
+    weaknesses: ["Very little high-level experience — just six pro fights", "Big step up in competition"],
+    history: "An unbeaten 31-year-old welterweight with a 6-0 record. This is a big jump in competition. The books have him as a big underdog, but unbeaten fighters don't stay unbeaten by accident." }
+});
+
+/* ============ FIGHTER PROFILES — Prochazka vs Stirling (Nov 21, Doha) ============ */
+Object.assign(FIGHTERS, {
+  jiriprochazka: { name: "Jiří Procházka", reach: 80, nick: "Denisa", age: 34, country: "Czech Republic", style: "Wild, unorthodox striker — hands low, constant forward pressure", strengths: [
+      "Finisher: 28 knockouts in 32 wins",
+      "Former light heavyweight champion",
+      "Huge 80-inch reach and unpredictable angles"],
+    weaknesses: ["Knocked out by Carlos Ulberg in round one in April", "Leaves himself open — he gets hit a lot"],
+    history: "A Czech former light heavyweight champion and one of the most exciting fighters in the sport, with a 32-6-1 record. He fought Carlos Ulberg for the title in April and was stopped in the first round. Now he faces the hottest unbeaten prospect in the division." },
+  navajostirling: { nick: "", name: "Navajo Stirling", age: 28, country: "", style: "Unbeaten, technical kickboxer with heavy hands", strengths: [
+      "Perfect 11-0 record",
+      "Stopped former champion Jan Blachowicz in round one in August",
+      "Young and still getting better"],
+    weaknesses: ["First five-round main event", "Has never faced anyone as chaotic as Prochazka"],
+    history: "An unbeaten light heavyweight who announced himself by stopping former champion Jan Blachowicz in the first round in Belgrade in August. He's already in the division's top five. Beating Procházka would make him a title contender at 29." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -636,7 +692,7 @@ Object.assign(MATCHUPS, {
     note: "Wellmaker was a hyped bantamweight knockout artist — three first-round KOs with his right hook — until two straight losses. He has moved to American Top Team to reset. Tanzilovi lost his UFC debut and needs a win too. If Wellmaker's power is still there, it probably ends early." },
   "jaiherbert|matheuscamilo": { odds: "Camilo -195, Herbert +160",
     note: "Momentum vs experience at lightweight. Camilo has won two straight, most recently a TKO of Nazim Sadykhov as an underdog. Herbert is a British veteran with ten UFC fights who has never strung together a winning streak. Camilo's pressure should carry it if he respects Herbert's power early." },
-  "renatomoicano|tomnolan": { odds: "Nolan -136, Moicano +106 — Nolan opened bigger (-170); the line has tightened",
+  "renatomoicano|tomnolan": { odds: "Nolan -122, Moicano +102 — basically a pick 'em; Nolan opened at -170",
     note: "Experience against momentum, over five rounds. Moicano has the jab, the grappling and years against the division's best. Nolan is a tall, aggressive 26-year-old on a five-fight streak, getting the biggest test of his career. If Nolan's length keeps Moicano at the end of punches, the young man is live; if Moicano gets to his back, it's a long night for the Australian." },
   "gabrielbonfim|seanbrady": { odds: "Lines not posted at write-up time",
     note: "A ranked welterweight crossroads. Bonfim is younger, more explosive and coming off the best win of his career over Belal Muhammad. Brady is the better pure wrestler and just out-grappled Joaquin Buckley. The winner moves right into the title conversation." },
@@ -668,8 +724,16 @@ Object.assign(MATCHUPS, {
     note: "A fun striking matchup at welterweight. Holland has a ten-inch reach advantage and a creative, unpredictable style. Medic is a ranked southpaw puncher with a heavy left hand. Holland needs to keep him on the end of his long shots; Medic needs to walk him down. Somebody is probably getting knocked down." },
   "bilalhasan|luisgurule": { odds: "Lines not posted at write-up time",
     note: "A big debut. Hasan is 10-0 with eight knockouts and won his contract in 45 seconds. Gurule is the experienced, scrappy veteran, coming off a quick submission loss. Fans and models both lean heavily toward the newcomer, but UFC debuts at the Garden are a different kind of pressure." },
-  "jacobesmith|randybrown": { odds: "Lines not posted at write-up time",
+  "jacobesmith|randybrown": { odds: "Smith -285, Brown +235",
     note: "Short-notice prospect against a long veteran. Smith is 13-0 and wants to close the distance and pressure; Brown is much taller and wants to keep him on the end of long punches and kicks. If Smith gets inside early, his record probably stays perfect. If Brown keeps it at range, the veteran can snap his skid." },
+  "codydurden|odeosbourne": { odds: "Osbourne -110, Durden -110 — a true coin flip",
+    note: "Striker vs wrestler at flyweight. Osbourne has a six-inch reach advantage and wants to keep Durden on the end of long, fast punches. Durden wants to close the distance, grab a leg and grind. The first takedown attempt tells you who's winning this one." },
+  "luanasantos|yanasantos": { odds: "Luana -255, Yana +212",
+    note: "Youth against experience, and no relation despite the name. Yana is the ranked veteran with busy kickboxing; Luana is ten years younger and the clear betting favorite. If Yana keeps it at range and out-works her, the upset is there; if Luana pushes the pace, it's her night." },
+  "farmanhasanov|jeanpaullebosnoyani": { odds: "Lebosnoyani -278, Hasanov +225",
+    note: "A rising welterweight against an unbeaten newcomer. Lebosnoyani is the more polished striker and switches stances to stay unpredictable. Hasanov is 6-0 and has the longer reach. The books expect Lebosnoyani's experience to tell." },
+  "jiriprochazka|navajostirling": { odds: "Lines not posted at write-up time",
+    note: "Chaos against control, over five rounds. Procházka fights with his hands low and throws from everywhere; he's either knocking you out or getting hit trying. Stirling is unbeaten, younger and more disciplined, and just flattened Jan Blachowicz. If Stirling stays composed and counters, the prospect takes the veteran's spot; if Procházka drags him into a brawl, anything can happen." },
   "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
     note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
   "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
@@ -716,18 +780,18 @@ EVENT_META.push(
   { match: ["ufc 333", "volkanovski vs. evloev", "volkanovski vs evloev"], titles: "2 title fights",
     note: "RESULTS: <b>Volkanovski dropped Movsar Evloev with a left hand and stopped him at 4:54 of round two</b> — the first loss of Evloev's career, and one more defense ties José Aldo's record. <b>Petr Yan beat Merab Dvalishvili 48-47 on all three cards</b> after losing the first two rounds, winning the trilogy 2-1 (Fight of the Night). Lone'er Kavanagh knocked out Ramazan Temirov in round one, Alexander Volkov out-pointed Rizvan Kuniev, and Aaron Pico stopped short-notice Losene Keita in 74 seconds.",
     mainCard: ["alexandervolkanovski|movsarevloev", "merabdvalishvili|petryan", "loneerkavanagh|ramazantemirov", "alexandervolkov|rizvankuniev", "aaronpico|losenekeita"] },
-  { match: ["buckley vs. malott", "buckley vs malott"], titles: "",
-    note: "RESULTS: <b>Mike Malott knocked out Joaquin Buckley with a knee at 2:32 of round two</b> — his fifth straight win, in front of his home country. The upset of the night: <b>Jasmine Jasudavicius out-pointed Erin Blanchfield</b> (29-28 on all three cards) as a +260 underdog, and may now be next in line for the flyweight title. Debutant Cristian Perez knocked out Kyle Nelson in 27 seconds, Marc-Andre Barriault stopped Kyle Daukaus in round one as the underdog, Timmy Cuamba spoiled Louis Jourdain's debut with a neck crank, and Mandel Nallo stopped Nate Landwehr.",
-    mainCard: ["joaquinbuckley|mikemalott", "erinblanchfield|jasminejasudavicius", "cristianperez|kylenelson", "kyledaukaus|marcandrebarriault", "louisjourdain|timmycuamba", "mandelnallo|natelandwehr"] },
   { match: ["moicano vs. nolan", "moicano vs nolan"], titles: "",
-    note: "Halloween at the Meta APEX: veteran lightweight Renato Moicano against Australia's Tom Nolan, who is 11-1 and on a five-fight win streak. A ranked name against a rising one. The rest of the card is still filling in; breakdowns closer to the date.",
-    mainCard: ["renatomoicano|tomnolan", "jacobesmith|randybrown"] },
+    note: "Halloween at the Meta APEX: veteran Renato Moicano against Australia's Tom Nolan, 26 and on a five-fight win streak — a true pick 'em after Nolan opened as a clear favorite. Unbeaten Jacobe Smith steps in on 12 days' notice against Randy Brown in the co-main. Also on the main card: Osbourne vs Durden, Yana Santos vs Luana Santos, and Lebosnoyani vs unbeaten Farman Hasanov.",
+    mainCard: ["renatomoicano|tomnolan", "jacobesmith|randybrown", "codydurden|odeosbourne", "luanasantos|yanasantos", "farmanhasanov|jeanpaullebosnoyani"] },
   { match: ["bonfim vs. brady", "bonfim vs brady"], titles: "",
     note: "Nov 7 at the Meta APEX: rising Brazilian Gabriel Bonfim, fresh off beating ex-champ Belal Muhammad, against Philadelphia grappler Sean Brady in a five-round welterweight main event. Tatiana Suarez vs Virna Jandiroba is also on the card. The rest of the lineup is still filling in.",
     mainCard: ["gabrielbonfim|seanbrady"] },
   { match: ["ufc 334", "gane vs. hokit", "gane vs hokit"], titles: "2 title fights",
     note: "Madison Square Garden: new heavyweight champion Ciryl Gane's first defense against unbeaten wrestler Josh Hokit, and Kayla Harrison vs Amanda Nunes for the women's bantamweight belt — Nunes coming out of retirement. Also on the main card: Caio Borralho vs Yousri Belgaroui, Kevin Holland vs Uros Medic, and Bilal Hasan vs Luis Gurule. Stephen \"Wonderboy\" Thompson has his final fight on the prelims.",
-    mainCard: ["cirylgane|joshhokit", "amandanunes|kaylaharrison", "caioborralho|yousribelgaroui", "kevinholland|urosmedic", "bilalhasan|luisgurule"] }
+    mainCard: ["cirylgane|joshhokit", "amandanunes|kaylaharrison", "caioborralho|yousribelgaroui", "kevinholland|urosmedic", "bilalhasan|luisgurule"] },
+  { match: ["prochazka vs. stirling", "prochazka vs stirling", "procházka vs. stirling"], titles: "",
+    note: "Doha, Qatar: former light heavyweight champion Jiří Procházka against unbeaten Navajo Stirling (11-0), who stopped Jan Blachowicz in August, in a five-round main event. An early start for US fans. The rest of the card is still being built.",
+    mainCard: ["jiriprochazka|navajostirling"] }
 );
 
 /* ============ FALLBACK SNAPSHOT (if live feed unreachable) ============ */
@@ -737,11 +801,12 @@ EVENT_META.push(
     { name: "UFC Fight Night: Moicano vs. Nolan", date: "2026-10-31T21:00Z", venue: "Meta APEX, Las Vegas", fights: [
       F("Lightweight", "Renato Moicano", "21-7-1", "Tom Nolan", "11-1-0"),
       F("Welterweight", "Randy Brown", "20-8-0", "Jacobe Smith", "13-0-0"),
+      F("Flyweight", "Ode Osbourne", "13-9-0", "Cody Durden", "18-11-1"),
+      F("W Bantamweight", "Yana Santos", "17-8-0", "Luana Santos", "11-2-0"),
+      F("Welterweight", "Jean-Paul Lebosnoyani", "11-2-0", "Farman Hasanov", "6-0-0"),
       F("Featherweight", "Julian Erosa", "", "Lee Jeong-yeong", ""),
       F("Middleweight", "Azamat Bekoev", "", "Andre Petroski", ""),
-      F("Middleweight", "Nick Klein", "", "Joseph Kropschot", ""),
-      F("W Bantamweight", "Yana Santos", "", "Luana Santos", ""),
-      F("Welterweight", "Rodrigo Sezinando", "", "Theodor Berggren", "")
+      F("Middleweight", "Nick Klein", "", "Joseph Kropschot", "")
     ]},
     { name: "UFC Fight Night: Bonfim vs. Brady", date: "2026-11-08T01:00Z", venue: "Meta APEX, Las Vegas", fights: [
       F("Welterweight", "Gabriel Bonfim", "20-1-0", "Sean Brady", "19-2-0"),
@@ -758,6 +823,9 @@ EVENT_META.push(
       F("Welterweight", "Stephen Thompson", "", "Charles Radtke", ""),
       F("Lightweight", "Drew Dober", "", "Chris Duncan", ""),
       F("Lightweight", "Jim Miller", "", "Terrance McKinney", "")
+    ]},
+    { name: "UFC Fight Night: Procházka vs. Stirling", date: "2026-11-21T18:00Z", venue: "ABHA Arena, Doha", fights: [
+      F("Light Heavyweight", "Jiří Procházka", "32-6-1", "Navajo Stirling", "11-0-0")
     ]}
   );
 })();
@@ -765,8 +833,8 @@ EVENT_META.push(
 DIVISIONS.men = [
   { name: "Heavyweight", weight: "265 lb", champ: { name: "Ciryl Gane", record: "14-2", country: "France" },
     beltFacts: "<b>Ciryl Gane, promoted to undisputed champion</b> in September after Tom Aspinall gave up the belt — the eye injury from their October 2025 fight (an accidental eye poke, ruled a no contest) never healed after multiple surgeries. Gane had won the interim belt by stopping Alex Pereira at the White House in June. <b>First defense: Josh Hokit at UFC 334, Nov 14, Madison Square Garden.</b>",
-    top5: [{ rank: 1, name: "Tom Aspinall", record: "15-3" }, { rank: 2, name: "Sergei Pavlovich", record: "21-3" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Alexander Volkov", record: "40-11" }, { rank: 5, name: "Rizvan Kuniev", record: "14-3-1" }],
-    story: "Dana White first said Gane would have to win the vacant belt in a fight, then the UFC reversed course and simply named him champion. His first defense is against <b>unbeaten Josh Hokit</b> (10-0, ranked just outside the top five), a former Fresno State wrestler who's 4-0 in the UFC — including a knockout of Derrick Lewis. Gane is a clear favorite (around -235). Aspinall says he isn't retiring and hopes to return in 2027. Below them: <b>Alexander Volkov vs Rizvan Kuniev</b> on the UFC 333 main card (Oct 24) is a top-five fight." },
+    top5: [{ rank: 1, name: "Tom Aspinall", record: "15-3" }, { rank: 2, name: "Alexander Volkov", record: "41-11" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Sergei Pavlovich", record: "21-3" }, { rank: 5, name: "Josh Hokit", record: "10-0" }],
+    story: "Dana White first said Gane would have to win the vacant belt in a fight, then the UFC reversed course and simply named him champion. His first defense is against <b>unbeaten Josh Hokit</b> (10-0, ranked just outside the top five), a former Fresno State wrestler who's 4-0 in the UFC — including a knockout of Derrick Lewis. Gane is a clear favorite (around -235). Aspinall says he isn't retiring and hopes to return in 2027. Below them, <b>Alexander Volkov jumped to #2</b> after out-pointing Rizvan Kuniev at UFC 333, and <b>Alex Pereira fights Sergei Pavlovich at UFC 335 in December</b>." },
   { name: "Light Heavyweight", weight: "205 lb", champ: { name: "Carlos Ulberg", record: "15-1", country: "New Zealand" },
     beltFacts: "Won the <b>vacant</b> belt in April 2026 with a first-round KO of Jiří Procházka — but <b>tore his ACL in that fight and is out until 2027</b>. <b>0 defenses.</b>",
     top5: [{ rank: 1, name: "Magomed Ankalaev", record: "20-2-1" }, { rank: 2, name: "Jiří Procházka", record: "32-6-1" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Khalil Rountree Jr.", record: "15-7" }, { rank: 5, name: "Navajo Stirling", record: "11-0" }],
@@ -793,7 +861,7 @@ DIVISIONS.men = [
     story: "<b>Yan settled the rivalry at UFC 333</b>: down two rounds on every card, he took the last three to beat Dvalishvili for the second fight in a row. Next in line is likely <b>Song Yadong</b>, who knocked out Umar Nurmagomedov in August with a second-round uppercut and has been demanding a title shot ever since." },
   { name: "Flyweight", weight: "125 lb", champ: { name: "Joshua Van", record: "18-2", country: "Myanmar/USA" },
     beltFacts: "Won the belt in Dec 2025 — a 26-second TKO when Pantoja's arm gave out — defended with a round-5 TKO of Tatsuro Taira in May, then <b>settled it for real at UFC 331 on Sep 19: a clean five-round decision over Pantoja</b>. 2 defenses.",
-    top5: [{ rank: 1, name: "Manel Kape", record: "23-7" }, { rank: 2, name: "Alexandre Pantoja", record: "30-7" }, { rank: 3, name: "Brandon Royval", record: "18-9" }, { rank: 4, name: "Tatsuro Taira", record: "18-2" }, { rank: 5, name: "Kyoji Horiguchi", record: "34-5" }],
+    top5: [{ rank: 1, name: "Manel Kape", record: "23-7" }, { rank: 2, name: "Alexandre Pantoja", record: "30-7" }, { rank: 3, name: "Brandon Royval", record: "18-9" }, { rank: 4, name: "Tatsuro Taira", record: "18-2" }, { rank: 5, name: "Lone'er Kavanagh", record: "11-2" }],
     story: "At 24, Van is <b>the youngest champion on the roster</b> and, after out-striking Pantoja for 25 minutes, a top-five pound-for-pound fighter on most media lists. Pantoja slid to #2 behind <b>Manel Kape, the obvious next challenger</b>. A Van–Kape fight would be the first real test of whether anyone at 125 can slow him down." }
 ];
 P4P.explain = "<b>Pound-for-pound</b> is a fun, hypothetical ranking: who's the best fighter if weight didn't matter? It compares champions and stars across divisions by skill and résumé. No belt attached — pure bragging rights.";
@@ -838,6 +906,7 @@ EXPLAINERS.push(
 (function () {
   const RAW = {
     "Rizvan Kuniev": "4001837", // Oct 18, from his espn.com/mma/fighter/_/id profile URL
+    "Lone'er Kavanagh": "5147737", // Oct 29, from espn.com/mma/fighter/_/id/5147737/loneer-kavanagh
     "Umar Nurmagomedov": "4569549", "Song Yadong": "3151289", "Yan Xiaonan": "4275487", "Denise Gomes": "4963343",
     "Aoriqileng": "4389085", "Kai Asakura": "4336757", "Alex Perez": "3155425", "Sumudaerji": "4405109",
     "Junior Tafa": "5122234", "Ce Liu": "5292011", "Liu Ce": "5292011", "Namsrai Batbayar": "5145018", "Andre Lima": "5157669",
