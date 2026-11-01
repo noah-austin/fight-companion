@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "October 29, 2026";
+const ANALYSIS_STAMP = "November 1, 2026";
 
 /* ============ FIGHTER PROFILES — UFC Vegas 121 (Sep 26, APEX) ============ */
 Object.assign(FIGHTERS, {
@@ -675,6 +675,22 @@ Object.assign(FIGHTERS, {
     history: "An unbeaten light heavyweight who announced himself by stopping former champion Jan Blachowicz in the first round in Belgrade in August. He's already in the division's top five. Beating Procházka would make him a title contender at 29." }
 });
 
+/* ============ FIGHTER PROFILES — Cortes-Acosta vs Walker (Nov 7) ============ */
+Object.assign(FIGHTERS, {
+  waldocortesacosta: { name: "Waldo Cortes-Acosta", ht: 76, reach: 78, nick: "Salsa Boy", age: 35, country: "Dominican Republic", style: "Durable, high-volume heavyweight — steady pressure and cardio", strengths: [
+      "Huge work rate for a heavyweight — he keeps throwing for all five rounds",
+      "Tough and hard to finish",
+      "Ranked in the heavyweight top 10"],
+    weaknesses: ["Lost his last two, to Alexander Volkov and Curtis Blaydes", "Gives up two inches of height and four of reach"],
+    history: "A Dominican heavyweight who climbed into the rankings with a long winning run, then dropped back-to-back fights to Alexander Volkov in May and Curtis Blaydes in September. He headlines on short notice with a chance to stop the slide." },
+  johnnywalker: { name: "Johnny Walker", ht: 78, reach: 82, nick: "", age: 34, country: "Brazil", style: "Wild, athletic striker — spinning attacks, flying knees, big power", strengths: [
+      "Huge frame: 6-foot-6 with an 82-inch reach",
+      "Knocked out Mick Parkin with a knee in his heavyweight debut (Oct 3)",
+      "Explosive — can end a fight with one strike"],
+    weaknesses: ["Has been stopped before at light heavyweight", "First five-round heavyweight fight, against a high-volume opponent"],
+    history: "A Brazilian who fights out of SBG Ireland and spent years as one of the most unpredictable light heavyweights in the UFC. After losing to Dominick Reyes in April he moved up to heavyweight, and finished Mick Parkin with a knee in under four minutes. Now he gets a ranked heavyweight in a main event." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -734,6 +750,8 @@ Object.assign(MATCHUPS, {
     note: "A rising welterweight against an unbeaten newcomer. Lebosnoyani is the more polished striker and switches stances to stay unpredictable. Hasanov is 6-0 and has the longer reach. The books expect Lebosnoyani's experience to tell." },
   "jiriprochazka|navajostirling": { odds: "Lines not posted at write-up time",
     note: "Chaos against control, over five rounds. Procházka fights with his hands low and throws from everywhere; he's either knocking you out or getting hit trying. Stirling is unbeaten, younger and more disciplined, and just flattened Jan Blachowicz. If Stirling stays composed and counters, the prospect takes the veteran's spot; if Procházka drags him into a brawl, anything can happen." },
+  "johnnywalker|waldocortesacosta": { odds: "Lines not posted at write-up time",
+    note: "A short-notice heavyweight main event. Walker is the bigger, more explosive striker, with spinning attacks and knees that can end it in one shot. Cortes-Acosta wants to wear him down with volume and pressure over five rounds. If Walker lands early, it's over fast; if it goes long, Cortes-Acosta's work rate takes over." },
   "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
     note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
   "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
@@ -781,11 +799,14 @@ EVENT_META.push(
     note: "RESULTS: <b>Volkanovski dropped Movsar Evloev with a left hand and stopped him at 4:54 of round two</b> — the first loss of Evloev's career, and one more defense ties José Aldo's record. <b>Petr Yan beat Merab Dvalishvili 48-47 on all three cards</b> after losing the first two rounds, winning the trilogy 2-1 (Fight of the Night). Lone'er Kavanagh knocked out Ramazan Temirov in round one, Alexander Volkov out-pointed Rizvan Kuniev, and Aaron Pico stopped short-notice Losene Keita in 74 seconds.",
     mainCard: ["alexandervolkanovski|movsarevloev", "merabdvalishvili|petryan", "loneerkavanagh|ramazantemirov", "alexandervolkov|rizvankuniev", "aaronpico|losenekeita"] },
   { match: ["moicano vs. nolan", "moicano vs nolan"], titles: "",
-    note: "Halloween at the Meta APEX: veteran Renato Moicano against Australia's Tom Nolan, 26 and on a five-fight win streak — a true pick 'em after Nolan opened as a clear favorite. Unbeaten Jacobe Smith steps in on 12 days' notice against Randy Brown in the co-main. Also on the main card: Osbourne vs Durden, Yana Santos vs Luana Santos, and Lebosnoyani vs unbeaten Farman Hasanov.",
+    note: "RESULTS: <b>Tom Nolan stopped Renato Moicano at 1:28 of round three</b> — he survived Moicano's back-takes early (helped by a controversial referee stand-up in round two), then hurt him with a knee and finished with elbows. Six straight wins for the 26-year-old Australian. Unbeaten Jacobe Smith beat Randy Brown 30-26 on all three cards on 12 days' notice; Cody Durden out-pointed Ode Osbourne, Luana Santos beat Yana Santos, and Jean-Paul Lebosnoyani won by doctor's stoppage over Farman Hasanov.",
     mainCard: ["renatomoicano|tomnolan", "jacobesmith|randybrown", "codydurden|odeosbourne", "luanasantos|yanasantos", "farmanhasanov|jeanpaullebosnoyani"] },
-  { match: ["bonfim vs. brady", "bonfim vs brady"], titles: "",
-    note: "Nov 7 at the Meta APEX: rising Brazilian Gabriel Bonfim, fresh off beating ex-champ Belal Muhammad, against Philadelphia grappler Sean Brady in a five-round welterweight main event. Tatiana Suarez vs Virna Jandiroba is also on the card. The rest of the lineup is still filling in.",
-    mainCard: ["gabrielbonfim|seanbrady"] },
+  { match: ["cortes-acosta vs. walker", "cortes-acosta vs walker", "cortes acosta vs. walker", "acosta vs. walker", "bonfim vs. brady"], titles: "",
+    note: "Nov 7 at the Meta APEX: the original main event fell apart when Sean Brady pulled out with a staph infection (Bonfim is expected to be rebooked). In its place, a five-round heavyweight fight: ranked veteran Waldo Cortes-Acosta against Johnny Walker, fresh off a one-knee knockout in his heavyweight debut. Tatiana Suarez vs Virna Jandiroba, two former strawweight title challengers, is the co-main.",
+    mainCard: ["johnnywalker|waldocortesacosta", "tatianasuarez|virnajandiroba"] },
+  { match: ["adesanya vs. magomedov", "adesanya vs magomedov"], titles: "",
+    note: "Dec 5 in Riyadh (reported, not yet official): former middleweight champion Israel Adesanya returns against Shara Magomedov. Breakdowns once the card is confirmed.",
+    mainCard: ["israeladesanya|sharamagomedov"] },
   { match: ["ufc 334", "gane vs. hokit", "gane vs hokit"], titles: "2 title fights",
     note: "Madison Square Garden: new heavyweight champion Ciryl Gane's first defense against unbeaten wrestler Josh Hokit, and Kayla Harrison vs Amanda Nunes for the women's bantamweight belt — Nunes coming out of retirement. Also on the main card: Caio Borralho vs Yousri Belgaroui, Kevin Holland vs Uros Medic, and Bilal Hasan vs Luis Gurule. Stephen \"Wonderboy\" Thompson has his final fight on the prelims.",
     mainCard: ["cirylgane|joshhokit", "amandanunes|kaylaharrison", "caioborralho|yousribelgaroui", "kevinholland|urosmedic", "bilalhasan|luisgurule"] },
@@ -798,18 +819,8 @@ EVENT_META.push(
 (function () {
   const F = (weight, n1, r1, n2, r2) => ({ weight, f1: { name: n1, record: r1, winner: false }, f2: { name: n2, record: r2, winner: false }, done: false, live: false });
   FALLBACK_EVENTS.push(
-    { name: "UFC Fight Night: Moicano vs. Nolan", date: "2026-10-31T21:00Z", venue: "Meta APEX, Las Vegas", fights: [
-      F("Lightweight", "Renato Moicano", "21-7-1", "Tom Nolan", "11-1-0"),
-      F("Welterweight", "Randy Brown", "20-8-0", "Jacobe Smith", "13-0-0"),
-      F("Flyweight", "Ode Osbourne", "13-9-0", "Cody Durden", "18-11-1"),
-      F("W Bantamweight", "Yana Santos", "17-8-0", "Luana Santos", "11-2-0"),
-      F("Welterweight", "Jean-Paul Lebosnoyani", "11-2-0", "Farman Hasanov", "6-0-0"),
-      F("Featherweight", "Julian Erosa", "", "Lee Jeong-yeong", ""),
-      F("Middleweight", "Azamat Bekoev", "", "Andre Petroski", ""),
-      F("Middleweight", "Nick Klein", "", "Joseph Kropschot", "")
-    ]},
-    { name: "UFC Fight Night: Bonfim vs. Brady", date: "2026-11-08T01:00Z", venue: "Meta APEX, Las Vegas", fights: [
-      F("Welterweight", "Gabriel Bonfim", "20-1-0", "Sean Brady", "19-2-0"),
+    { name: "UFC Fight Night: Cortes-Acosta vs. Walker", date: "2026-11-07T22:00Z", venue: "Meta APEX, Las Vegas", fights: [
+      F("Heavyweight", "Waldo Cortes-Acosta", "", "Johnny Walker", ""),
       F("W Strawweight", "Tatiana Suarez", "", "Virna Jandiroba", ""),
       F("Middleweight", "Mantas Kondratavicius", "", "Wesley Schultz", ""),
       F("Light Heavyweight", "Billy Elekana", "", "Lucas Fernando", "")
@@ -869,9 +880,9 @@ P4P.men = [{ name: "Islam Makhachev", record: "29-1" }, { name: "Alexander Volka
 
 /* ============ STORYLINES & UFC 101 ============ */
 STORYLINES.push(
-  { em: "🍁", title: "Edmonton: Malott's knee, Jasudavicius's upset", body: [
-    "<b>Mike Malott knocked out Joaquin Buckley with a knee in round two</b>, his fifth straight win and one of the best knockouts of the year, in front of a Canadian crowd. Buckley has now lost three in a row.",
-    "The bigger shake-up came in the co-main: <b>Jasmine Jasudavicius beat Erin Blanchfield</b> on all three cards as a +260 underdog, which could put the 37-year-old Canadian in line for a flyweight title shot."] },
+  { em: "🎃", title: "Halloween: Tom Nolan arrives", body: [
+    "<b>Tom Nolan stopped Renato Moicano in round three</b> — his sixth straight win and the biggest of his career. Moicano nearly had him early with back-takes, and the referee's stand-up in round two drew plenty of criticism, but Nolan finished it clean with a knee and elbows. At 26, the Australian is now a real name at lightweight.",
+    "Next Saturday's card changed too: <b>Sean Brady pulled out with a staph infection</b>, so Waldo Cortes-Acosta vs Johnny Walker is the new heavyweight main event."] },
   { em: "🐐", title: "Makhachev owns the record books", body: [
     "At UFC 330 Islam Makhachev out-pointed Ian Machado Garry for his first welterweight defense and his <b>17th straight UFC win — breaking Anderson Silva's all-time record</b> (16) that stood for 14 years. He named <b>Carlos Prates</b> as the most deserving next challenger, waved off unbeaten Michael Morales, and hinted he misses lightweight — where a Topuria superfight still lurks."] },
   { em: "🏆", title: "UFC 333: both champs hold on", body: [
