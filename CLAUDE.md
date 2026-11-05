@@ -20,6 +20,7 @@ Built with Claude Aug 15–16, 2026; refreshed twice weekly since; **redesigned 
 | `app.css` | All styles. Tokens on `:root` (dark canvas, `--red` corner, `--blue` corner, `--gold` for belts/winners/favorites); display font Barlow Condensed from `fonts/`. | Design work only |
 | `app.js` | All logic: ESPN feed, live mode, rendering, sheets, alerts, update check. Declares the data containers (`FIGHTERS`, `MATCHUPS`, …) and helpers like `norm()`; boots on `DOMContentLoaded`, after `data.js` has run. | Design work only |
 | `data.js` | **The baked data blocks — the ONLY file a refresh edits.** | Refresh |
+| `scripts/check-data.mjs` | Data validator: loads `app.js` helpers + `data.js` and checks every block against the rules below. Run before every data push. | Design work only |
 | `sw.js`, `manifest.webmanifest`, `icon-192.png`, `icon-512.png`, `apple-touch-icon.png`, `fonts/` | Push service worker (push only, deliberately no fetch handler), PWA manifest and icons, fonts. | Never in a refresh |
 | `server/` | Railway API: sends the fight-alert pushes (and still holds the archived Bets data). | Never in a refresh |
 | `archive/bets/` | The retired Bets tab's page code + how to restore it. | Nobody |
@@ -41,11 +42,14 @@ Three bottom tabs: **Fights / Rankings / Catch Up**, plus a ⚙️ settings shee
 
 ### Live data (no maintenance needed)
 The page fetches ESPN's public scoreboard (`site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=…`, from 9 days back to 75 days ahead) and normalizes it in `normalizeEspnEvent()`. Facts learned in production, all relied on:
-- **ESPN lists fights chronologically — earliest prelim first, main event LAST.** `splitCard()` uses `EVENT_META[...].mainCard` for the true main card in broadcast order and falls back to "last fight = main event".
+- **ESPN lists fights chronologically — earliest prelim first, main event LAST.** `splitCard()` puts the `EVENT_META[...].mainCard` fights first in broadcast order, then adds any other fight that starts at or after the main-card start time (from ESPN's per-fight dates). With no meta it uses the last start-time group, or "last fight = main event".
+- Fights are identified by ESPN's competition id (`fightKey()` → `id:NNN`), falling back to the sorted name pair for the offline snapshot. MATCHUPS stay keyed by name pair.
 - The athlete id is on `competitors[].id` (`athlete.id` is absent) — used for headshots (`a.espncdn.com/i/headshots/mma/players/full/{id}.png`, initials fallback).
 - A finished fight's status says only "Final"; `status.period` + `displayClock` are set; the method is the `details` entry "Unofficial Winner Kotko|Decision|Submission" (Kotko = KO/TKO), the rest is play-by-play; 5:00 of the last round with no entry = decision (`resultOf()`, same rules as `server/src/espn.js`).
 - Live statuses: `STATUS_IN_PROGRESS`, `STATUS_END_PERIOD`, `STATUS_HALFTIME`. A card with some results in and more to come counts as live (`eventState`). During a card window the page polls every 60s (5 min when a card starts within 2h).
-- If the fetch fails, the page shows `FALLBACK_EVENTS` with an Offline banner.
+- Every fetch has an 8s timeout. During live polling the page asks ESPN for ±1 day around the live card and merges it in (a full 9-back/75-ahead fetch every 10th poll or after a failure).
+- If the first fetch fails, the page shows `FALLBACK_EVENTS` with an Offline banner and retries on its own (30s, doubling to 5 min), on resume and when the phone comes back online. If a later poll fails, it keeps the last good data and the live box says "Last updated N min ago".
+- `stamp()` wraps `ANALYSIS_STAMP`, so a broken `data.js` still leaves a working (live-only) app instead of a blank page.
 
 ### Fight alerts (Web Push)
 Settings → Fight alerts asks for notification permission, registers `sw.js` and subscribes with the Railway API (`/push/key`, `/push/subscribe`, `/push/test`). The server pushes main-card fight starts and results from `settle.js`. On iPhone it works only from the Home-Screen install (the sheet says so). `fc-alerts` in localStorage mirrors the switch; in-app toasts also fire while the app is open.
@@ -61,8 +65,8 @@ GitHub Pages caches files ~10 min and a home-screen app has no address bar. `che
 - `FIGHTERS` — key: `norm(fullName)` → `{name, ht, reach, nick, age, country, style, strengths[2-3], weaknesses[1-3], history}`. `history` may contain `<b>` tags. `ht` and `reach` are **inches as numbers** (6'2" → `ht: 74`; `73.5` is fine), cross-checked on ESPN / UFC Stats / Tapology; leave one out rather than guess (the tile shows "—").
 - `MATCHUPS` — key: the two fighters' `norm()` names **sorted alphabetically, joined with "|"** → `{note, odds, title?}` (`title` only for title fights, e.g. "Welterweight title").
   **The odds format is load-bearing:** `"Name -NNN, Name +NNN"` (any part of each fighter's name, minus sign before the number), with optional commentary after an em dash `" — ..."`. It drives the Fav tag and the plain-English odds card; anything else falls back to showing the raw text.
-- `EVENT_META` — per analyzed event: `{match: [lowercase substrings of the ESPN event name], titles: "" | "N title fights", note, mainCard: [pair keys in broadcast order, main event first]}`.
-- `FALLBACK_EVENTS` — offline snapshot: `{name, date ISO, venue, fights: [{weight, f1:{name,record}, f2:{name,record}}]}` — main card first (main event at top), then prelims.
+- `EVENT_META` — per analyzed event: `{match: [lowercase substrings of the ESPN event name], titles: "" | "N title fights", note, mainCard: [pair keys in broadcast order, main event first]}`. List the **whole** main card once it's announced (usually 5 fights). For finished cards the note is the recap, with no "RESULTS:" prefix (the app labels it "How it went"). A finished card's entry stays ~9 days (the results window), then goes.
+- `FALLBACK_EVENTS` — offline snapshot: `{name, date ISO, venue, fights: [{weight, f1:{name,record}, f2:{name,record}}]}` — main card first (main event at top), then prelims. Upcoming cards only. Give every fighter in it an `ESPN_IDS` entry when one can be found (offline, it's the only way to show a face).
 - `DIVISIONS.men` — 8 divisions (Heavyweight→Flyweight): `{name, weight, champ:{name,record,country}, interim?, beltFacts, top5:[{rank,name,record}], story}`. A vacant belt is `champ: {name: "Vacant", record: "<short note>", country: "<next title fight>"}`. **Verify every champion against 2+ current sources — belts change often.**
 - `P4P.men` — top 10 `{name, record}`; `P4P.explain` — one short paragraph.
 - `STORYLINES` — 5-6 `{em, title, body:[paragraphs]}` big-picture items.
@@ -75,8 +79,8 @@ GitHub Pages caches files ~10 min and a home-screen app has no address bar. `che
 
 1. Read the current `data.js` from `main` (never rebuild from scratch).
 2. Research via web search, verified against 2+ current sources (ESPN, UFC.com, Sherdog, MMA media — facts must reflect today, not training data): next ~4 real UFC events (main-card lineups, per-fighter breakdowns, matchup notes with betting odds), men's champions + top 5 + division storylines, P4P top 10, big-picture storylines, ESPN ids for new fighters.
-3. Edit only `data.js`: replace the blocks + stamp. Drop past events; add newly announced ones. Never edit `index.html`, `app.js`, `app.css`, `server/` or `archive/`.
-4. Verify: `node --check data.js`, then **commit and push** (see failure modes below). Then, if Playwright is available (`executablePath: '/opt/pw-browsers/chromium'`), serve the repo root (`python3 -m http.server`) and click through the three tabs, a fight sheet and a division sheet — the ESPN fetch failing in the sandbox is EXPECTED (it exercises the offline path); any other JS error is a real bug.
+3. Edit only `data.js`: replace the blocks + stamp. Drop past events; add newly announced ones. **Prune as you go**: delete every `MATCHUPS` entry not on an `EVENT_META` main card or a `FALLBACK_EVENTS` fight, and every `FIGHTERS` profile not on one of those fights or in the rankings/P4P (aliases with them). Never edit `index.html`, `app.js`, `app.css`, `server/` or `archive/`.
+4. Verify: `node --check data.js && node scripts/check-data.mjs`. The checker is a **hard gate**: any ERROR (bad key, unparseable odds, stale entry, missing ESPN id for a ranked fighter, past fallback card, …) must be fixed before pushing; WARNINGs are worth a look. Then **commit and push** (see failure modes below). Then, if Playwright is available (`executablePath: '/opt/pw-browsers/chromium'`), serve the repo root (`python3 -m http.server`) and click through the three tabs, a fight sheet and a division sheet — the ESPN fetch failing in the sandbox is EXPECTED (it exercises the offline path); any other JS error is a real bug.
 5. Commit to `main` with a message like `Refresh: <date>` and push. No PRs. Verify with `git ls-remote origin refs/heads/main`.
 
 ## Tone of written content
@@ -87,7 +91,7 @@ For casual fans: plain English, no insider jargon without explanation, short sen
 
 `server/` (Node 20, Express, Postgres, no ORM), Railway project `fight-companion`, service `api`, root directory `/server`, Postgres alongside. Public URL `https://api-production-34f6c.up.railway.app` (`ALERTS_API` in app.js). Railway builds on every push to `main` that touches `server/`. Env vars live only in Railway (`DATABASE_URL`, `JWT_SECRET`, `INVITE_CODE`, `CORS_ORIGINS`, `STARTING_BANKROLL`).
 
-Today it matters for **fight alerts**: it polls ESPN (every minute during a card, every 15 min otherwise) and pushes main-card starts/results to subscribed devices (VAPID keys in the `kv` table). It also still runs the archived Bets backend (accounts, bets, settlement, leaderboard) with all data intact; nothing on the site calls those endpoints any more. Verify the server from Railway deploy logs (`[sync]`, `[card]`, `[shape]`, `[push]` lines) — Railway and ESPN are egress-blocked from the Claude sandbox.
+Today it matters for **fight alerts**: it polls ESPN (every minute during a card, every 15 min otherwise) and pushes main-card starts/results to subscribed devices (VAPID keys in the `kv` table). The archived Bets backend (accounts, bets, settlement, leaderboard) is still there with all data intact, but switched off: unless `BETS_ENABLED=1` is set in Railway, the per-fight odds calls are skipped and the bets/feed/leaderboard routes answer 410. `/push/*` is rate-limited per IP (30 per 10 min), and `/push/test` only fires at a device already in `push_subs`. Verify the server from Railway deploy logs (`[sync]`, `[card]`, `[shape]`, `[push]` lines) — Railway and ESPN are egress-blocked from the Claude sandbox.
 
 ## Bets — archived Oct 15, 2026
 
