@@ -4,14 +4,31 @@ import { q, tx, applySchema } from "./db.js";
 import { signup, login, sign, requireUser, requireAdmin, maybeUser, httpErr } from "./auth.js";
 import { initPush, pushEnabled, vapidPublicKey, saveSubscription, removeSubscription, sendTo, broadcast } from "./push.js";
 import { price, grade, METHODS } from "./pricing.js";
-import { startPoller, syncOnce, settleFinished, lastRaw } from "./settle.js";
+import { startPoller, syncOnce, settleFinished, lastRaw, BETS_ENABLED } from "./settle.js";
 
 const app = express();
+app.set("trust proxy", 1);   // Railway's proxy sets X-Forwarded-For; req.ip is the caller
 app.use(express.json({ limit: "64kb" }));
 app.use(cors({ origin: (process.env.CORS_ORIGINS || "https://noah-austin.github.io").split(",").map((s) => s.trim()) }));
 
 const STARTING_BANKROLL = Number(process.env.STARTING_BANKROLL || 1000);
 const wrap = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+
+// Small per-IP limit on the public push endpoints: plenty for a phone toggling alerts,
+// not enough for anyone to use /push/test as a notification cannon.
+const hits = new Map();   // ip -> [timestamps]
+const limit = (max, windowMs) => (req, res, next) => {
+  const now = Date.now(), ip = req.ip || "?";
+  const recent = (hits.get(ip) || []).filter((t) => now - t < windowMs);
+  recent.push(now); hits.set(ip, recent);
+  if (recent.length > max) return res.status(429).json({ error: "too many requests, try again in a few minutes" });
+  next();
+};
+setInterval(() => { const now = Date.now(); for (const [ip, ts] of hits) if (!ts.some((t) => now - t < 15 * 60e3)) hits.delete(ip); }, 15 * 60e3).unref();
+
+// Bets were archived in the Oct 2026 redesign. Their routes answer 410 unless BETS_ENABLED=1;
+// the data stays in Postgres untouched.
+const betsOnly = (_req, res, next) => (BETS_ENABLED ? next() : res.status(410).json({ error: "bets are archived" }));
 
 // The one card the book is open on: the earliest event that isn't finished. A card stays
 // "next" while it's live (remaining fights are still bettable) and hands off once every
@@ -45,7 +62,7 @@ app.get("/events", wrap(async (req, res) => {
   res.json({ upcoming_id: await upcomingEventId(), events: events.map((e) => ({ ...e, fights: byEvent[e.id] })) });
 }));
 
-app.get("/events/:id", wrap(async (req, res) => {
+app.get("/events/:id", betsOnly, wrap(async (req, res) => {
   const { rows: [event] } = await q(`SELECT * FROM events WHERE id=$1`, [req.params.id]);
   if (!event) throw httpErr(404, "no such event");
   const { rows: fights } = await q(`SELECT * FROM fights WHERE event_id=$1 ORDER BY order_idx`, [event.id]);
@@ -64,28 +81,31 @@ app.get("/events/:id", wrap(async (req, res) => {
 }));
 
 // ---- push notifications --------------------------------------------------------------
+app.use("/push", limit(30, 10 * 60e3));
 app.get("/push/key", (_req, res) => res.json({ enabled: pushEnabled(), key: vapidPublicKey() }));
 app.post("/push/subscribe", maybeUser, wrap(async (req, res) => { await saveSubscription(req.body?.subscription, req.user?.id); res.json({ ok: true }); }));
 app.delete("/push/subscribe", wrap(async (req, res) => { if (req.body?.endpoint) await removeSubscription(req.body.endpoint); res.json({ ok: true }); }));
-// Fire one notification at the caller's own device so they can see alerts work.
+// Fire one notification at the caller's own device so they can see alerts work. Only for a
+// device that has already subscribed, and the keys come from our table, not the request.
 app.post("/push/test", wrap(async (req, res) => {
-  const s = req.body?.subscription;
-  if (!s?.endpoint || !s?.keys?.p256dh || !s?.keys?.auth) throw httpErr(400, "bad subscription");
-  const sent = await sendTo([{ endpoint: s.endpoint, p256dh: s.keys.p256dh, auth: s.keys.auth }],
-    { title: "🔔 Fight alerts are on", body: "You'll hear from us when main-card fights start and finish, and when your bets settle.", tag: "test" });
+  const endpoint = req.body?.subscription?.endpoint;
+  if (!endpoint) throw httpErr(400, "bad subscription");
+  const { rows } = await q(`SELECT endpoint, p256dh, auth FROM push_subs WHERE endpoint=$1`, [endpoint]);
+  if (!rows.length) throw httpErr(404, "turn fight alerts on first");
+  const sent = await sendTo(rows, { title: "🔔 Fight alerts are on", body: "You'll get a buzz when main-card fights start and when they finish.", tag: "test" });
   res.json({ sent });
 }));
 
 // ---- bets ---------------------------------------------------------------------------
 // Quote without placing: same math the server uses, so the UI can show a live payout.
-app.post("/quote", wrap(async (req, res) => {
+app.post("/quote", betsOnly, wrap(async (req, res) => {
   const { fight_id, pick_id, method = null, round = null, stake } = req.body || {};
   const f = await fightForBet(fight_id, pick_id);
   const ml = f.f1_id === pick_id ? f.f1_ml : f.f2_ml;
   res.json(price({ ml, method, round, rounds: f.rounds, stake: Number(stake) || 100 }));
 }));
 
-app.post("/bets", requireUser, wrap(async (req, res) => {
+app.post("/bets", betsOnly, requireUser, wrap(async (req, res) => {
   const { fight_id, pick_id, method = null, round = null } = req.body || {};
   const stake = Math.floor(Number(req.body?.stake));
   if (!Number.isFinite(stake) || stake < 1) throw httpErr(400, "stake must be at least $1");
@@ -121,7 +141,7 @@ app.post("/bets", requireUser, wrap(async (req, res) => {
   res.status(201).json({ bet: publicBet(bet) });
 }));
 
-app.delete("/bets/:id", requireUser, wrap(async (req, res) => {
+app.delete("/bets/:id", betsOnly, requireUser, wrap(async (req, res) => {
   const { rows: [b] } = await q(`SELECT b.*, f.status AS fstatus, f.start_at FROM bets b JOIN fights f ON f.id=b.fight_id WHERE b.id=$1`, [req.params.id]);
   if (!b) throw httpErr(404, "no such bet");
   if (b.user_id !== req.user.id) throw httpErr(403, "not your bet");
@@ -130,7 +150,7 @@ app.delete("/bets/:id", requireUser, wrap(async (req, res) => {
   res.json({ ok: true });
 }));
 
-app.post("/bets/:id/react", requireUser, wrap(async (req, res) => {
+app.post("/bets/:id/react", betsOnly, requireUser, wrap(async (req, res) => {
   const emoji = String(req.body?.emoji || "").slice(0, 8);
   if (!emoji) throw httpErr(400, "emoji required");
   const { rowCount } = await q(`DELETE FROM reactions WHERE bet_id=$1 AND user_id=$2 AND emoji=$3`, [req.params.id, req.user.id, emoji]);
@@ -139,7 +159,7 @@ app.post("/bets/:id/react", requireUser, wrap(async (req, res) => {
 }));
 
 // ---- feed & leaderboard ---------------------------------------------------------------
-app.get("/feed", wrap(async (req, res) => {
+app.get("/feed", betsOnly, wrap(async (req, res) => {
   const { rows } = await q(
     `SELECT b.*, u.username, f.f1_name, f.f2_name, f.weight, e.name AS event_name,
             COALESCE(json_agg(json_build_object('emoji', r.emoji, 'username', ru.username)) FILTER (WHERE r.id IS NOT NULL), '[]') AS reactions
@@ -150,7 +170,7 @@ app.get("/feed", wrap(async (req, res) => {
   res.json({ feed: rows.map(publicBet) });
 }));
 
-app.get("/leaderboard", wrap(async (_req, res) => {
+app.get("/leaderboard", betsOnly, wrap(async (_req, res) => {
   const { rows: alltime } = await q(
     `SELECT u.username,
             COALESCE(SUM(CASE WHEN b.status IN ('won','lost','void') THEN b.payout - b.stake END),0)::numeric AS pl,

@@ -11,6 +11,10 @@ const shortEvent = (n) => String(n || "").replace(/^UFC Fight Night:\s*/i, "");
 const methodText = (m) => (m === "KO" ? "KO/TKO" : m === "SUB" ? "submission" : m === "DEC" ? "decision" : m === "DQ" ? "DQ" : "");
 const money = (n) => "$" + Math.round(Number(n)).toLocaleString("en-US");
 
+// The Bets tab is archived. Its per-fight odds calls (one ESPN request per upcoming fight,
+// every sync) stay off unless BETS_ENABLED=1 is set in Railway. Alerts don't need them.
+export const BETS_ENABLED = process.env.BETS_ENABLED === "1";
+
 export const lastRaw = new Map();   // fight id -> raw ESPN competition, for /admin/debug
 
 // Log what ESPN actually sends so the odds/result parsers can be verified from Railway
@@ -37,7 +41,7 @@ export async function syncOnce() {
   for (const raw of events) {
     const ev = normalizeEvent(raw);
     // Lines come from the core odds resource, one call per upcoming fight (~45 days out).
-    if (ev.status !== "final" && new Date(ev.date) - Date.now() < 45 * 864e5) {
+    if (BETS_ENABLED && ev.status !== "final" && new Date(ev.date) - Date.now() < 45 * 864e5) {
       for (const f of ev.fights) {
         if (f.status !== "scheduled") continue;
         const items = await fetchOdds(ev.id, f.id);
