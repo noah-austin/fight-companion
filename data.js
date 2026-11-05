@@ -462,7 +462,13 @@ EXPLAINERS.push(
     "Islam Makhachev": "3332412", "Ian Machado Garry": "4738092",
     "Tom Aspinall": "4010976", "Ciryl Gane": "4426000", "Carlos Ulberg": "4695736", "Sean Strickland": "3093653",
     "Justin Gaethje": "3022345", "Alexander Volkanovski": "3949584", "Petr Yan": "4293517", "Joshua Van": "5120301",
-    "Ilia Topuria": "4350812", "Merab Dvalishvili": "3948572", "Alex Pereira": "4705658", "Khamzat Chimaev": "4684751"
+    "Ilia Topuria": "4350812", "Merab Dvalishvili": "3948572", "Alex Pereira": "4705658", "Khamzat Chimaev": "4684751",
+    // Nov 5: offline-snapshot fighters, each from their espn.com/mma/fighter/_/id profile URL
+    "Johnny Walker": "3146944", "Tatiana Suarez": "4020435", "Virna Jandiroba": "4289516", "Mantas Kondratavicius": "5264925",
+    "Wesley Schultz": "5057023", "Wes Schultz": "5057023", "Billy Elekana": "5078114", "Lucas Fernando": "5119021",
+    "Kayla Harrison": "4332765", "Amanda Nunes": "2516131", "Kevin Holland": "3943695", "Uros Medic": "4685870",
+    "Bilal Hasan": "5264405", "Luis Gurule": "5218137", "Stephen Thompson": "2615077", "Charles Radtke": "4416297",
+    "Drew Dober": "2951202", "Jim Miller": "2335718", "Terrance McKinney": "4425604"
   };
   Object.keys(RAW).forEach(n => { ESPN_IDS[norm(n)] = RAW[n]; });
 })();
