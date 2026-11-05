@@ -12,6 +12,9 @@ const ALERTS_API = "https://api-production-34f6c.up.railway.app";
 const SW_URL = "sw.js";
 
 /* ---------- baked data containers (filled by data.js) ---------- */
+// data.js declares ANALYSIS_STAMP; read it through stamp() so the app still runs (on live
+// ESPN data, without the written analysis) if a refresh ever ships a data.js that fails to load.
+const stamp = () => (typeof ANALYSIS_STAMP === "string" && ANALYSIS_STAMP) || "recently";
 const FIGHTERS = {};
 const MATCHUPS = {};
 const EVENT_META = [];
@@ -24,7 +27,7 @@ const ESPN_IDS = {};
 
 /* ---------- helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);
-const norm = s => (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
+const norm = s => (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, "");
 const pairKey = (a, b) => [norm(a), norm(b)].sort().join("|");
 const lastTok = name => norm((name || "").trim().split(/\s+/).pop());
 const esc = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -74,26 +77,27 @@ function avatar(name, size, ring, liveId) {
   const img = id ? `<img loading="lazy" src="https://a.espncdn.com/i/headshots/mma/players/full/${encodeURIComponent(id)}.png" alt="" onerror="this.remove()">` : "";
   return `<span class="av av-${size} ${ring || ""}"><i>${esc(initials)}</i>${img}</span>`;
 }
-const fighterAttrs = (name, id) => ` data-fighter="${esc(name)}"${id ? ` data-fid="${esc(String(id))}"` : ""}`;
-const wtLabel = w => (w || "").replace(/^W\s+/i, "Women's ").replace(/^Women's\s+/i, "Women's ");
+const fighterAttrs = (name, id) => !name || /^tba$/i.test(name) ? "" : ` data-fighter="${esc(name)}"${id ? ` data-fid="${esc(String(id))}"` : ""}`;
+const wtLabel = w => (w || "").replace(/^W\s+/i, "Women's ");
 const shortEventName = n => /fight night/i.test(n || "") ? n.replace(/^UFC Fight Night:\s*/i, "") : (n || "").split(":")[0];
 const timeOf = ms => new Date(ms).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
 
 function fmtEventDate(iso) {
   const d = new Date(iso), now = new Date();
   const date = d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-  const short = d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }).replace(",", "");
+  const short = date.replace(",", "");
   // calendar-day difference, so "tomorrow" means tomorrow, not "less than 48 hours"
   const dayDiff = Math.round((new Date(d.toDateString()) - new Date(now.toDateString())) / 86400000);
-  const rel = dayDiff === 0 ? "Tonight" : dayDiff === 1 ? "Tomorrow" : dayDiff > 1 ? "In " + dayDiff + " days" : "";
+  const rel = dayDiff === 0 ? (d.getHours() < 12 ? "Today" : "Tonight") : dayDiff === 1 ? "Tomorrow" : dayDiff > 1 ? "In " + dayDiff + " days" : "";
   return { date, short, time: timeOf(d), rel, dayDiff };
 }
 
 /* ---------- live schedule (ESPN) ---------- */
-function espnUrl() {
+function espnUrl(around) {
   const p = d => d.toISOString().slice(0, 10).replace(/-/g, "");
-  const start = new Date(Date.now() - 9 * 86400000);   // last weekend's results stay visible
-  const end = new Date(Date.now() + 75 * 86400000);
+  // full window: last ~9 days of results through 75 days ahead; narrow window: one card's dates
+  const start = around ? new Date(around - 86400000) : new Date(Date.now() - 9 * 86400000);
+  const end = around ? new Date(around + 86400000) : new Date(Date.now() + 75 * 86400000);
   return `https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=${p(start)}-${p(end)}`;
 }
 
@@ -116,6 +120,7 @@ function normalizeEspnEvent(ev) {
       const st = c.status || {};
       const status = st.type ? st.type.name : "";
       const fight = {
+        id: c.id ? String(c.id) : null,
         weight: (c.type && (c.type.text || c.type.abbreviation)) || "",
         f1: f(0), f2: f(1),
         date: c.date || c.startDate || null,
@@ -178,6 +183,7 @@ function liveSnapshot(ev) {
   const next = chron.slice(from).find(f => !f.done && !f.live) || null;
   return { now, next };
 }
+const fightKey = f => f.id ? "id:" + f.id : pairKey(f.f1.name, f.f2.name);
 const winnerOf = f => f.done && (f.f1.winner || f.f2.winner) ? (f.f1.winner ? f.f1 : f.f2) : null;
 
 // Live = a fight is on, or the card has started (some results in, more to come) within 12h.
@@ -196,21 +202,39 @@ function eventMetaFor(name) {
 }
 
 // Main card vs prelims. ESPN lists fights chronologically: earliest prelim FIRST, main
-// event LAST. With baked meta we know the true main card (in broadcast order); without
-// it, the last fight is the main event and everything else is a prelim.
+// event LAST. EVENT_META.mainCard gives the main card in broadcast order. When it lists only
+// part of the main card (common before a card is finalized), the rest is filled in from ESPN's
+// per-fight start times: every fight that starts with the main-card block is a main-card fight.
+// Without meta or times, the last fight is the main event and everything else is a prelim.
 function splitCard(ev) {
   const meta = eventMetaFor(ev.name);
   const mainKeys = meta ? meta.mainCard : [];
-  const mains = [], prelims = [];
+  const keyed = [], rest = [];
   ev.fights.forEach(f => {
     const i = mainKeys.findIndex(k => inKey(k, f.f1.name) && inKey(k, f.f2.name));
-    if (i >= 0) mains[i] = f; else prelims.push(f);
+    if (i >= 0) keyed[i] = f; else rest.push(f);
   });
-  const mainsClean = mains.filter(Boolean);
-  const reversed = [...ev.fights].reverse();
-  const useMains = mainsClean.length ? mainsClean : reversed.slice(0, 1);
-  const usePrelims = mainsClean.length ? [...prelims].reverse() : reversed.slice(1);  // featured prelim first
-  return { meta, mains: useMains, prelims: usePrelims, mainsClean };
+  const mainsClean = keyed.filter(Boolean);
+  const t = f => f.date ? new Date(f.date).getTime() : NaN;
+  let mains, prelims;
+  if (mainsClean.length) {
+    mains = mainsClean;
+    prelims = rest;
+    const T = cardTimes(ev, mainsClean);
+    if (T) {
+      const late = rest.filter(f => t(f) >= T.main);                 // same block as the keyed main card
+      mains = mainsClean.concat(late.reverse());                       // keyed order first, then latest-first
+      prelims = rest.filter(f => !(t(f) >= T.main));
+    }
+    prelims = [...prelims].reverse();                                  // featured prelim first
+  } else {
+    const T = cardTimes(ev, []);
+    const reversed = [...ev.fights].reverse();
+    mains = T ? reversed.filter(f => t(f) >= T.main) : reversed.slice(0, 1);
+    if (!mains.length) mains = reversed.slice(0, 1);
+    prelims = reversed.filter(f => !mains.includes(f));
+  }
+  return { meta, mains, prelims, mainsClean: mainsClean.length ? mainsClean : mains };
 }
 
 // Start times from ESPN's per-fight dates: the main card starts at its earliest fight; the
@@ -263,13 +287,14 @@ function oddsHtml(mu, f) {
   const inOdds = name => (name || "").trim().split(/\s+/).reverse().find(t => t.length > 2 && new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i").test(mu.odds)) || lastName(name);
   const n1 = inOdds(f.f1.name), n2 = inOdds(f.f2.name);
   const win = ml => ml > 0 ? ml : Math.round(10000 / -ml);
+  const sgn = ml => (ml > 0 ? "+" : "") + ml;
   let txt;
   if (L.a < 0 && L.b < 0) txt = `<b>Basically a coin flip.</b> Both sides are priced as slight favorites (${esc(n1)} ${L.a}, ${esc(n2)} ${L.b}).`;
   else {
     const favFirst = L.a < L.b;
     const [fav, favMl, dog, dogMl] = favFirst ? [n1, L.a, n2, L.b] : [n2, L.b, n1, L.a];
     const big = favMl <= -400 ? " — a heavy favorite" : favMl >= -130 ? " — only a slight favorite" : "";
-    txt = `<b>${esc(fav)} is the favorite</b>${big} (${favMl}): $100 on ${esc(fav)} wins $${win(favMl)}. ${esc(dog)} is the underdog (+${Math.abs(dogMl)}): $100 wins $${win(dogMl)}.`;
+    txt = `<b>${esc(fav)} is the favorite</b>${big} (${sgn(favMl)}): $100 on ${esc(fav)} wins $${win(favMl)}. ${esc(dog)} is the underdog (+${Math.abs(dogMl)}): $100 wins $${win(dogMl)}.`;
   }
   return `<div class="odds">${txt}${L.rest ? '<span class="sub">' + L.rest + "</span>" : ""}</div>`;
 }
@@ -306,48 +331,94 @@ const S = {
   offline: false,
   sel: null,           // evKey of the card being shown
   prelimsOpen: {},     // evKey -> true
+  noteOpen: {},        // evKey -> true ("Read more" on the event note)
   scrolledTo: null,    // evKey the switcher was last scrolled to
+  lastGood: 0,         // time of the last successful ESPN fetch
+  polls: 0,            // live polls since the last full-window fetch
+  retryIn: 30000,      // offline retry delay, backs off to 5 minutes
 };
 let pollTimer = null;
+let loading = false;
 
-async function loadEvents() {
+async function fetchFeed(around) {
+  const ctl = typeof AbortController === "function" ? new AbortController() : null;
+  const timer = ctl ? setTimeout(() => ctl.abort(), 8000) : null;   // a hung request falls back, not spins
   try {
-    const res = await fetch(espnUrl(), { cache: "no-store" });
+    const res = await fetch(espnUrl(around), { cache: "no-store", signal: ctl ? ctl.signal : undefined });
     if (!res.ok) throw new Error("HTTP " + res.status);
     const data = await res.json();
-    const events = (data.events || [])
+    return (data.events || [])
       .filter(ev => !SPINOFF_RX.test(ev.name || ""))
       .sort((a, b) => new Date(a.date) - new Date(b.date))
       .map(normalizeEspnEvent);
+  } finally { if (timer) clearTimeout(timer); }
+}
+
+// During a live card the page polls every minute; most polls fetch just that card's dates and
+// merge it into the full list, and every 10th poll (or any failure) re-fetches the full window.
+function liveFocus(events) {
+  if (!events || S.offline) return null;
+  const ev = events.find(e => eventState(e) === "live") || events.find(e => {
+    const t = new Date(e.date).getTime(); return Date.now() >= t - 30 * 60000 && Date.now() <= t + 8 * 3600000;
+  });
+  return ev ? new Date(ev.date).getTime() : null;
+}
+
+async function loadEvents(opts) {
+  if (loading) return;
+  loading = true;
+  const around = opts && opts.poll && S.polls % 10 !== 9 ? liveFocus(S.events) : null;
+  try {
+    let events = await fetchFeed(around);
+    if (around) {
+      // merge the narrow fetch into the full list by event key; keep everything else as it was
+      const fresh = new Map(events.map(e => [evKey(e), e]));
+      events = S.events.map(e => fresh.get(evKey(e)) || e);
+      fresh.forEach((e, k) => { if (!events.some(x => evKey(x) === k)) events.push(e); });
+      events.sort((a, b) => new Date(a.date) - new Date(b.date));
+      S.polls++;
+    } else S.polls = 0;
     if (!events.length) throw new Error("empty");
     S.offline = false;
+    S.retryIn = 30000;
+    S.lastGood = Date.now();
     alertOnChanges(events);
     S.events = events;
   } catch (e) {
     if (!S.events || S.offline) { S.offline = true; S.events = FALLBACK_EVENTS; }
     // a failed poll during a live card keeps the last good data on screen
+    S.polls = 9;   // next poll fetches the full window
   }
+  loading = false;
   renderFights();
   refreshSheets();
-  if (!S.offline) scheduleNextPoll(S.events);
+  scheduleNextPoll(S.events);
 }
 
 /* ---------- fight-night live mode ---------- */
 function isCardWindow(events) {
   const now = Date.now();
-  return events.some(ev =>
+  return events.some(ev => eventState(ev) !== "past" && (
     ev.fights.some(f => f.live) || eventState(ev) === "live" ||
-    (now >= new Date(ev.date).getTime() - 30 * 60000 && now <= new Date(ev.date).getTime() + 8 * 3600000));
+    (now >= new Date(ev.date).getTime() - 30 * 60000 && now <= new Date(ev.date).getTime() + 8 * 3600000)));
 }
 function scheduleNextPoll(events) {
   if (pollTimer) { clearTimeout(pollTimer); pollTimer = null; }
-  const soon = events.some(ev => { const dt = new Date(ev.date).getTime() - Date.now(); return dt > 0 && dt < 2 * 3600000; });
-  const delay = isCardWindow(events) ? 60000 : soon ? 5 * 60000 : null;   // fight night: every minute
-  if (delay) pollTimer = setTimeout(() => { pollTimer = null; if (document.visibilityState === "visible") loadEvents(); }, delay);
+  let delay = null;
+  if (S.offline) {
+    delay = S.retryIn;                                            // keep trying to get back online
+    S.retryIn = Math.min(S.retryIn * 2, 5 * 60000);
+  } else {
+    const soon = events.some(ev => { const dt = new Date(ev.date).getTime() - Date.now(); return dt > 0 && dt < 2 * 3600000; });
+    delay = isCardWindow(events) ? 60000 : soon ? 5 * 60000 : null;   // fight night: every minute
+  }
+  if (delay) pollTimer = setTimeout(() => { pollTimer = null; if (document.visibilityState === "visible") loadEvents({ poll: true }); }, delay);
 }
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && S.events && !S.offline && isCardWindow(S.events) && !pollTimer) loadEvents();
+  if (document.visibilityState !== "visible" || !S.events || pollTimer) return;
+  if (S.offline || isCardWindow(S.events)) loadEvents({ poll: true });
 });
+window.addEventListener("online", () => { if (S.offline) { S.retryIn = 30000; loadEvents(); } });
 
 /* ---------- in-app alerts (toasts) on status changes ---------- */
 let ALERTS_ON = false;
@@ -366,7 +437,7 @@ function toast(em, title, body) {
 let PREV_STATUS = null;
 function alertOnChanges(events) {
   const cur = {};
-  events.forEach(ev => ev.fights.forEach(f => { cur[pairKey(f.f1.name, f.f2.name)] = { live: f.live, done: f.done, f, ev: ev.name }; }));
+  events.forEach(ev => ev.fights.forEach(f => { cur[fightKey(f)] = { live: f.live, done: f.done, f, ev: ev.name }; }));
   if (PREV_STATUS && ALERTS_ON) {
     Object.keys(cur).forEach(pk => {
       const now = cur[pk], was = PREV_STATUS[pk];
@@ -422,10 +493,10 @@ function renderFights() {
   const ev = evs.find(e => evKey(e) === S.sel);
 
   let html = "";
-  if (S.offline) html += `<div class="banner warn"><span><b>Offline</b> — showing the saved schedule from ${esc(ANALYSIS_STAMP)}.</span><button class="btn sm" type="button" data-act="retry">Try again</button></div>`;
+  if (S.offline) html += `<div class="banner warn"><span><b>Offline</b> — showing the saved schedule from ${esc(stamp())}.</span><button class="btn sm" type="button" data-act="retry">Try again</button></div>`;
   html += `<div class="evbar" role="tablist" aria-label="Fight cards">${evs.map(e => evPill(e)).join("")}</div>`;
   html += eventView(ev);
-  html += `<div class="foot">Times are in your time zone. Results and records update live from ESPN.<br>Breakdowns written ${esc(ANALYSIS_STAMP)}.</div>`;
+  html += `<div class="foot">Times are in your time zone. Results and records update live from ESPN.<br>Breakdowns written ${esc(stamp())}.</div>`;
   box.innerHTML = html;
 
   if (S.scrolledTo !== S.sel) {
@@ -438,7 +509,7 @@ function renderFights() {
 function evPill(ev) {
   const st = eventState(ev), k = evKey(ev);
   const { short, rel } = fmtEventDate(ev.date);
-  const d = st === "live" ? '<span class="pulse"></span>Live now' : st === "past" ? "Final · " + short.replace(/^\w+\s/, "") : (rel === "Tonight" || rel === "Tomorrow" ? rel : short);
+  const d = st === "live" ? '<span class="pulse"></span>Live now' : st === "past" ? "Final · " + short.replace(/^\w+\s/, "") : (rel === "Today" || rel === "Tonight" || rel === "Tomorrow" ? rel : short);
   return `<button class="evpill ${st} ${k === S.sel ? "sel" : ""}" type="button" role="tab" aria-selected="${k === S.sel}" data-ev="${esc(k)}">
     <span class="d">${d}</span><span class="n">${esc(shortEventName(ev.name))}</span></button>`;
 }
@@ -459,11 +530,11 @@ function eventView(ev) {
   let face = "";
   if (me) {
     const w = winnerOf(me);
-    const side = (x, ring) => `<div class="fo-side ${w ? (x.winner ? "won" : "lost") : ""}"${fighterAttrs(x.name, x.id)}>
+    const side = (x, ring) => `<button class="fo-side ${w ? (x.winner ? "won" : "lost") : ""}" type="button"${fighterAttrs(x.name, x.id)}>
         ${avatar(x.name, 92, ring, x.id)}
-        <div class="fo-name">${esc(x.name)}</div>
-        <div class="fo-meta">${w && x.winner ? '<span class="tag-won">&#10003; Winner</span>' : esc(x.record)}</div>
-      </div>`;
+        <span class="fo-name">${esc(x.name)}</span>
+        <span class="fo-meta">${w && x.winner ? '<span class="tag-won">&#10003; Winner</span>' : esc(x.record)}</span>
+      </button>`;
     const how = w ? howItEnded(me, true) : "";
     const mid = w ? `<div class="fo-how">${esc(how || "Final")}</div>`
       : me.live ? `<div class="fo-how" style="color:var(--red)">${me.between ? "Break" : "R" + (me.period || 1)}</div>`
@@ -475,7 +546,7 @@ function eventView(ev) {
       `<div><span class="k">Prelims</span><span class="v">${timeOf(T.prelims)}</span></div>` +
       `<div class="main"><span class="k">Main card</span><span class="v">${timeOf(T.main)}</span></div>`
     : `<div class="main"><span class="k">Starts</span><span class="v">${dt.time}</span></div>`;
-  const remind = st === "upcoming" ? `<button class="btn ghost" type="button" data-act="ics">&#128467; Remind me</button>` : "";
+  const remind = st === "upcoming" && ev.fights.length ? `<button class="btn ghost" type="button" data-act="ics">&#128467; Remind me</button>` : "";
   let html = `<section class="poster" aria-label="${esc(ev.name)}">
     <div class="p-head">
       <div class="p-badges">${status}${titles}</div>
@@ -491,15 +562,19 @@ function eventView(ev) {
   if (st === "live" && !S.offline) {
     const { now, next } = liveSnapshot(ev);
     const vs = x => `<b>${esc(lastName(x.f1.name))}</b> vs <b>${esc(lastName(x.f2.name))}</b>`;
+    const stale = S.lastGood && Date.now() - S.lastGood > 3 * 60000
+      ? `<div class="stale">Last updated ${Math.round((Date.now() - S.lastGood) / 60000)} min ago — trying to reconnect…</div>` : "";
     html += `<div class="livebox" aria-live="polite">
-      <div class="row"><span class="k">Now</span><span class="v">${now ? vs(now) + " · " + esc(liveText(now)) : "Between fights"}</span></div>
+      <div class="row"><span class="k">Now</span><span class="v">${now ? vs(now) + "<span class=\"lt\">" + esc(liveText(now)) + "</span>" : "Between fights"}</span></div>
       ${next ? `<div class="row next"><span class="k">Up next</span><span class="v">${vs(next)}</span></div>` : ""}
+      ${stale}
     </div>`;
   }
 
-  if (meta && meta.note) html += `<div class="card story"><div class="k">${st === "past" ? "How it went" : "Why watch"}</div><div class="t">${meta.note}</div><button class="more-btn" type="button" data-act="more">Read more</button></div>`;
+  if (meta && meta.note) html += `<div class="card story ${S.noteOpen[k] ? "full" : ""}"><div class="k">${st === "past" ? "How it went" : "Why watch"}</div><div class="t">${meta.note}</div><button class="more-btn" type="button" data-act="more">Read more</button></div>`;
 
   // fight lists
+  if (!ev.fights.length) return html + '<div class="card empty">No fights announced for this card yet. Check back soon.</div>';
   const tag = (label, ms, main) => `<div class="seg ${main ? "main" : ""}"><h3>${label}</h3>${ms ? `<span class="t">${timeOf(ms)}</span>` : ""}</div>`;
   html += tag("Main card", T && T.main, true);
   html += `<div class="card fights">${mains.map(f => fightRow(f, k)).join("")}</div>`;
@@ -519,6 +594,9 @@ function eventView(ev) {
   return html;
 }
 
+// Long single words (Kondratavicius, Nurmagomedov) don't fit a phone-width fight row at full size.
+const nameSize = n => { const w = Math.max(0, ...(n || "").split(/\s+/).map(x => x.length)); return w > 13 ? "xl" : w > 11 ? "l" : ""; };
+
 function fightRow(f, k) {
   const mu = findMatchup(f.f1.name, f.f2.name);
   const p1 = findFighter(f.f1.name), p2 = findFighter(f.f2.name);
@@ -527,7 +605,7 @@ function fightRow(f, k) {
   const cls = x => (w ? (x.winner ? "won" : "lost") : "");
   const sub = x => w && x.winner ? '<span class="tag-won">&#10003; Won</span>'
     : esc(x.record) + (fav && norm(x.name) === fav ? ' · <span class="tag-fav">Fav</span>' : "");
-  const side = (x, ring, ab) => `<div class="fs ${ab} ${cls(x)}">${avatar(x.name, 36, ring, x.id)}<div class="fs-t"><div class="nm">${esc(x.name)}</div><div class="sub">${sub(x)}</div></div></div>`;
+  const side = (x, ring, ab) => `<div class="fs ${ab} ${cls(x)}">${avatar(x.name, 36, ring, x.id)}<div class="fs-t"><div class="nm ${nameSize(x.name)}">${esc(x.name)}</div><div class="sub">${sub(x)}</div></div></div>`;
   let mid;
   if (f.live) mid = `<span class="lv"><span class="pulse"></span>${f.between ? "Break" : "R" + (f.period || 1)}</span>`;
   else if (f.done) {
@@ -538,7 +616,7 @@ function fightRow(f, k) {
   } else if (f.cancelled) mid = '<span class="how"><small>Off</small></span>';
   else mid = '<span class="vs">VS</span>';
   const go = mu || p1 || p2 ? '<span class="fr-go">Breakdown</span>' : '<span class="fr-go">Details</span>';
-  return `<button class="fr ${f.live ? "live" : ""} ${f.cancelled ? "cxl" : ""}" type="button" data-fight="${esc(pairKey(f.f1.name, f.f2.name))}" data-ev="${esc(k)}">
+  return `<button class="fr ${f.live ? "live" : ""} ${f.cancelled ? "cxl" : ""}" type="button" data-fight="${esc(fightKey(f))}" data-ev="${esc(k)}">
     <div class="fr-top"><span class="fr-wc">${esc(wtLabel(f.weight))}</span>${mu && mu.title ? `<span class="badge title">&#127942; Title</span>` : ""}${go}</div>
     <div class="fr-main">${side(f.f1, "red", "a")}<div class="fr-mid">${mid}</div>${side(f.f2, "blue", "b")}</div>
   </button>`;
@@ -552,10 +630,18 @@ const SHEETS = [];
 let ignorePop = 0;
 const RENDER = {};
 
+// While sheets are open, everything behind the top one is inert: no tabbing into the page.
+function syncInert() {
+  const top = SHEETS.length ? SHEETS[SHEETS.length - 1].el : null;
+  ["header.top", "main", "nav.tabs", "#a2hs"].forEach(sel => { const el = document.querySelector(sel); if (el) el.inert = !!top; });
+  SHEETS.forEach(s => { s.el.inert = s.el !== top; });
+}
 function openSheet(kind, args) {
-  if (SHEETS.length >= 5) closeTopSheet();
   const r = RENDER[kind](args);
   if (!r) return;
+  const replace = SHEETS.length >= 5;               // cap the stack: swap the top sheet, same history entry
+  const opener = document.activeElement;
+  if (replace) { const old = SHEETS.pop(); old.el.remove(); }
   const wrap = document.createElement("div");
   wrap.className = "sheet-wrap";
   wrap.innerHTML = `<div class="sheet-back"></div>
@@ -565,8 +651,9 @@ function openSheet(kind, args) {
       <div class="sheet-body">${r.html}</div>
     </div>`;
   document.body.appendChild(wrap);
-  const s = { el: wrap, kind, args };
+  const s = { el: wrap, kind, args, opener: replace ? null : opener };
   SHEETS.push(s);
+  syncInert();
   wrap.querySelector(".sheet-back").addEventListener("click", () => closeTopSheet());
   wrap.querySelector(".sheet-x").addEventListener("click", () => closeTopSheet());
   const body = wrap.querySelector(".sheet-body"), head = wrap.querySelector(".sheet-head");
@@ -574,7 +661,7 @@ function openSheet(kind, args) {
   if (r.after) r.after(wrap);
   document.documentElement.classList.add("locked");
   requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add("open")));
-  try { history.pushState({ sheet: SHEETS.length }, ""); } catch (e) {}
+  if (!replace) { try { history.pushState({ sheet: SHEETS.length }, ""); } catch (e) {} }
   setTimeout(() => { const x = wrap.querySelector(".sheet-x"); if (x) x.focus({ preventScroll: true }); }, 60);
 }
 function dropTopSheet() {
@@ -583,6 +670,9 @@ function dropTopSheet() {
   s.el.classList.remove("open");
   setTimeout(() => s.el.remove(), 260);
   if (!SHEETS.length) document.documentElement.classList.remove("locked");
+  syncInert();
+  // focus goes back to whatever opened the sheet, if it's still on the page
+  if (s.opener && document.contains(s.opener) && s.opener.focus) s.opener.focus({ preventScroll: true });
 }
 function closeTopSheet() {
   if (!SHEETS.length) return;
@@ -609,7 +699,7 @@ function refreshSheets() {
 
 function findFight(k, pk) {
   const ev = (S.events || []).find(e => evKey(e) === k);
-  const f = ev && ev.fights.find(x => pairKey(x.f1.name, x.f2.name) === pk);
+  const f = ev && ev.fights.find(x => fightKey(x) === pk);
   return f ? { ev, f } : null;
 }
 
@@ -620,14 +710,15 @@ RENDER.fight = ({ k, pk }) => {
   const mu = findMatchup(f.f1.name, f.f2.name);
   const p1 = findFighter(f.f1.name), p2 = findFighter(f.f2.name);
   const w = winnerOf(f);
-  const side = (x, ring) => `<div class="fo-side ${w ? (x.winner ? "won" : "lost") : ""}"${fighterAttrs(x.name, x.id)}>
-      ${avatar(x.name, 72, ring, x.id)}<div class="fo-name">${esc(x.name)}</div><div class="fo-meta">${esc(x.record)}</div></div>`;
+  const side = (x, ring) => `<button class="fo-side ${w ? (x.winner ? "won" : "lost") : ""}" type="button"${fighterAttrs(x.name, x.id)}>
+      ${avatar(x.name, 72, ring, x.id)}<span class="fo-name">${esc(x.name)}</span><span class="fo-meta">${esc(x.record)}</span></button>`;
   const mid = f.live ? `<div class="fo-how" style="color:var(--red)">Live</div>` : w ? `<div class="fo-how">Final</div>` : '<div class="fo-vs">VS</div>';
   let h = `<div class="fs-face">${side(f.f1, "red")}<div class="fo-mid">${mid}<div class="fo-wc">${esc(wtLabel(f.weight))}${mu && mu.title ? "<br>" + esc(mu.title) : ""}</div></div>${side(f.f2, "blue")}</div>`;
   if (w) {
     const how = howItEnded(f);
     h += `<div class="result"><b>${esc(w.name)}</b> won${how ? " by " + esc(how.replace(" · ", " in ").replace("R", "round ")) : ""}.</div>`;
   } else if (f.done && f.result && f.result.kind) h += `<div class="result">${f.result.kind === "draw" ? "This one was scored a <b>draw</b>." : "This one was ruled a <b>no contest</b>."}</div>`;
+  else if (f.cancelled) h += `<div class="result">This fight is <b>off the card</b>.</div>`;
   else if (f.live) h += `<div class="result" style="background:var(--red-wash);border-color:rgba(232,72,77,.45)"><b style="color:var(--red)">Live now</b> · ${esc(liveText(f))}</div>`;
   h += oddsHtml(mu, f);
   if (p1 || p2) h += taleOfTape(p1, p2, f);
@@ -682,8 +773,8 @@ RENDER.fighter = ({ name, fid }) => {
       ${p && p.nick ? `<div class="fp-nick">"${esc(p.nick)}"</div>` : ""}
       ${ranks.length ? `<div class="fp-ranks">${ranks.map(r => `<span class="badge ${r.champ ? "title" : ""}">${esc(r.txt)}</span>`).join("")}</div>` : ""}
     </div></div>`;
-  const stats = [[record || "—", "Record"], [p && p.age ? p.age : "—", "Age"], [p && p.ht ? ftIn(p.ht) : "—", "Height"], [p && p.reach ? p.reach + "″" : "—", "Reach"]];
-  h += `<div class="stats">${stats.map(([v, k]) => `<div class="stat"><div class="v">${esc(String(v))}</div><div class="k">${k}</div></div>`).join("")}</div>`;
+  const stats = [[record, "Record"], [p && p.age, "Age"], [p && p.ht && ftIn(p.ht), "Height"], [p && p.reach && p.reach + "″", "Reach"]].filter(([v]) => v);
+  if (stats.length) h += `<div class="stats n${stats.length}">${stats.map(([v, k]) => `<div class="stat"><div class="v">${esc(String(v))}</div><div class="k">${k}</div></div>`).join("")}</div>`;
   const pills = [country, p && p.style].filter(Boolean);
   if (pills.length) h += `<div class="pills">${pills.map(t => `<span class="pill">${esc(t)}</span>`).join("")}</div>`;
   if (bouts.length) {
@@ -697,7 +788,7 @@ RENDER.fighter = ({ name, fid }) => {
       else if (b.f.live) r = "Live now";
       else if (b.f.cancelled) r = "Off";
       else r = eventState(b.ev) === "live" ? "Tonight" : eventState(b.ev) === "past" ? "" : fmtEventDate(b.ev.date).rel || when;
-      return `<button class="bout" type="button"${fighterAttrs(b.opp.name, b.opp.id)}><span><span>vs <b>${esc(b.opp.name)}</b></span><span class="ev" style="display:block">${esc(shortEventName(b.ev.name))} · ${esc(when)}</span></span><span class="r ${cls}">${esc(r)}</span></button>`;
+      return `<button class="bout" type="button" data-fight="${esc(fightKey(b.f))}" data-ev="${esc(evKey(b.ev))}"><span><span>vs <b>${esc(b.opp.name)}</b></span><span class="ev" style="display:block">${esc(shortEventName(b.ev.name))} · ${esc(when)}</span></span><span class="r ${cls}">${esc(r)}</span></button>`;
     }).join("");
   }
   if (p) {
@@ -706,10 +797,11 @@ RENDER.fighter = ({ name, fid }) => {
     h += p.weaknesses.map(s => `<div class="sw minus"><span class="ico">&minus;</span><p>${s}</p></div>`).join("");
     h += `<div class="sh-sec">Story so far</div><div class="prose">${p.history}</div>`;
   } else {
-    h += `<p class="note">No full write-up for this fighter yet — fighters get one when they're on an upcoming main card.</p>`;
+    const div = ranks.length ? DIVISIONS.men.find(d => d.top5.some(c => sameFighter(c.name, name)) || sameFighter(d.champ.name, name) || (d.interim && sameFighter(d.interim.name, name))) : null;
+    h += `<p class="note">No full write-up for this fighter yet — fighters get one when they're on an upcoming main card.${div ? ` For the state of the ${esc(div.name.toLowerCase())} division, see Rankings.` : ""}</p>`;
   }
   if (id) h += `<a class="btn block ext" href="https://www.espn.com/mma/fighter/_/id/${encodeURIComponent(id)}" target="_blank" rel="noopener">Full fight record on ESPN &rsaquo;</a>`;
-  return { title: "Fighter", html: h };
+  return { title: shown, html: h };
 };
 
 /* =====================================================================
@@ -718,11 +810,11 @@ RENDER.fighter = ({ name, fid }) => {
 function renderRankings() {
   const champs = DIVISIONS.men.map((d, i) => {
     const vacant = /^vacant$/i.test(d.champ.name);
-    const sub = vacant ? esc(d.champ.record) + (d.champ.country ? " · " + esc(d.champ.country) : "") : esc(d.champ.record) + (d.champ.country ? " · " + esc(d.champ.country) : "");
+    const sub = esc(d.champ.record) + (d.champ.country ? " · " + esc(d.champ.country) : "");
     return `<button class="dv" type="button" data-div="${i}">${avatar(d.champ.name, 56, "gold")}
       <span class="dv-t"><span class="dv-w" style="display:block">${esc(d.name)} · ${esc(d.weight)}</span>
       <span class="dv-c" style="display:block">${vacant ? "Belt vacant" : esc(d.champ.name)}</span>
-      <span class="dv-s" style="display:block">${d.interim ? "Interim: " + esc(d.interim.name) + (vacant ? "" : "") : sub}</span></span>
+      <span class="dv-s" style="display:block">${d.interim ? "Interim: " + esc(d.interim.name) : sub}</span></span>
       <span class="chev">&rsaquo;</span></button>`;
   }).join("");
   const p4p = P4P.men.map((x, i) => `<button class="rk-row ${i === 0 ? "top" : ""}" type="button"${fighterAttrs(x.name)}><span class="rk-n">${i + 1}</span>${avatar(x.name, 36, i === 0 ? "gold" : "")}<span class="rk-nm">${esc(x.name)}</span><span class="rk-rc">${esc(x.record)}</span></button>`).join("");
@@ -733,7 +825,7 @@ function renderRankings() {
     <h2 class="sec">Pound-for-pound <small>best at any weight</small></h2>
     ${P4P.explain ? `<p class="lede">${P4P.explain}</p>` : ""}
     <div class="card champs">${p4p}</div>
-    <div class="foot">Rankings as of ${esc(ANALYSIS_STAMP)}. An <b>interim</b> champ holds a stand-in belt while the real champ is out.</div>`;
+    <div class="foot">Rankings as of ${esc(stamp())}.${DIVISIONS.men.some(d => d.interim) ? " An <b>interim</b> champ holds a stand-in belt while the real champ is out." : ""}</div>`;
 }
 RENDER.division = ({ i }) => {
   const d = DIVISIONS.men[i];
@@ -762,7 +854,7 @@ function renderLearn() {
       <div class="faq-a prose">${s.body.map(p => "<p>" + p + "</p>").join("")}</div></div>`).join("");
   document.getElementById("learnView").innerHTML = `
     <h2 class="sec first">What's going on</h2>
-    <p class="lede">The big stories a casual fan should know, updated ${esc(ANALYSIS_STAMP)}.</p>
+    <p class="lede">The big stories a casual fan should know, updated ${esc(stamp())}.</p>
     ${stories}
     <h2 class="sec">UFC 101 <small>the stuff nobody explains</small></h2>
     <div class="card faq">${faq}</div>
@@ -851,7 +943,7 @@ RENDER.settings = () => {
     ${ALERTS_ON ? '<button class="set-link" type="button" data-act="alerts-test">Send me a test alert</button>' : ""}
     <div class="set-row"><div><div class="set-k">App version</div><div class="set-s">${VERSION.fresh ? "A newer version is out — update to get it." : "Tap to reload the latest version of the app."}</div></div>
       <button class="btn ${VERSION.fresh ? "gold" : ""}" type="button" data-act="update">${VERSION.fresh ? "Update" : "Reload"}</button></div>
-    <div class="set-row"><div><div class="set-k">About the data</div><div class="set-s">Schedules, results and records are live from ESPN. Breakdowns, rankings and storylines were written ${esc(ANALYSIS_STAMP)} and are refreshed every Sunday and Thursday.</div></div></div>`;
+    <div class="set-row"><div><div class="set-k">About the data</div><div class="set-s">Schedules, results and records are live from ESPN. Breakdowns, rankings and storylines were written ${esc(stamp())} and are refreshed every Sunday and Thursday.</div></div></div>`;
   return { title: "Settings", html: h };
 };
 function redrawSettings() {
@@ -864,17 +956,19 @@ function redrawSettings() {
    check of the page and its scripts on resume lights up the gear when something changed. */
 const VERSION = { tag: null, fresh: false };
 const ASSETS = ["app.js", "app.css", "data.js"];
-async function versionTag() {
+// `loaded` reads the copies the browser used for this page (its HTTP cache), `server` asks
+// GitHub Pages directly, so a deploy that lands while the cache is still warm is still caught.
+async function versionTag(loaded) {
   const urls = [location.pathname, ...ASSETS];
-  const tags = await Promise.all(urls.map(u => fetch(u, { method: "HEAD", cache: "no-store" })
+  const tags = await Promise.all(urls.map(u => fetch(u, loaded ? { cache: "force-cache" } : { method: "HEAD", cache: "no-store" })
     .then(r => (r.headers.get("etag") || "") + (r.headers.get("last-modified") || "")).catch(() => "")));
   return tags.join("|");
 }
 async function checkVersion() {
   if (!/^https?:$/.test(location.protocol)) return;
   try {
-    const t = await versionTag();
-    if (VERSION.tag === null) { VERSION.tag = t; return; }
+    if (VERSION.tag === null) VERSION.tag = await versionTag(true);
+    const t = await versionTag(false);
     if (t.replace(/\|/g, "") && t !== VERSION.tag && !VERSION.fresh) {
       VERSION.fresh = true;
       document.getElementById("gearBtn").classList.add("has-dot");
@@ -940,7 +1034,7 @@ document.addEventListener("click", e => {
   if (tab) { showTab(tab.dataset.page); return; }
   const pill = t.closest(".evpill");
   if (pill) { S.sel = pill.dataset.ev; renderFights(); return; }
-  const fr = t.closest(".fr");
+  const fr = t.closest(".fr, .bout");
   if (fr) { openSheet("fight", { k: fr.dataset.ev, pk: fr.dataset.fight }); return; }
   const dv = t.closest(".dv");
   if (dv) { openSheet("division", { i: +dv.dataset.div }); return; }
@@ -950,9 +1044,9 @@ document.addEventListener("click", e => {
   const act = t.closest("[data-act]");
   if (!act) return;
   const a = act.dataset.act;
-  if (a === "retry") { S.events = null; loadEvents(); }
+  if (a === "retry") { S.events = null; S.retryIn = 30000; loadEvents(); }
   else if (a === "prelims") { S.prelimsOpen[S.sel] = true; renderFights(); }
-  else if (a === "more") act.closest(".story").classList.add("full");
+  else if (a === "more") { S.noteOpen[S.sel] = true; act.closest(".story").classList.add("full"); }
   else if (a === "xp-more") act.closest(".xp").classList.add("full");
   else if (a === "ics") { const ev = S.events.find(x => evKey(x) === S.sel); if (ev) downloadIcs(ev); }
   else if (a === "alerts") toggleAlerts();
@@ -962,9 +1056,10 @@ document.addEventListener("click", e => {
 
 function boot() {
   if (/[?&]v=\d+/.test(location.search)) { try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {} }
-  renderRankings();
-  renderLearn();
+  [renderRankings, renderLearn].forEach(fn => { try { fn(); } catch (e) { console.error(e); } });
   loadEvents();
+  // push-only service worker (no fetch handler); registering it up front lets Android offer Install
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) pushReg().catch(() => {});
   setupA2hs();
   checkVersion();
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") checkVersion(); });
