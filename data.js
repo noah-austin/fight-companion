@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "November 1, 2026";
+const ANALYSIS_STAMP = "November 5, 2026";
 
 /* ============ FIGHTER PROFILES — UFC Vegas 121 (Sep 26, APEX) ============ */
 Object.assign(FIGHTERS, {
@@ -691,6 +691,22 @@ Object.assign(FIGHTERS, {
     history: "A Brazilian who fights out of SBG Ireland and spent years as one of the most unpredictable light heavyweights in the UFC. After losing to Dominick Reyes in April he moved up to heavyweight, and finished Mick Parkin with a knee in under four minutes. Now he gets a ranked heavyweight in a main event." }
 });
 
+/* ============ FIGHTER PROFILES — Suarez vs Jandiroba (Nov 7 co-main) ============ */
+Object.assign(FIGHTERS, {
+  tatianasuarez: { name: "Tatiana Suarez", ht: 65, reach: 66, nick: "", age: 35, country: "USA", style: "Elite wrestler — relentless takedowns and smothering top control", strengths: [
+      "One of the best wrestlers in women's MMA",
+      "13-1 overall and 9-1 in the UFC",
+      "Two-inch reach advantage"],
+    weaknesses: ["Injuries have kept her out of the cage for long stretches", "Has to deal with one of the best submission artists at 115"],
+    history: "An American wrestler who has dominated almost everyone she's faced, with a 13-1 record. Injuries have slowed her career, but when she's healthy she's a title contender. A win here puts her right back in line for a shot." },
+  virnajandiroba: { name: "Virna Jandiroba", ht: 63, reach: 64, nick: "", age: 38, country: "Brazil", style: "Jiu-jitsu ace — dangerous submissions from her back and on top", strengths: [
+      "Elite submissions: dangerous anywhere on the mat",
+      "Experience: 27 pro fights, 23 wins",
+      "Former strawweight title challenger"],
+    weaknesses: ["38 years old", "Gives up wrestling to one of the best takedown artists in the division"],
+    history: "A Brazilian jiu-jitsu specialist with a 23-4 record who has fought for the strawweight title. She's at her most dangerous when opponents take her down — which is exactly what Suarez wants to do. That makes this a fascinating grappling chess match." }
+});
+
 Object.assign(MATCHUPS, {
   "estebanribovics|kinggreen": { odds: "Ribovics -192, Green +160",
     note: "The fun fight on the card: Green's hands-down counter boxing against Ribovics' relentless kick-and-punch volume. Ribovics should win the activity battle and chop the lead leg; Green wins if he keeps it clean and uses his wrestling, which Ribovics has struggled with twice. Ribovics missed weight by half a pound, so it's a catchweight and he can't earn a bonus. A classic pace-vs-savvy clash." },
@@ -730,15 +746,15 @@ Object.assign(MATCHUPS, {
     note: "A Quebec prospect's UFC debut at home against a spoiler. Jourdain is on a four-fight win streak and likes to finish with chokes. Cuamba has the longer reach, UFC experience and real power, but he's 2-3 in the promotion. Watch the first takedown: if Jourdain gets it, he's comfortable." },
   "mandelnallo|natelandwehr": { odds: "Nallo -278, Landwehr +230",
     note: "Pure entertainment. Both men lost their last fight, and Landwehr has lost three straight and is moving up to lightweight to turn things around. Nallo is bigger and fighting at home. Neither man backs up, so don't expect this to see the judges." },
-  "cirylgane|joshhokit": { title: "Heavyweight title", odds: "Gane -235, Hokit +195",
+  "cirylgane|joshhokit": { title: "Heavyweight title", odds: "Gane -243, Hokit +203",
     note: "Striker vs wrestler, five rounds. Gane will try to stay at range with his reach and footwork and pick Hokit apart. Hokit needs to close the distance, get his hands on Gane and drag him down — he's never been beaten and finishes almost everyone he fights. If Gane's takedown defense holds, the champ should win comfortably; if Hokit gets him down early, this gets very interesting." },
-  "amandanunes|kaylaharrison": { title: "Women's bantamweight title", odds: "Harrison -210, Nunes +175",
+  "amandanunes|kaylaharrison": { title: "Women's bantamweight title", odds: "Harrison -190, Nunes +161",
     note: "The biggest women's fight in years. Harrison is younger and bigger, with Olympic judo that has made her almost impossible to fight on the inside. Nunes is the greatest ever and the better striker, but she hasn't fought in three years. Nunes needs to keep it standing and land early; once Harrison gets a grip, it's her fight." },
-  "caioborralho|yousribelgaroui": { odds: "Lines not posted at write-up time",
+  "caioborralho|yousribelgaroui": { odds: "Borralho -120, Belgaroui +103 — the closest fight on the card",
     note: "The all-rounder against the giant kickboxer. Belgaroui is 6-foot-6 with a 79-inch reach and three Glory title fights behind him; at range he's very dangerous. Borralho wants to close the distance, wrestle and make him work on the mat. If Borralho gets him down, it's his fight; if it stays at kicking range, the upset is on." },
-  "kevinholland|urosmedic": { odds: "Lines not posted at write-up time",
+  "kevinholland|urosmedic": { odds: "Medic -165, Holland +140",
     note: "A fun striking matchup at welterweight. Holland has a ten-inch reach advantage and a creative, unpredictable style. Medic is a ranked southpaw puncher with a heavy left hand. Holland needs to keep him on the end of his long shots; Medic needs to walk him down. Somebody is probably getting knocked down." },
-  "bilalhasan|luisgurule": { odds: "Lines not posted at write-up time",
+  "bilalhasan|luisgurule": { odds: "Hasan -950, Gurule +650 — the biggest favorite on the card",
     note: "A big debut. Hasan is 10-0 with eight knockouts and won his contract in 45 seconds. Gurule is the experienced, scrappy veteran, coming off a quick submission loss. Fans and models both lean heavily toward the newcomer, but UFC debuts at the Garden are a different kind of pressure." },
   "jacobesmith|randybrown": { odds: "Smith -285, Brown +235",
     note: "Short-notice prospect against a long veteran. Smith is 13-0 and wants to close the distance and pressure; Brown is much taller and wants to keep him on the end of long punches and kicks. If Smith gets inside early, his record probably stays perfect. If Brown keeps it at range, the veteran can snap his skid." },
@@ -750,8 +766,10 @@ Object.assign(MATCHUPS, {
     note: "A rising welterweight against an unbeaten newcomer. Lebosnoyani is the more polished striker and switches stances to stay unpredictable. Hasanov is 6-0 and has the longer reach. The books expect Lebosnoyani's experience to tell." },
   "jiriprochazka|navajostirling": { odds: "Lines not posted at write-up time",
     note: "Chaos against control, over five rounds. Procházka fights with his hands low and throws from everywhere; he's either knocking you out or getting hit trying. Stirling is unbeaten, younger and more disciplined, and just flattened Jan Blachowicz. If Stirling stays composed and counters, the prospect takes the veteran's spot; if Procházka drags him into a brawl, anything can happen." },
-  "johnnywalker|waldocortesacosta": { odds: "Lines not posted at write-up time",
+  "johnnywalker|waldocortesacosta": { odds: "Cortes-Acosta -230, Walker +190 — opened even bigger (-300)",
     note: "A short-notice heavyweight main event. Walker is the bigger, more explosive striker, with spinning attacks and knees that can end it in one shot. Cortes-Acosta wants to wear him down with volume and pressure over five rounds. If Walker lands early, it's over fast; if it goes long, Cortes-Acosta's work rate takes over." },
+  "tatianasuarez|virnajandiroba": { odds: "Suarez -204, Jandiroba +173",
+    note: "Wrestler vs jiu-jitsu ace, between two former title contenders. Suarez will try to take Jandiroba down and keep her there; Jandiroba is happy to go to the mat because she's so dangerous with submissions from her back. If Suarez can control without getting caught, she wins clearly. If Jandiroba catches an arm or neck in a scramble, it's the upset." },
   "luishernandez|sedriquesdumas": { odds: "Hernandez -225, Dumas +185",
     note: "The fight the internet made famous: an active-duty Miami-Dade sheriff's deputy, in his UFC debut on short notice, against a fighter whose arrest record has been the story all week. Strip the headlines away and it's a real stylistic clash — Dumas's height and reach against Hernandez's 8-0, all-finishes pressure and back-take game. Dumas is 1-5 in his last six and this looks like his last chance; the market says the deputy wins by stoppage, but that reach is a genuine problem for a 5-foot-9 man moving up to 205." },
   "melissaamaya|valescamachado": { odds: "Machado -230, Amaya +190",
@@ -821,7 +839,7 @@ EVENT_META.push(
   FALLBACK_EVENTS.push(
     { name: "UFC Fight Night: Cortes-Acosta vs. Walker", date: "2026-11-07T22:00Z", venue: "Meta APEX, Las Vegas", fights: [
       F("Heavyweight", "Waldo Cortes-Acosta", "", "Johnny Walker", ""),
-      F("W Strawweight", "Tatiana Suarez", "", "Virna Jandiroba", ""),
+      F("W Strawweight", "Tatiana Suarez", "13-1-0", "Virna Jandiroba", "23-4-0"),
       F("Middleweight", "Mantas Kondratavicius", "", "Wesley Schultz", ""),
       F("Light Heavyweight", "Billy Elekana", "", "Lucas Fernando", "")
     ]},
