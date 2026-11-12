@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "November 8, 2026";
+const ANALYSIS_STAMP = "November 12, 2026";
 
 /* ============ FIGHTER PROFILES — main-card fighters on current cards, plus ranked fighters ============ */
 Object.assign(FIGHTERS, {
@@ -26,12 +26,6 @@ Object.assign(FIGHTERS, {
     "Only UFC losses are decisions to Makhachev and Gamrot"],
     weaknesses: ["Infamously withdrew from his title shot the night before with a back injury — and he's been out 10 months", "Vulnerable early to explosive strikers before he settles into wrestling"],
     history: "A former training rival of Makhachev who nearly beat him as a debutant in 2019, Tsarukyan has spent years as the uncrowned #1 contender. His withdrawal from UFC 311 cost him a title shot; he requalified by tapping Hooker. <b>Win this five-rounder and a shot at champion Gaethje is next.</b>" },
-  renatomoicano: { name: "Renato Moicano", ht: 71, reach: 72, nick: "Money", age: 37, country: "Brazil", style: "Rangy jab-heavy kickboxer with elite ground grappling", strengths: [
-    "Rebounded from his skid with a submission of Chris Duncan in an April main event",
-    "Big-fight experience — stepped up on one day's notice to fight Makhachev for the title",
-    "Great jab and strong submission defense"],
-    weaknesses: ["Has struggled against elite pressure and big finishers", "37, against a 26-year-old on a five-fight run"],
-    history: "A longtime contender from Brazil, as famous for his mic work ('I love money!') as his jab. He submitted Chris Duncan in an April main event; a September rematch with Brian Ortega fell through when Ortega withdrew. Now he headlines Halloween against a rising Australian." },
   brendanallen: { name: "Brendan Allen", ht: 74, reach: 75, nick: "All In", age: 30, country: "USA", style: "Submission grappler — chains takedowns until one lands, then hunts the back", strengths: [
       "Finishing on the mat: most of his wins are submissions, usually the rear-naked choke",
       "Relentless takedown chains — he keeps shooting until he gets the fight where he wants it",
@@ -77,12 +71,6 @@ Object.assign(FIGHTERS, {
       "Beat Waldo Cortes Acosta by decision in May"],
     weaknesses: ["Can be taken down and held by strong wrestlers", "37, facing a younger, rising contender"],
     history: "A Russian veteran with a 40-11 record and one of the most consistent heavyweights of the last decade. He's never won the belt but always seems to be near the top. Beat Waldo Cortes Acosta in May and is the favorite here." },
-  tomnolan: { name: "Tom Nolan", reach: 73, nick: "Big Train", age: 26, country: "Australia", style: "Tall, aggressive striker — long punches and a fast finishing instinct", strengths: [
-      "On a five-fight win streak, most recently a decision over Fares Ziam in June",
-      "Very tall for a lightweight, with a 73-inch reach",
-      "Finisher: five of his wins came in the first round"],
-    weaknesses: ["Biggest step up of his career — first main event, first ranked veteran of this level", "Has never gone five rounds"],
-    history: "From Brisbane, Queensland. He earned his UFC contract on the Contender Series in 2023 with a first-round TKO and has kept winning since: 11-1, with five straight. Now the UFC is testing him against a veteran who's fought for the title." },
   gabrielbonfim: { name: "Gabriel Bonfim", ht: 73, reach: 72, nick: "Marretinha", age: 29, country: "Brazil", style: "Explosive all-rounder — dangerous submissions and heavy hands", strengths: [
       "20-1, and just beat former champion Belal Muhammad over five rounds in June",
       "Submission threat from every position",
@@ -149,54 +137,6 @@ Object.assign(FIGHTERS, {
       "Tough and durable"],
     weaknesses: ["Lost to Rei Tsuruya by first-round submission in May", "Gives up six inches of reach to Hasan"],
     history: "A US flyweight with a record around 11-4 who has been in and out of the UFC win column. He beat Daniel Barez in May, then got submitted by Rei Tsuruya two weeks later. Here he's the veteran test for a hyped debutant." },
-  jacobesmith: { name: "Jacobe Smith", ht: 70, reach: 72, nick: "Cobe", age: 30, country: "USA", style: "Unbeaten pressure fighter with heavy hands", strengths: [
-      "Perfect 13-0 record",
-      "Knocked out Bruce Whitehead at UFC 332 on Oct 3",
-      "Confident enough to take a co-main on 12 days' notice"],
-    weaknesses: ["Short notice — second fight in four weeks", "Gives up five inches of height and six of reach"],
-    history: "An unbeaten welterweight prospect who knocked out Bruce Whitehead at UFC 332 earlier this month, then jumped at this co-main slot when Carlos Leal got hurt. A win over a veteran like Brown would push him toward the rankings." },
-  randybrown: { name: "Randy Brown", ht: 75, reach: 78, nick: "Rude Boy", age: 36, country: "", style: "Long, rangy striker — keeps opponents on the end of punches and kicks", strengths: [
-      "Huge length for welterweight: 6-foot-3 with a 78-inch reach",
-      "Experience: 28 pro fights, most of them in the UFC",
-      "Can finish standing (8 KOs) or on the mat (5 submissions)"],
-    weaknesses: ["Lost his last two, to Gabriel Bonfim and Kevin Holland", "36, against an unbeaten 30-year-old"],
-    history: "A veteran welterweight with a 20-8 record and a long UFC run. He's dangerous at range but has lost two straight to top names. This is a must-win to stop the slide." },
-  odeosbourne: { name: "Ode Osbourne", ht: 67, reach: 73, nick: "", age: 34, country: "", style: "Long, explosive striker — fast hands and a big reach for 125", strengths: [
-      "Six-inch reach advantage (73 inches) over Durden",
-      "Fast-twitch athlete with knockout power",
-      "Years of UFC experience"],
-    weaknesses: ["Inconsistent: 13-9 with two no contests", "Pulled out of this same fight in July with an injury"],
-    history: "A veteran flyweight with a 13-9 record (plus two no contests) who has spent years trading wins and losses in the UFC. This fight was first booked for July, until an injury forced him out. Now it's back on, and the books can't split them." },
-  codydurden: { name: "Cody Durden", ht: 67, reach: 67, nick: "Custom Made", age: 35, country: "USA", style: "Grinding wrestler — takedowns, pressure and cardio", strengths: [
-      "Strong wrestling and top pressure",
-      "Experience: 30 pro fights",
-      "Tough to finish"],
-    weaknesses: ["Lost his last fight to Alessandro Costa by submission in July", "Gives up six inches of reach"],
-    history: "A 35-year-old flyweight with an 18-11-1 record who wins by wrestling and wearing opponents down. He was submitted by Alessandro Costa in July. Against a long striker, he has to close the distance and drag the fight to the mat." },
-  yanasantos: { name: "Yana Santos", ht: 66, reach: 68, nick: "Foxy", age: 36, country: "Russia", style: "Volume kickboxer — busy hands, sharp counters", strengths: [
-      "Ranked in the women's bantamweight top 10",
-      "Seven knockout wins",
-      "Experience: 26 pro fights against the division's best"],
-    weaknesses: ["Ten years older than her opponent", "Can be out-worked by younger, faster strikers"],
-    history: "A Russian bantamweight with a 17-8 record (plus one no contest) and a long run near the top of the division. She's been in with almost every big name at 135. Now she faces a rising Brazilian who's ten years younger, and the books favor youth." },
-  luanasantos: { name: "Luana Santos", reach: 67, nick: "", age: 26, country: "", style: "Young, aggressive all-rounder — pressure and power", strengths: [
-      "11-2 and still improving",
-      "Ten years younger than Yana Santos",
-      "Big favorite with the oddsmakers"],
-    weaknesses: ["Has never faced someone this experienced", "Slightly shorter reach"],
-    history: "A young bantamweight with an 11-2 record who is getting her biggest test yet against a ranked veteran. The oddsmakers make her a clear favorite. A win would likely put her into the rankings." },
-  jeanpaullebosnoyani: { name: "Jean-Paul Lebosnoyani", ht: 71, reach: 72, nick: "Mufasa", age: 27, country: "USA", style: "Switch-stance striker with quick, varied attacks", strengths: [
-      "Only two losses in 13 pro fights",
-      "Switches stances to keep opponents guessing",
-      "Young and improving fast"],
-    weaknesses: ["Still building UFC experience", "Faces an unbeaten opponent"],
-    history: "A 27-year-old welterweight with a record around 11-2 who has been climbing steadily. He's a big favorite here against an unbeaten newcomer. Another win starts pushing him toward ranked opposition." },
-  farmanhasanov: { name: "Farman Hasanov", reach: 74, nick: "The Lion", age: 31, country: "", style: "Unbeaten pressure fighter", strengths: [
-      "Perfect 6-0 record",
-      "Longer reach than Lebosnoyani (74 inches)",
-      "Nothing to lose as a big underdog"],
-    weaknesses: ["Very little high-level experience — just six pro fights", "Big step up in competition"],
-    history: "An unbeaten 31-year-old welterweight with a 6-0 record. This is a big jump in competition. The books have him as a big underdog, but unbeaten fighters don't stay unbeaten by accident." },
   jiriprochazka: { name: "Jiří Procházka", reach: 80, nick: "Denisa", age: 34, country: "Czech Republic", style: "Wild, unorthodox striker — hands low, constant forward pressure", strengths: [
       "Finisher: 28 knockouts in 32 wins",
       "Former light heavyweight champion",
@@ -279,15 +219,85 @@ Object.assign(FIGHTERS, {
       "Real power — 11 knockout wins"],
     weaknesses: ["Lost four of his last five"],
     history: "Once over 300 pounds, he lost more than 100 to chase a fight career, debuted in the UFC at heavyweight in 2015 and worked his way down to middleweight, where he fought Israel Adesanya for the title. He's lost four of his last five, most recently to Christian Leroy Duncan in July." },
+  charlesoliveira: { name: "Charles Oliveira", ht: 70, reach: 74, nick: "Do Bronx", country: "Brazil", style: "Jiu-jitsu master with dangerous, improved striking", strengths: [
+      "World-class submissions — he can finish from any position",
+      "Former lightweight champion and current BMF titleholder",
+      "Dominated Max Holloway 50-45 on every card in March"],
+    weaknesses: ["Can be hurt early on the feet", "Gives up an inch of height"],
+    history: "A Brazilian former lightweight champion and one of the most exciting finishers in UFC history. In March he beat Max Holloway on all three cards at UFC 326 to win the BMF belt — the first man to hold both that and the undisputed lightweight title. Now he defends it against another aggressive Brazilian." },
+  diegolopes: { name: "Diego Lopes", ht: 71, reach: 72, nick: "", style: "Aggressive all-rounder — wild striking and slick submissions", strengths: [
+      "Always pushing forward; never in a dull fight",
+      "Dangerous jiu-jitsu off his back and in scrambles",
+      "TKO'd Steve Garcia in round two on the White House card in June"],
+    weaknesses: ["Lost twice to Alexander Volkanovski for the featherweight title", "Moving up to 155 against a bigger, more experienced grappler"],
+    history: "A featherweight contender who fought Alexander Volkanovski for the title twice — in April 2025 and again at UFC 325 in January — and lost both on the cards. He bounced back by stopping Steve Garcia at the White House card in June. Now he moves up to lightweight for the BMF belt." },
+  alexpereira: { name: "Alex Pereira", ht: 76, reach: 79, nick: "Poatan", country: "Brazil", style: "Kickboxing knockout artist — left hook and leg kicks", strengths: [
+      "One of the hardest one-punch knockouts in the sport",
+      "Former champion at middleweight and light heavyweight",
+      "Calm under fire; fights like a veteran kickboxer"],
+    weaknesses: ["Knocked out by Ciryl Gane in his heavyweight debut in June", "Gives up five inches of reach to Pavlovich"],
+    history: "A Brazilian former kickboxing champion who won UFC titles at middleweight and light heavyweight. He moved up to heavyweight for an interim title fight with Ciryl Gane at UFC Freedom 250 in June and was knocked out. This is his second try at the big boys." },
+  sergeipavlovich: { name: "Sergei Pavlovich", ht: 75, reach: 84, nick: "", country: "Russia", style: "Heavy-handed pressure puncher", strengths: [
+      "Huge 84-inch reach",
+      "Frightening power — knocked out Tallison Teixeira in 39 seconds in May",
+      "Ranked in the heavyweight top five"],
+    weaknesses: ["Facing a former two-division champion with real counter power"],
+    history: "A Russian heavyweight known for finishing people fast. He's 21-3 and knocked out Tallison Teixeira in 39 seconds in Macau in May. A win over a former two-division champion would put him back near the front of the title line." },
+  brandonmoreno: { name: "Brandon Moreno", ht: 67, reach: 70, nick: "The Assassin Baby", age: 32, country: "Mexico", style: "Well-rounded veteran — good boxing, scrappy grappling", strengths: [
+      "Former flyweight champion — the first Mexican-born UFC champ",
+      "Huge experience in five-round title fights",
+      "Back in the win column after a split decision in September"],
+    weaknesses: ["Lost two of his last three, including a knockout loss to Tatsuro Taira", "Has taken a lot of damage over a long career"],
+    history: "A Mexican flyweight who won the UFC title from Deiveson Figueiredo in 2021 and lost it to Alexandre Pantoja in 2023. After losses to Tatsuro Taira and Lone'er Kavanagh, he edged Joseph Morales on the Noche UFC card in September." },
+  charlesjohnson: { name: "Charles Johnson", ht: 69, reach: 70, nick: "InnerG", country: "USA", style: "Busy switch-stance striker", strengths: [
+      "Volume striker who switches stances to confuse opponents",
+      "Former LFA flyweight champion",
+      "Taller than Moreno"],
+    weaknesses: ["Submitted by Asu Almabayev in June", "Big step up in competition"],
+    history: "An American flyweight who won the LFA title before joining the UFC. His 2026 has been mixed, with losses to Alex Perez in January and Asu Almabayev in June. A win over a former champion would be the biggest of his career." },
+  joepyfer: { name: "Joe Pyfer", ht: 74, reach: 75, nick: "Bodybagz", country: "USA", style: "Heavy-handed pressure fighter", strengths: [
+      "Stopped Israel Adesanya in round two in March — the biggest win of his career",
+      "Real knockout power in both hands",
+      "Three straight wins"],
+    weaknesses: ["Facing an elite wrestler", "Lost a decision to Jack Hermansson in 2024"],
+    history: "An American middleweight who's on the best run of his career: a decision over Kelvin Gastelum, a submission of Abus Magomedov, then a knockout of former champion Israel Adesanya in Seattle in March. He's 16-3." },
+  bonickal: { name: "Bo Nickal", ht: 73, reach: 76, nick: "", country: "USA", style: "Elite wrestler with growing knockout power", strengths: [
+      "Won the Hodge Trophy, college wrestling's top prize, at Penn State",
+      "Knocked out his last two opponents",
+      "Slight reach edge"],
+    weaknesses: ["Knocked out by Reinier de Ridder in May 2025, his only loss", "Still young as a striker"],
+    history: "A star college wrestler from Penn State who came to the UFC through the Contender Series. His only loss is a 2025 knockout by Reinier de Ridder; since then he's knocked out Rodolfo Vieira and Kevin Daukaus. He's 9-1." },
+  israeladesanya: { name: "Israel Adesanya", ht: 76, reach: 80, nick: "The Last Stylebender", country: "New Zealand", style: "Elite kickboxer — long, precise and hard to hit", strengths: [
+      "Two-time middleweight champion",
+      "Huge reach advantage: 80 inches to Magomedov's 73",
+      "Some of the best striking technique in UFC history"],
+    weaknesses: ["Lost four straight, the last by knockout", "Five losses in his last six fights"],
+    history: "Born in Nigeria and raised in New Zealand, he ruled the middleweight division for years and beat Alex Pereira to win back the belt in 2023. Since then he's lost to Sean Strickland, Dricus du Plessis, Nassourdine Imavov and, in March, Joe Pyfer. This fight may decide how long he keeps going." },
+  sharamagomedov: { name: "Shara Magomedov", ht: 74, reach: 73, nick: "", age: 32, country: "Russia", style: "Power striker — most of his wins are knockouts", strengths: [
+      "17-1 with 12 knockouts",
+      "Beat Michel Pereira by decision in June",
+      "Younger and fresher than Adesanya"],
+    weaknesses: ["Only loss was to Michael Page, a slick long-range striker", "Gives up seven inches of reach"],
+    history: "A Russian middleweight who has won 17 of 18 pro fights, 12 by knockout. His only defeat came against Michael Page in February 2025; since then he's beaten Marc-André Barriault and Michel Pereira. He called for this fight with Adesanya and got it." },
+  ianmachadogarry: { name: "Ian Machado Garry", nick: "The Future", country: "Ireland", style: "Long, quick counter-striker", strengths: [
+      "Fought for the welterweight title in August",
+      "Fast, accurate striking from range",
+      "Ranked near the top of the division"],
+    weaknesses: ["Lost a decision to Islam Makhachev at UFC 330", "Facing a top-level wrestler"],
+    history: "An Irish welterweight who climbed fast and earned a title shot against Islam Makhachev at UFC 330 in August, losing on the cards. This is his first fight back, against one of the best wrestlers outside the UFC's top tier." },
+  yaroslavamosov: { name: "Yaroslav Amosov", nick: "", age: 33, country: "Ukraine", style: "Suffocating wrestler and grappler", strengths: [
+      "30-1 — one loss in his entire career",
+      "Former Bellator welterweight champion",
+      "Submitted his last opponent at UFC 328 in May"],
+    weaknesses: ["Only loss was a knockout, to Jason Jackson in 2023", "Has never faced a UFC striker this good"],
+    history: "A Ukrainian former Bellator welterweight champion who stepped away from MMA to help defend his country, then came back and kept winning. He's 2-0 in the UFC, most recently with a submission at UFC 328. Beating Garry would make him a contender." },
 });
 
 /* ============ MATCHUP NOTES — main-card fights on current cards ============ */
 Object.assign(MATCHUPS, {
-  "renatomoicano|tomnolan": { odds: "Nolan -122, Moicano +102 — basically a pick 'em; Nolan opened at -170",
-    note: "Experience against momentum, over five rounds. Moicano has the jab, the grappling and years against the division's best. Nolan is a tall, aggressive 26-year-old on a five-fight streak, getting the biggest test of his career. If Nolan's length keeps Moicano at the end of punches, the young man is live; if Moicano gets to his back, it's a long night for the Australian." },
-  "cirylgane|joshhokit": { title: "Heavyweight title", odds: "Gane -250, Hokit +205 — Gane opened -225 and some books now have him near -300",
+  "cirylgane|joshhokit": { title: "Heavyweight title", odds: "Gane -210, Hokit +170 — money has come in on Hokit this week",
     note: "Striker vs wrestler, five rounds. Gane will try to stay at range with his reach and footwork and pick Hokit apart. Hokit needs to close the distance, get his hands on Gane and drag him down — he's never been beaten and finishes almost everyone he fights. If Gane's takedown defense holds, the champ should win comfortably; if Hokit gets him down early, this gets very interesting." },
-  "amandanunes|kaylaharrison": { title: "Women's bantamweight title", odds: "Harrison -190, Nunes +161",
+  "amandanunes|kaylaharrison": { title: "Women's bantamweight title", odds: "Harrison -192, Nunes +160",
     note: "The biggest women's fight in years. Harrison is younger and bigger, with Olympic judo that has made her almost impossible to fight on the inside. Nunes is the greatest ever and the better striker, but she hasn't fought in three years. Nunes needs to keep it standing and land early; once Harrison gets a grip, it's her fight." },
   "caioborralho|yousribelgaroui": { odds: "Borralho -155, Belgaroui +130 — Borralho has been bet up from -120",
     note: "The all-rounder against the giant kickboxer. Belgaroui is 6-foot-6 with a 79-inch reach and three Glory title fights behind him; at range he's very dangerous. Borralho wants to close the distance, wrestle and make him work on the mat. If Borralho gets him down, it's his fight; if it stays at kicking range, the upset is on." },
@@ -295,14 +305,6 @@ Object.assign(MATCHUPS, {
     note: "A fun striking matchup at welterweight. Holland has a ten-inch reach advantage and a creative, unpredictable style. Medic is a ranked southpaw puncher with a heavy left hand. Holland needs to keep him on the end of his long shots; Medic needs to walk him down. Somebody is probably getting knocked down." },
   "bilalhasan|luisgurule": { odds: "Hasan -950, Gurule +650 — the biggest favorite on the card",
     note: "A big debut. Hasan is 10-0 with eight knockouts and won his contract in 45 seconds. Gurule is the experienced, scrappy veteran, coming off a quick submission loss. Fans and models both lean heavily toward the newcomer, but UFC debuts at the Garden are a different kind of pressure." },
-  "jacobesmith|randybrown": { odds: "Smith -285, Brown +235",
-    note: "Short-notice prospect against a long veteran. Smith is 13-0 and wants to close the distance and pressure; Brown is much taller and wants to keep him on the end of long punches and kicks. If Smith gets inside early, his record probably stays perfect. If Brown keeps it at range, the veteran can snap his skid." },
-  "codydurden|odeosbourne": { odds: "Osbourne -110, Durden -110 — a true coin flip",
-    note: "Striker vs wrestler at flyweight. Osbourne has a six-inch reach advantage and wants to keep Durden on the end of long, fast punches. Durden wants to close the distance, grab a leg and grind. The first takedown attempt tells you who's winning this one." },
-  "luanasantos|yanasantos": { odds: "Luana -255, Yana +212",
-    note: "Youth against experience, and no relation despite the name. Yana is the ranked veteran with busy kickboxing; Luana is ten years younger and the clear betting favorite. If Yana keeps it at range and out-works her, the upset is there; if Luana pushes the pace, it's her night." },
-  "farmanhasanov|jeanpaullebosnoyani": { odds: "Lebosnoyani -278, Hasanov +225",
-    note: "A rising welterweight against an unbeaten newcomer. Lebosnoyani is the more polished striker and switches stances to stay unpredictable. Hasanov is 6-0 and has the longer reach. The books expect Lebosnoyani's experience to tell." },
   "jiriprochazka|navajostirling": { odds: "Stirling -138, Procházka +110 — the unbeaten prospect is the favorite",
     note: "Chaos against control, over five rounds. Procházka fights with his hands low and throws from everywhere; he's either knocking you out or getting hit trying. Stirling is unbeaten, younger and more disciplined, and just flattened Jan Blachowicz. If Stirling stays composed and counters, the prospect takes the veteran's spot; if Procházka drags him into a brawl, anything can happen." },
   "johnnywalker|waldocortesacosta": { odds: "Cortes-Acosta -230, Walker +190 — opened even bigger (-300)",
@@ -325,19 +327,20 @@ Object.assign(MATCHUPS, {
     note: "Former flyweight champion Brandon Moreno, back in the win column after a split decision in September, against Charles Johnson, a busy switch-stance striker. Moreno's experience and boxing are the edge, but he's lost two of his last three." },
   "bonickal|joepyfer": { odds: "Pyfer -198, Nickal +164",
     note: "Two rising middleweights with something to prove. Pyfer is coming off the biggest win of his career, stopping Israel Adesanya in March. Nickal is a decorated Penn State wrestler who has knocked out his last two opponents. If Nickal gets it to the mat, he's in charge; if Pyfer keeps it standing, his power is the difference." },
+  "israeladesanya|sharamagomedov": { odds: "Adesanya -150, Magomedov +130 — Adesanya opened -205, but money has poured in on Magomedov",
+    note: "A legend fighting for his career against a young knockout puncher. Adesanya is the taller man with a seven-inch reach edge and still has some of the best striking skills the division has seen — but he's lost four straight, the last by knockout. Magomedov has 12 knockouts in 17 wins and comes forward hunting the finish. If Adesanya can keep him at the end of his jab, the old master wins; if Magomedov drags him into a firefight, it could be a sad night." },
+  "ianmachadogarry|yaroslavamosov": { odds: "Garry -145, Amosov +125 — Garry opened -185",
+    note: "Slick striker vs suffocating wrestler. Garry is long, quick and likes to pick opponents apart from the outside. Amosov, the former Bellator champion, has lost once in 31 fights and wants to take Garry down and grind. If Garry keeps it standing, he's the favorite for a reason; if Amosov gets his hands on him early, this could get ugly for the Irishman." },
 });
 
 /* ============ EVENT META — which fights are the main card ============ */
 EVENT_META.push(
-  { match: ["moicano vs. nolan", "moicano vs nolan"], titles: "",
-    note: "<b>Tom Nolan stopped Renato Moicano at 1:28 of round three</b> — he survived Moicano's back-takes early (helped by a controversial referee stand-up in round two), then hurt him with a knee and finished with elbows. Six straight wins for the 26-year-old Australian. Unbeaten Jacobe Smith beat Randy Brown 30-26 on all three cards on 12 days' notice; Cody Durden out-pointed Ode Osbourne, Luana Santos beat Yana Santos, and Jean-Paul Lebosnoyani won by doctor's stoppage over Farman Hasanov.",
-    mainCard: ["renatomoicano|tomnolan", "jacobesmith|randybrown", "codydurden|odeosbourne", "luanasantos|yanasantos", "farmanhasanov|jeanpaullebosnoyani"] },
   { match: ["cortes-acosta vs. walker", "cortes-acosta vs walker", "cortes acosta vs. walker", "acosta vs. walker", "bonfim vs. brady"], titles: "",
     note: "<b>Johnny Walker came from behind to stop Waldo Cortes-Acosta at 2:27 of round three</b> — down on two of the three scorecards, he hurt him and finished with punches. That's two straight wins since moving up to heavyweight, plus a $100,000 bonus. <b>Tatiana Suarez beat Virna Jandiroba by unanimous decision</b> (30-27, 30-27, 29-28), riding out her submission attempts to win from on top, then called for a title shot. Lucas Fernando out-pointed Billy Elekana, and on the prelims Andre Petroski stopped Mantas Kondratavicius in round two.",
     mainCard: ["johnnywalker|waldocortesacosta", "tatianasuarez|virnajandiroba"] },
   { match: ["adesanya vs. magomedov", "adesanya vs magomedov"], titles: "",
-    note: "Dec 5 in Riyadh (reported, not yet official): former middleweight champion Israel Adesanya returns against Shara Magomedov. Breakdowns once the card is confirmed.",
-    mainCard: ["israeladesanya|sharamagomedov"] },
+    note: "Dec 5 in Riyadh, Saudi Arabia — a daytime card for US fans on Paramount+. Former two-time middleweight champion Israel Adesanya, on a four-fight losing streak, faces hard-hitting Shara Magomedov (17-1). In the co-main, Ian Machado Garry — back after his title loss to Islam Makhachev — meets former Bellator welterweight champion Yaroslav Amosov. Serghei Spivac vs Mario Pinto is also on the main card.",
+    mainCard: ["israeladesanya|sharamagomedov", "ianmachadogarry|yaroslavamosov"] },
   { match: ["ufc 334", "gane vs. hokit", "gane vs hokit"], titles: "2 title fights",
     note: "Madison Square Garden: new heavyweight champion Ciryl Gane's first defense against unbeaten wrestler Josh Hokit, and Kayla Harrison vs Amanda Nunes for the women's bantamweight belt — Nunes coming out of retirement. Also on the main card: Caio Borralho vs Yousri Belgaroui, Kevin Holland vs Uros Medic, and Bilal Hasan vs Luis Gurule. Stephen \"Wonderboy\" Thompson has his final fight on the prelims.",
     mainCard: ["cirylgane|joshhokit", "amandanunes|kaylaharrison", "caioborralho|yousribelgaroui", "kevinholland|urosmedic", "bilalhasan|luisgurule"] },
@@ -369,6 +372,10 @@ EVENT_META.push(
       F("Flyweight", "Kyoji Horiguchi", "36-6-0", "Asu Almabayev", "24-3-0"),
       F("Lightweight", "Dan Hooker", "", "Brian Ortega", "16-5-0"),
       F("Middleweight", "Ikram Aliskerov", "", "Jared Cannonier", "")
+    ]},
+    { name: "UFC Fight Night: Adesanya vs. Magomedov", date: "2026-12-05T18:00Z", venue: "Riyadh, Saudi Arabia", fights: [
+      F("Middleweight", "Israel Adesanya", "24-6-0", "Shara Magomedov", "17-1-0"),
+      F("Welterweight", "Ian Machado Garry", "", "Yaroslav Amosov", "30-1-0")
     ]},
     { name: "UFC 335: Oliveira vs. Lopes", date: "2026-12-13T02:00Z", venue: "T-Mobile Arena, Las Vegas", fights: [
       F("Lightweight", "Charles Oliveira", "", "Diego Lopes", ""),
@@ -504,7 +511,9 @@ EXPLAINERS.push(
     // Nov 8: Doha + UFC 335 main cards, each from their espn.com/mma/fighter/_/id profile URL
     "Kevin Vallejos": "5145681", "Kyoji Horiguchi": "2613374", "Asu Almabayev": "4294926", "Dan Hooker": "3109135",
     "Brian Ortega": "3045737", "Ikram Aliskerov": "4684776", "Jared Cannonier": "3154860",
-    "Brandon Moreno": "3027545", "Charles Johnson": "4375156", "Joe Pyfer": "4684135", "Bo Nickal": "5061870"
+    "Brandon Moreno": "3027545", "Charles Johnson": "4375156", "Joe Pyfer": "4684135", "Bo Nickal": "5061870",
+    // Nov 12: Saudi card, from espn.com/mma/fighter/_/id profile URLs
+    "Israel Adesanya": "4285679", "Shara Magomedov": "4421784", "Yaroslav Amosov": "4275020"
   };
   Object.keys(RAW).forEach(n => { ESPN_IDS[norm(n)] = RAW[n]; });
 })();
