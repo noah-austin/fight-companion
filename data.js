@@ -4,7 +4,7 @@
    (FIGHTERS, MATCHUPS, ...) and helpers like norm() are declared in app.js,
    which loads first; the page boots after this file runs.
    ===================================================================== */
-const ANALYSIS_STAMP = "November 12, 2026";
+const ANALYSIS_STAMP = "November 15, 2026";
 
 /* ============ FIGHTER PROFILES — main-card fighters on current cards, plus ranked fighters ============ */
 Object.assign(FIGHTERS, {
@@ -81,14 +81,14 @@ Object.assign(FIGHTERS, {
       "Best footwork and striking variety in the division",
       "Huge 81-inch reach that he uses to keep fights at range",
       "Stopped Alex Pereira in round two in June to win the interim belt"],
-    weaknesses: ["Has lost to elite wrestlers before (Francis Ngannou took him down repeatedly)", "Has never successfully defended an undisputed title"],
-    history: "A former Muay Thai fighter from France who rose to the top of heavyweight fast. He lost title fights to Ngannou and Jon Jones, then his 2025 title fight with Tom Aspinall ended in a no contest after an accidental eye poke. He beat Pereira at the White House in June, and when Aspinall vacated, the UFC made him the undisputed champion." },
+    weaknesses: ["Has lost to elite wrestlers before (Francis Ngannou took him down repeatedly)", "Got hurt early by Hokit in his first defense"],
+    history: "A former Muay Thai fighter from France who rose to the top of heavyweight fast. He lost title fights to Ngannou and Jon Jones, then his 2025 title fight with Tom Aspinall ended in a no contest after an accidental eye poke. He beat Pereira at the White House in June, and when Aspinall vacated, the UFC made him the undisputed champion. In his first defense at UFC 334 he edged Josh Hokit 48-47 on all three cards." },
   joshhokit: { name: "Josh Hokit", ht: 73, reach: 73, nick: "", age: 28, country: "USA", style: "Powerful wrestler with heavy hands — finishes almost everyone", strengths: [
-      "Unbeaten: 10-0, with nine finishes",
+      "10-1, with nine finishes — took the champion the full five rounds",
       "All-American wrestler at Fresno State — he can take big men down",
       "Went 4-0 in his first year in the UFC, including a knockout of Derrick Lewis"],
-    weaknesses: ["Gives up three inches of height and eight of reach", "Has never faced a striker anywhere near Gane's level"],
-    history: "From Fresno, California: a state-champion high school wrestler who became an All-American at Fresno State. He has run through the UFC since arriving, 4-0 in under a year, including a stoppage of Derrick Lewis at the White House event. He called for this shot the day the belt came open." },
+    weaknesses: ["Gives up three inches of height and eight of reach", "Couldn't keep up with Gane's volume over five rounds"],
+    history: "From Fresno, California: a state-champion high school wrestler who became an All-American at Fresno State. He has run through the UFC since arriving, 4-0 in under a year, including a stoppage of Derrick Lewis at the White House event. He got his title shot at UFC 334 and lost a close decision to Ciryl Gane (48-47 on all three cards) — the first loss of his career." },
   kaylaharrison: { name: "Kayla Harrison", ht: 68, reach: 66, nick: "", age: 36, country: "USA", style: "Olympic judo champion — throws, top control and crushing submissions", strengths: [
       "Two-time Olympic gold medalist in judo",
       "19-1, and nobody has been able to stop her takedowns and throws",
@@ -342,7 +342,7 @@ EVENT_META.push(
     note: "Dec 5 in Riyadh, Saudi Arabia — a daytime card for US fans on Paramount+. Former two-time middleweight champion Israel Adesanya, on a four-fight losing streak, faces hard-hitting Shara Magomedov (17-1). In the co-main, Ian Machado Garry — back after his title loss to Islam Makhachev — meets former Bellator welterweight champion Yaroslav Amosov. Serghei Spivac vs Mario Pinto is also on the main card.",
     mainCard: ["israeladesanya|sharamagomedov", "ianmachadogarry|yaroslavamosov"] },
   { match: ["ufc 334", "gane vs. hokit", "gane vs hokit"], titles: "2 title fights",
-    note: "Madison Square Garden: new heavyweight champion Ciryl Gane's first defense against unbeaten wrestler Josh Hokit, and Kayla Harrison vs Amanda Nunes for the women's bantamweight belt — Nunes coming out of retirement. Also on the main card: Caio Borralho vs Yousri Belgaroui, Kevin Holland vs Uros Medic, and Bilal Hasan vs Luis Gurule. Stephen \"Wonderboy\" Thompson has his final fight on the prelims.",
+    note: "<b>Ciryl Gane kept the heavyweight belt, edging Josh Hokit 48-47 on all three cards</b> — he survived an early onslaught and landed 237 significant strikes, a UFC heavyweight record. <b>Kayla Harrison submitted Amanda Nunes</b> with a rear-naked choke in round four to keep the women's bantamweight title. Caio Borralho out-pointed Yousri Belgaroui, Kevin Holland and Uros Medic fought to a majority draw, and in the night's big upset Luis Gurule (a +650 underdog) beat Bilal Hasan by split decision. On the prelims, <b>Stephen \"Wonderboy\" Thompson retired in style</b>, knocking out Charles Radtke with a spinning kick in round three.",
     mainCard: ["cirylgane|joshhokit", "amandanunes|kaylaharrison", "caioborralho|yousribelgaroui", "kevinholland|urosmedic", "bilalhasan|luisgurule"] },
   { match: ["prochazka vs. stirling", "prochazka vs stirling", "procházka vs. stirling"], titles: "",
     note: "Nov 21 at ABHA Arena in Doha, Qatar — an early one for US fans (main card 1 p.m. ET on Paramount+). Former light heavyweight champion Jiří Procházka meets unbeaten Navajo Stirling over five rounds. Former bantamweight champ Aljamain Sterling vs Argentine knockout artist Kevin Vallejos is the co-main, with Kyoji Horiguchi vs Asu Almabayev, Dan Hooker vs Brian Ortega and Jared Cannonier vs Ikram Aliskerov also on the main card.",
@@ -356,16 +356,6 @@ EVENT_META.push(
 (function () {
   const F = (weight, n1, r1, n2, r2) => ({ weight, f1: { name: n1, record: r1, winner: false }, f2: { name: n2, record: r2, winner: false }, done: false, live: false });
   FALLBACK_EVENTS.push(
-    { name: "UFC 334: Gane vs. Hokit", date: "2026-11-15T02:00Z", venue: "Madison Square Garden, New York", fights: [
-      F("Heavyweight", "Ciryl Gane", "14-2-0", "Josh Hokit", "10-0-0"),
-      F("W Bantamweight", "Kayla Harrison", "19-1-0", "Amanda Nunes", "23-5-0"),
-      F("Middleweight", "Caio Borralho", "", "Yousri Belgaroui", ""),
-      F("Welterweight", "Kevin Holland", "", "Uros Medic", ""),
-      F("Flyweight", "Bilal Hasan", "", "Luis Gurule", ""),
-      F("Welterweight", "Stephen Thompson", "", "Charles Radtke", ""),
-      F("Lightweight", "Drew Dober", "", "Chris Duncan", ""),
-      F("Lightweight", "Jim Miller", "", "Terrance McKinney", "")
-    ]},
     { name: "UFC Fight Night: Procházka vs. Stirling", date: "2026-11-21T18:00Z", venue: "ABHA Arena, Doha", fights: [
       F("Light Heavyweight", "Jiří Procházka", "32-6-1", "Navajo Stirling", "11-0-0"),
       F("Featherweight", "Aljamain Sterling", "", "Kevin Vallejos", "18-1-0"),
@@ -387,10 +377,10 @@ EVENT_META.push(
 })();
 /* ============ BELTS & RANKINGS (men's divisions; current as of ANALYSIS_STAMP) ============ */
 DIVISIONS.men = [
-  { name: "Heavyweight", weight: "265 lb", champ: { name: "Ciryl Gane", record: "14-2", country: "France" },
-    beltFacts: "<b>Ciryl Gane, promoted to undisputed champion</b> in September after Tom Aspinall gave up the belt — the eye injury from their October 2025 fight (an accidental eye poke, ruled a no contest) never healed after multiple surgeries. Gane had won the interim belt by stopping Alex Pereira at the White House in June. <b>First defense: Josh Hokit at UFC 334, Nov 14, Madison Square Garden.</b>",
-    top5: [{ rank: 1, name: "Tom Aspinall", record: "15-3" }, { rank: 2, name: "Alexander Volkov", record: "41-11" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Sergei Pavlovich", record: "21-3" }, { rank: 5, name: "Josh Hokit", record: "10-0" }],
-    story: "Dana White first said Gane would have to win the vacant belt in a fight, then the UFC reversed course and simply named him champion. His first defense is against <b>unbeaten Josh Hokit</b> (10-0, ranked just outside the top five), a former Fresno State wrestler who's 4-0 in the UFC — including a knockout of Derrick Lewis. Gane is a clear favorite (around -235). Aspinall says he isn't retiring and hopes to return in 2027. Below them, <b>Alexander Volkov jumped to #2</b> after out-pointing Rizvan Kuniev at UFC 333, and <b>Alex Pereira fights Sergei Pavlovich at UFC 335 in December</b>." },
+  { name: "Heavyweight", weight: "265 lb", champ: { name: "Ciryl Gane", record: "15-2", country: "France" },
+    beltFacts: "<b>Ciryl Gane, promoted to undisputed champion</b> in September after Tom Aspinall gave up the belt — the eye injury from their October 2025 fight (an accidental eye poke, ruled a no contest) never healed after multiple surgeries. Gane had won the interim belt by stopping Alex Pereira at the White House in June. <b>First defense done: he edged Josh Hokit 48-47 on all three cards at UFC 334 (Nov 14).</b>",
+    top5: [{ rank: 1, name: "Tom Aspinall", record: "15-3" }, { rank: 2, name: "Alexander Volkov", record: "41-11" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Sergei Pavlovich", record: "21-3" }, { rank: 5, name: "Josh Hokit", record: "10-1" }],
+    story: "Dana White first said Gane would have to win the vacant belt in a fight, then the UFC reversed course and simply named him champion. He proved it at UFC 334, surviving an early storm from <b>Josh Hokit</b> and out-working him over five rounds — a record 237 significant strikes. Aspinall says he isn't retiring and hopes to return in 2027. Next in the division: <b>Alex Pereira vs Sergei Pavlovich at UFC 335 on Dec 12</b>, and Johnny Walker is suddenly a name after two straight finishes." },
   { name: "Light Heavyweight", weight: "205 lb", champ: { name: "Carlos Ulberg", record: "15-1", country: "New Zealand" },
     beltFacts: "Won the <b>vacant</b> belt in April 2026 with a first-round KO of Jiří Procházka — but <b>tore his ACL in that fight and is out until 2027</b>. <b>0 defenses.</b>",
     top5: [{ rank: 1, name: "Magomed Ankalaev", record: "20-2-1" }, { rank: 2, name: "Jiří Procházka", record: "32-6-1" }, { rank: 3, name: "Alex Pereira", record: "13-4" }, { rank: 4, name: "Khalil Rountree Jr.", record: "15-7" }, { rank: 5, name: "Navajo Stirling", record: "11-0" }],
@@ -427,15 +417,15 @@ P4P.men = [{ name: "Islam Makhachev", record: "29-1" }, { name: "Alexander Volka
 STORYLINES.push(
   { em: "🥃", title: "Johnny Walker, heavyweight", body: [
     "Moving up has made <b>Johnny Walker</b> look like a new fighter. Five weeks after knocking out Mick Parkin with a knee in his heavyweight debut, he took a short-notice main event against ranked Waldo Cortes-Acosta, was losing on two of three cards, and <b>stopped him in round three</b>. Two fights, two finishes — and suddenly the 6-foot-6 Brazilian is a name at heavyweight.",
-    "Next up in the division: <b>Ciryl Gane vs Josh Hokit for the belt at UFC 334</b> on Saturday, then <b>Alex Pereira vs Sergei Pavlovich at UFC 335</b> on Dec 12."] },
+    "Next up in the division: <b>Alex Pereira vs Sergei Pavlovich at UFC 335</b> on Dec 12 — the winner could be next in line for Ciryl Gane."] },
   { em: "🐐", title: "Makhachev owns the record books", body: [
     "At UFC 330 Islam Makhachev out-pointed Ian Machado Garry for his first welterweight defense and his <b>17th straight UFC win — breaking Anderson Silva's all-time record</b> (16) that stood for 14 years. He named <b>Carlos Prates</b> as the most deserving next challenger, waved off unbeaten Michael Morales, and hinted he misses lightweight — where a Topuria superfight still lurks."] },
-  { em: "🏆", title: "UFC 333: both champs hold on", body: [
-    "<b>Alexander Volkanovski, 38, knocked out unbeaten Movsar Evloev in round two</b> — dropping him with a left and finishing him at 4:54. It's Evloev's first loss in 21 fights, and one more defense would tie José Aldo's featherweight record. Volkanovski has floated a farewell superfight with lightweight champ Justin Gaethje.",
-    "In the co-main, <b>Petr Yan lost the first two rounds to Merab Dvalishvili on every card, then won the last three</b> to take the trilogy 2-1 and keep his bantamweight belt. Song Yadong is waiting."] },
+  { em: "🏆", title: "UFC 334: both champs hold on — and Wonderboy says goodbye", body: [
+    "<b>Ciryl Gane survived an early onslaught from Josh Hokit</b> and won 48-47 on all three cards, setting a UFC heavyweight record with 237 significant strikes in his first title defense. In the co-main, <b>Kayla Harrison submitted Amanda Nunes</b> in round four — a statement win over the greatest women's fighter ever.",
+    "On the prelims, <b>Stephen \"Wonderboy\" Thompson</b>, 43, ended a 14-year UFC run the way it began: with a kick to the head. He knocked out Charles Radtke with a spinning kick in round three, then retired to spend time with his baby daughter."] },
   { em: "👑", title: "Heavyweight has a new king: Ciryl Gane", body: [
     "Tom Aspinall gave up the heavyweight belt in September — the eye injury from his October 2025 fight with Gane never fully healed. After first saying Gane would have to fight for the vacant title, the UFC simply <b>promoted Gane to undisputed champion</b>.",
-    "His first defense: <b>unbeaten wrestler Josh Hokit at UFC 334, Nov 14 at Madison Square Garden</b>, with Kayla Harrison vs a returning Amanda Nunes for the women's bantamweight belt as the co-main."] },
+    "He passed his first test at UFC 334, edging unbeaten wrestler <b>Josh Hokit</b> on all three cards after getting hurt early. Next challengers to watch: the winner of <b>Alex Pereira vs Sergei Pavlovich</b> (Dec 12)."] },
   { em: "🧊", title: "Light heavyweight is frozen", body: [
     "Champion Carlos Ulberg <b>tore his ACL winning the belt</b> and now says he's targeting an early-2027 return. There has been talk of an interim title while he heals, but nothing is booked, and #1 contender Ankalaev is stuck waiting either way."] },
   { em: "🌋", title: "Legends: one out, two in limbo", body: [
